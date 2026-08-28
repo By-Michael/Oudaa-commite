@@ -118,13 +118,13 @@ class CreatePlatformController extends Controller
             'status' => 'pending_setup',
         ]);
 
-        // With QUEUE_CONNECTION=sync (see .env.example) this runs
-        // inline, in this same request, before dispatch() returns —
-        // no queue worker process required. Switching that one env
-        // var to 'database' later (plus running `queue:work`) is all
-        // it'd take to push this back onto a background worker if
-        // provisioning ever grows heavier.
-        ProvisionTenant::dispatch($tenant->id);
+        // Still a single process / single instance — no queue worker
+        // required. afterResponse() sends the redirect to the browser
+        // first, then PHP keeps running in the background (within the
+        // same request's process) to provision the tenant and send the
+        // welcome email. That means a slow/hung SMTP connection can no
+        // longer block the page load, even with QUEUE_CONNECTION=sync.
+        ProvisionTenant::dispatch($tenant->id)->afterResponse();
 
         Session::forget(['onboarding.name', 'onboarding.slug', 'onboarding.community_type']);
 

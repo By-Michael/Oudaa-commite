@@ -12,7 +12,7 @@ RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloade
 COPY . .
 
 RUN composer dump-autoload --optimize \
-    && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
+    && mkdir -p storage/framework/{cache,sessions,views} storage/logs storage/certs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # One process, one instance: no queue worker, no supervisor. Provisioning
@@ -23,5 +23,11 @@ RUN composer dump-autoload --optimize \
 # image or mounted in, e.g. COPY it in above under storage/certs/.
 EXPOSE 8000
 
-CMD php artisan migrate --force \
+# config:cache/route:cache/view:cache run at container start (not build
+# time) since Render injects env vars right before this CMD runs — caching
+# during the build would bake in empty/missing values instead.
+CMD php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan migrate --force \
     && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}

@@ -11,9 +11,6 @@ return [
         'oudaa', 'support', 'help', 'terms', 'privacy', 'assets',
     ],
 
-    // Where per-tenant SQLite files live.
-    'database_path' => database_path('tenants'),
-
     // How long a "set your password" link stays valid after signup.
     'setup_link_ttl_hours' => 24 * 7,
 ];

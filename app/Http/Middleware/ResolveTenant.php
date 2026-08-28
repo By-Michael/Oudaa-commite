@@ -3,23 +3,27 @@
 namespace App\Http\Middleware;
 
 use App\Models\Central\Tenant;
+use App\Support\CurrentCommunity;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Runs on every {tenant}/... route. Looks up the slug in the central
- * registry, then points the 'tenant' database connection at that
- * community's own SQLite file for the rest of this request only —
- * nothing here persists between requests, so there's no risk of one
- * tenant's request bleeding into another's.
+ * Runs on every {tenant}/... route. Looks up the slug in the tenants
+ * table, then sets CurrentCommunity for the rest of this request —
+ * every model using App\Models\Concerns\BelongsToCommunity picks that
+ * up automatically and scopes/stamps its queries with it.
+ *
+ * There is no database connection swap anymore (that only made sense
+ * when each tenant had its own SQLite file). One shared connection,
+ * one column doing the isolation.
  *
  * Every existing controller/model in this app (ResidentController,
  * Fund, Committee auth, ...) is completely unaware this is happening;
- * they just use the default connection like they always did.
+ * they just use the model as they always did and the global scope
+ * does the filtering.
  */
 class ResolveTenant
 {
@@ -33,21 +37,11 @@ class ResolveTenant
             abort(404);
         }
 
-        if ($tenant->status === 'provisioning') {
-            return response()->view('tenants.provisioning', ['tenant' => $tenant], 503);
-        }
-
         if ($tenant->status === 'failed') {
             return response()->view('tenants.failed', ['tenant' => $tenant], 503);
         }
 
-        // Point the shared 'tenant' connection at this community's file
-        // and force a fresh handle — critical on long-lived workers
-        // (queue, octane) where a stale connection to a *different*
-        // tenant's file could otherwise still be cached.
-        Config::set('database.connections.tenant.database', $tenant->db_path);
-        DB::purge('tenant');
-        DB::reconnect('tenant');
+        app(CurrentCommunity::class)->set($tenant->id);
 
         // Isolate sessions per community so logging into one committee
         // panel never gets treated as a session for another's.

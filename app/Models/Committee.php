@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Concerns\Auditable;
+use App\Models\Concerns\BelongsToCommunity;
 
 /**
  * The single authenticated actor in this system: a committee member.
@@ -17,7 +18,7 @@ use App\Models\Concerns\Auditable;
  */
 class Committee extends Authenticatable
 {
-    use Notifiable, Auditable;
+    use Notifiable, Auditable, BelongsToCommunity;
 
     protected $table = 'committees';
 

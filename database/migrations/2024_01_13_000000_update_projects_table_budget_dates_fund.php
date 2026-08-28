@@ -32,15 +32,42 @@ return new class extends Migration
             DB::table('projects')->whereNull('fund_id')->update(['fund_id' => $fundId]);
         }
 
+        // The original foreign key was created with nullOnDelete()
+        // (ON DELETE SET NULL), which MySQL refuses to keep once the
+        // column becomes NOT NULL below — SQLite didn't enforce that
+        // and let it through, but MySQL does. Drop it first, then
+        // recreate with restrictOnDelete(): correct anyway, since a
+        // fund becoming NULL on delete makes no sense once it's
+        // required — and funds are archived, never deleted, in this
+        // app, so a restrict here should never actually fire.
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropForeign(['fund_id']);
+        });
+
         Schema::table('projects', function (Blueprint $table) {
             $table->foreignId('fund_id')->nullable(false)->change();
+        });
+
+        Schema::table('projects', function (Blueprint $table) {
+            $table->foreign('fund_id')->references('id')->on('funds')->restrictOnDelete();
         });
     }
 
     public function down(): void
     {
         Schema::table('projects', function (Blueprint $table) {
+            $table->dropForeign(['fund_id']);
+        });
+
+        Schema::table('projects', function (Blueprint $table) {
             $table->foreignId('fund_id')->nullable()->change();
+        });
+
+        Schema::table('projects', function (Blueprint $table) {
+            $table->foreign('fund_id')->references('id')->on('funds')->nullOnDelete();
+        });
+
+        Schema::table('projects', function (Blueprint $table) {
             $table->dropColumn(['start_date', 'end_date']);
             $table->renameColumn('planned_budget', 'budget');
         });

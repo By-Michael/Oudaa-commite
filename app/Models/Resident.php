@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Concerns\Auditable;
+use App\Models\Concerns\BelongsToCommunity;
 
 class Resident extends Model
 {
-    use HasFactory, Auditable;
+    use HasFactory, Auditable, BelongsToCommunity;
 
     protected $fillable = [
         'name',

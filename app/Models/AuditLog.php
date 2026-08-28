@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToCommunity;
 
 class AuditLog extends Model
 {
+    use BelongsToCommunity;
+
     const UPDATED_AT = null;
 
     protected $fillable = [

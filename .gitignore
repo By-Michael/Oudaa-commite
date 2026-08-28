@@ -10,3 +10,4 @@
 !/storage/framework/views/.gitignore
 /database/database.sqlite
 .DS_Store
+/storage/certs/*.pem

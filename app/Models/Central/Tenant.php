@@ -5,22 +5,18 @@ namespace App\Models\Central;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * The one record, in the one central database, that represents a
- * community/tenant. Deliberately pinned to the 'central' connection
- * with an explicit property so it is never affected by the per-request
- * connection-swapping that App\Http\Middleware\ResolveTenant does to
- * the 'tenant' connection.
+ * The one record that represents a community/tenant. Lives in the
+ * same shared database as everything else — no separate connection
+ * needed. It's the one table with no community_id column, since it's
+ * the thing every other table's community_id points back at.
  */
 class Tenant extends Model
 {
-    protected $connection = 'central';
-
     protected $fillable = [
         'name',
         'slug',
         'community_type',
         'owner_email',
-        'db_path',
         'status',
         'setup_token',
         'setup_token_expires_at',

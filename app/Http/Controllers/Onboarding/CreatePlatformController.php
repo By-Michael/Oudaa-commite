@@ -115,10 +115,15 @@ class CreatePlatformController extends Controller
             'slug' => $slug,
             'community_type' => Session::get('onboarding.community_type', 'normal'),
             'owner_email' => $data['email'],
-            'db_path' => rtrim(config('tenancy.database_path'), '/')."/{$slug}.sqlite",
-            'status' => 'provisioning',
+            'status' => 'pending_setup',
         ]);
 
+        // With QUEUE_CONNECTION=sync (see .env.example) this runs
+        // inline, in this same request, before dispatch() returns —
+        // no queue worker process required. Switching that one env
+        // var to 'database' later (plus running `queue:work`) is all
+        // it'd take to push this back onto a background worker if
+        // provisioning ever grows heavier.
         ProvisionTenant::dispatch($tenant->id);
 
         Session::forget(['onboarding.name', 'onboarding.slug', 'onboarding.community_type']);

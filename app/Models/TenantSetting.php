@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToCommunity;
 
 /**
  * Lives on the 'tenant' connection — same dynamic-per-request connection
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TenantSetting extends Model
 {
+    use BelongsToCommunity;
+
     protected $fillable = [
         'community_name',
         'community_type',

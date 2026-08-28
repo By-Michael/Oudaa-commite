@@ -5,21 +5,22 @@ namespace App\Http\Controllers\Onboarding;
 use App\Http\Controllers\Controller;
 use App\Models\Central\Tenant;
 use App\Models\Committee;
+use App\Support\CurrentCommunity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 
 /**
  * The page behind the signed link emailed by ProvisionTenant. Sets the
- * password for the very first (admin) Committee account inside this
- * tenant's own database, then flips the tenant to 'active'.
+ * password for the very first (admin) Committee account for this
+ * community, then flips the tenant to 'active'.
  *
  * Note this runs OUTSIDE the {tenant}/... route group (no ResolveTenant
  * middleware) because at this point the person isn't logged into a
  * tenant yet — they're proving ownership via the signed URL. So it
- * points the tenant connection at the right file manually.
+ * sets CurrentCommunity manually instead of relying on that middleware,
+ * which is what makes the Committee::updateOrCreate() below land on
+ * (and stay scoped to) the right community.
  */
 class SetPasswordController extends Controller
 {
@@ -60,7 +61,7 @@ class SetPasswordController extends Controller
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
-        $this->pointTenantConnectionAt($tenantModel->db_path);
+        app(CurrentCommunity::class)->set($tenantModel->id);
 
         Committee::updateOrCreate(
             ['email' => $tenantModel->owner_email],
@@ -97,12 +98,5 @@ class SetPasswordController extends Controller
         }
 
         return $tenant;
-    }
-
-    protected function pointTenantConnectionAt(string $path): void
-    {
-        Config::set('database.connections.tenant.database', $path);
-        DB::purge('tenant');
-        DB::reconnect('tenant');
     }
 }

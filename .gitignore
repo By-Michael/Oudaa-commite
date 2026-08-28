@@ -1,0 +1,12 @@
+/vendor
+/node_modules
+.env
+/storage/*.key
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+!/storage/framework/cache/data/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
+/database/database.sqlite
+.DS_Store

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@yield('title', 'Oudaa — Community Management, Simplified')</title>
+  <meta name="description" content="@yield('meta_description', 'Oudaa is a SaaS platform for managing communities, condos and apartment buildings — residents, fees, funds, payments and more.')">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2314919B'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial' font-weight='800' fill='white' text-anchor='middle'%3EO%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="{{ asset('nexora-assets/css/custom.css') }}" rel="stylesheet">
+  @stack('styles')
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-nexora fixed-top">
+    <div class="container">
+      <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.index') }}">
+        <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="Oudaa" style="height:34px;width:auto;">
+      </a>
+      <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1 mt-3 mt-lg-0">
+          <li class="nav-item"><a class="nav-link nav2 active"  href="{{ route('landing.index') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.about') }}">About</a></li>
+          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.services') }}">Features</a></li>
+          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.contact') }}">Contact</a></li>
+          <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom w-100">Create Platform</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+@yield('content')
+
+<footer class="footer-nexora">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6">
+        
+          <a class="navbar-brand-custom d-inline-block mb-3" href="{{ route('landing.index') }}">
+            <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="Oudaa" style="height:32px;width:auto;">
+          </a>
+          <p class="text-white-50 mb-4" style="max-width:320px;">Oudaa gives your committee one simple platform to manage residents, fees, funds, payments, projects and expenses.</p>
+          <div class="d-flex gap-2">
+            <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Company</h6>
+          <a href="{{ route('landing.about') }}">About Us</a>
+          <a href="{{ route('landing.services') }}">Features</a>
+          <a href="{{ route('landing.contact') }}">Contact</a>
+        </div>
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Features</h6>
+          <a href="{{ route('landing.service-details', 'residents') }}">Residents</a>
+          <a href="{{ route('landing.service-details', 'fees') }}">Fees</a>
+          <a href="{{ route('landing.service-details', 'payments') }}">Payments</a>
+          <a href="{{ route('landing.service-details', 'funds') }}">Funds</a>
+          <a href="{{ route('landing.service-details', 'projects') }}">Projects</a>
+          <a href="{{ route('landing.service-details', 'expenses') }}">Expenses</a>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <h6>Get in touch</h6>
+          <p class="text-white-50 mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:support@oudaa.com" style="color:inherit;">support@oudaa.com</a></p>
+          <p class="text-white-50 mb-3"><i class="bi bi-telephone me-2"></i><a href="tel:+10000000000" style="color:inherit;">+1 (000) 000-0000</a></p>
+          <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom">Create Your Platform</a>
+        </div>
+      </div>
+      <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center text-md-start">
+        <p class="mb-0">&copy; 2026 Oudaa. All rights reserved.</p>
+        <div class="d-flex gap-4">
+          <a href="#" class="mb-0">Privacy Policy</a>
+          <a href="#" class="mb-0">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ asset('nexora-assets/js/main.js') }}"></script>
+  @stack('scripts')
+</body>
+</html>

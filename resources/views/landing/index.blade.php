@@ -119,7 +119,7 @@
       <div class="row align-items-center g-5">
         <div class="col-lg-6 reveal">
           <div class="position-relative">
-            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=700&h=560&fit=crop" class="rounded-img w-100" alt="Modern residential apartment community" style="aspect-ratio: 5/4; object-fit:cover;">
+            <img src="{{ asset('nexora-assets/img/villa-community.jpg') }}" class="rounded-img w-100" alt="Villa community in Addis Ababa, Ethiopia" style="aspect-ratio: 5/4; object-fit:cover;">
             <div class="hero-float-badge badge-2 d-none d-sm-flex" style="position:absolute; bottom:-1.5rem; left:-1.5rem; right:auto;">
               <div class="icon-box icon-box-primary" style="width:36px;height:36px;border-radius:10px;font-size:1.1rem;"><i class="bi bi-lightning-charge-fill"></i></div>
               <div>Ready in minutes<br><small class="text-slate fw-normal">No setup calls needed</small></div>

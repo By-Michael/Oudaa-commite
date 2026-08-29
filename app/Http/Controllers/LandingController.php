@@ -103,4 +103,14 @@ class LandingController extends Controller
     {
         return view('landing.contact');
     }
+
+    public function privacy()
+    {
+        return view('landing.privacy');
+    }
+
+    public function terms()
+    {
+        return view('landing.terms');
+    }
 }

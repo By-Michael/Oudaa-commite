@@ -91,7 +91,7 @@
           </ul>
         </div>
         <div class="col-lg-6 reveal">
-          <img src="https://images.unsplash.com/photo-1502672260066-6bc21bcb9670?w=700&h=560&fit=crop" class="rounded-img w-100" alt="Apartment building exterior" style="aspect-ratio:5/4; object-fit:cover;">
+          <img src="https://images.unsplash.com/photo-1626598442658-ea6a1a5943df?w=700&h=560&fit=crop" class="rounded-img w-100" alt="Streets of Addis Ababa, Ethiopia" style="aspect-ratio:5/4; object-fit:cover;">
         </div>
       </div>
     </div>

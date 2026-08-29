@@ -21,14 +21,14 @@
           <div class="card-premium text-center">
             <div class="icon-box icon-box-secondary mx-auto mb-3"><i class="bi bi-envelope"></i></div>
             <h3 class="card-title">Email Us</h3>
-            <p class="mb-0">General inquiries &amp; support:<br><a href="mailto:support@oudaa.com" class="text-primary-custom fw-semibold text-decoration-none">support@oudaa.com</a></p>
+            <p class="mb-0">General inquiries &amp; support:<br><a href="mailto:m7020322@gmail.com" class="text-primary-custom fw-semibold text-decoration-none">m7020322@gmail.com</a></p>
           </div>
         </div>
         <div class="col-md-5 reveal">
           <div class="card-premium text-center">
             <div class="icon-box icon-box-success mx-auto mb-3"><i class="bi bi-telephone"></i></div>
             <h3 class="card-title">Call Us</h3>
-            <p class="mb-0">Mon – Fri<br><a href="tel:+10000000000" class="text-primary-custom fw-semibold text-decoration-none">+1 (000) 000-0000</a></p>
+            <p class="mb-0">Every day, during working hours<br><a href="tel:+251973069687" class="text-primary-custom fw-semibold text-decoration-none">+251 973 069 687</a></p>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cfaq2">I forgot my password — what do I do?</button>
               </h2>
               <div id="cfaq2" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
-                <div class="accordion-body">Email us at support@oudaa.com with your community name and we'll help you regain access.</div>
+                <div class="accordion-body">Email us at m7020322@gmail.com with your community name and we'll help you regain access.</div>
               </div>
             </div>
             <div class="accordion-item">

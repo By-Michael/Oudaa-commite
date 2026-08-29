@@ -88,16 +88,16 @@
         </div>
         <div class="col-lg-4 col-md-6">
           <h6>Get in touch</h6>
-          <p class="text-white-50 mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:support@oudaa.com" style="color:inherit;">support@oudaa.com</a></p>
-          <p class="text-white-50 mb-3"><i class="bi bi-telephone me-2"></i><a href="tel:+10000000000" style="color:inherit;">+1 (000) 000-0000</a></p>
+          <p class="text-white-50 mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:m7020322@gmail.com" style="color:inherit;">m7020322@gmail.com</a></p>
+          <p class="text-white-50 mb-3"><i class="bi bi-telephone me-2"></i><a href="tel:+251973069687" style="color:inherit;">+251 973 069 687</a></p>
           <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom">Create Your Platform</a>
         </div>
       </div>
       <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center text-md-start">
-        <p class="mb-0">&copy; 2026 Oudaa. All rights reserved.</p>
+        <p class="mb-0">&copy; {{ date('Y') }} Oudaa. All rights reserved.</p>
         <div class="d-flex gap-4">
-          <a href="#" class="mb-0">Privacy Policy</a>
-          <a href="#" class="mb-0">Terms of Service</a>
+          <a href="{{ route('landing.privacy') }}" class="mb-0">Privacy Policy</a>
+          <a href="{{ route('landing.terms') }}" class="mb-0">Terms of Service</a>
         </div>
       </div>
     </div>

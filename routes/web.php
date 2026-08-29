@@ -36,6 +36,8 @@ Route::get('/about', [LandingController::class, 'about'])->name('landing.about')
 Route::get('/services', [LandingController::class, 'services'])->name('landing.services');
 Route::get('/services/{service}', [LandingController::class, 'serviceDetails'])->name('landing.service-details');
 Route::get('/contact', [LandingController::class, 'contact'])->name('landing.contact');
+Route::get('/privacy-policy', [LandingController::class, 'privacy'])->name('landing.privacy');
+Route::get('/terms-of-service', [LandingController::class, 'terms'])->name('landing.terms');
 Route::post('/contact', [ContactController::class, 'store'])
     ->name('landing.contact.store')
     ->middleware('throttle:5,1'); // 5 submissions per minute per IP — cheap spam guard on a public, unauthenticated form.

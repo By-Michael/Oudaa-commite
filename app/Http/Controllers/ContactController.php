@@ -20,7 +20,7 @@ class ContactController extends Controller
             'website' => ['prohibited'],
         ]);
 
-        Mail::to(env('MAIL_SUPPORT_ADDRESS', 'support@oudaa.com'))
+        Mail::to(env('MAIL_SUPPORT_ADDRESS', 'm7020322@gmail.com'))
             ->queue(new ContactMessageReceived($data));
 
         return redirect()

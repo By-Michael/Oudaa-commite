@@ -19,7 +19,7 @@
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6 reveal">
-          <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=700&h=560&fit=crop" class="rounded-img w-100" alt="Residential community" style="aspect-ratio:5/4; object-fit:cover;">
+          <img src="https://images.unsplash.com/photo-1571946080923-a81668948f52?w=700&h=560&fit=crop" class="rounded-img w-100" alt="Bole district, Addis Ababa, Ethiopia" style="aspect-ratio:5/4; object-fit:cover;">
         </div>
         <div class="col-lg-6 reveal">
           <span class="eyebrow">Our mission</span>

@@ -12,7 +12,7 @@
     <h1>Something went wrong setting up {{ $tenant->name }}</h1>
     <p class="sub">
         Our team has been notified. Please contact
-        <a href="mailto:support@oudaa.com">support@oudaa.com</a> and mention your community name
+        <a href="mailto:m7020322@gmail.com">m7020322@gmail.com</a> and mention your community name
         so we can fix this for you.
     </p>
 

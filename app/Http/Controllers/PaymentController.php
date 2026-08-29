@@ -49,6 +49,14 @@ class PaymentController extends Controller
             'note' => ['nullable', 'string', 'max:255'],
         ]);
 
+        // fee_id/fund_id are mutually exclusive in the UI, and the one
+        // not chosen gets disabled client-side — disabled <select> fields
+        // are never submitted at all, so the key can be fully absent from
+        // $data here, not just empty. Normalize both to null up front so
+        // nothing below has to guess whether the key exists.
+        $data['fee_id'] = $data['fee_id'] ?? null;
+        $data['fund_id'] = $data['fund_id'] ?? null;
+
         if (empty($data['fee_id']) && empty($data['fund_id'])) {
             return back()->withErrors([
                 'fee_id' => 'Select a fee or a fund — a payment has to be attributed to one of them.',

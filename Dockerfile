@@ -7,8 +7,9 @@
 # something fixable from inside the Dockerfile.
 FROM php:8.4-fpm-alpine
 
-RUN apk add --no-cache libzip-dev nginx supervisor gettext \
-    && docker-php-ext-install pdo pdo_mysql
+RUN apk add --no-cache libzip-dev nginx supervisor gettext libpng-dev libjpeg-turbo-dev freetype-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
+    && docker-php-ext-install pdo pdo_mysql gd zip
 
 WORKDIR /app
 

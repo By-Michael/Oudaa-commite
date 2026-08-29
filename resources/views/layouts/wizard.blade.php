@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    // Applied before first paint to avoid a light/dark flash on load,
+    // and to carry the theme chosen on the landing page through the
+    // whole onboarding flow (same localStorage key, same origin).
+    (function () {
+      var stored = localStorage.getItem('oudaa-theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Create your platform — Oudaa')</title>

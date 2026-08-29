@@ -50,7 +50,7 @@
                 @checked(old('community_type', $communityType) === 'normal')>
             <label class="form-check-label" for="type-normal">
                 <strong>Normal community</strong>
-                <div class="text-muted" style="font-size:0.85rem;">Houses/villas — residents identified by unit number only.</div>
+                <div class="text-slate" style="font-size:0.85rem;">Houses/villas — residents identified by unit number only.</div>
             </label>
         </div>
 
@@ -59,7 +59,7 @@
                 @checked(old('community_type', $communityType) === 'condo')>
             <label class="form-check-label" for="type-condo">
                 <strong>Condo / Apartment building</strong>
-                <div class="text-muted" style="font-size:0.85rem;">Adds a block number field when adding residents.</div>
+                <div class="text-slate" style="font-size:0.85rem;">Adds a block number field when adding residents.</div>
             </label>
         </div>
     </div>

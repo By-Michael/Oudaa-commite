@@ -15,7 +15,7 @@
         set your password. It usually takes less than a minute.
     </p>
 
-    <p class="text-muted" style="font-size:0.9rem;">
+    <p class="text-slate" style="font-size:0.9rem;">
         Your platform link will be:<br>
         <strong>{{ rtrim(url('/'), '/') }}/{{ $tenant->slug }}</strong>
     </p>

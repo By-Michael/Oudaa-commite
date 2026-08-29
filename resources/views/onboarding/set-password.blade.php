@@ -20,7 +20,7 @@
     <div class="mb-3">
         <label for="password" class="form-label">New password</label>
         <input type="password" id="password" name="password" class="form-control" minlength="8" required autofocus>
-        <div class="form-text">At least 8 characters.</div>
+        <div class="form-text text-slate">At least 8 characters.</div>
     </div>
 
     <div class="mb-4">

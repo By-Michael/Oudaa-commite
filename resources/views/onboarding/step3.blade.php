@@ -38,7 +38,32 @@
         >
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Create My Platform <i class="bi bi-arrow-right"></i></button>
+    <div class="mb-3 form-check">
+        <input
+            type="checkbox"
+            id="accept_terms"
+            name="accept_terms"
+            class="form-check-input"
+            value="1"
+            {{ old('accept_terms') ? 'checked' : '' }}
+            required
+        >
+        <label for="accept_terms" class="form-check-label">
+            I agree to the <a href="{{ route('landing.privacy') }}" target="_blank" rel="noopener">Privacy Policy</a>
+            and <a href="{{ route('landing.terms') }}" target="_blank" rel="noopener">Terms of Service</a>.
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" id="submit-btn" disabled>Create My Platform <i class="bi bi-arrow-right"></i></button>
 </form>
+
+<script>
+    var acceptTerms = document.getElementById('accept_terms');
+    var submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = !acceptTerms.checked;
+    acceptTerms.addEventListener('change', function () {
+        submitBtn.disabled = !this.checked;
+    });
+</script>
 
 @endsection

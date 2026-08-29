@@ -36,7 +36,7 @@
           <p><strong class="text-navy">Automatically collected:</strong> basic technical data such as IP address, browser type, and access logs, used for security and troubleshooting.</p>
 
           <h3 class="mt-5 mb-3">3. Data isolation between communities</h3>
-          <p>Every community gets its own separate database when its platform is created. Data entered by one community is never visible to, or mixed with, another community's data. Committee members can only see the data that belongs to their own platform.</p>
+          <p>All communities' data is stored in a single, shared database, with each record tagged to the specific community it belongs to. Access controls in the application enforce that data entered by one community is never visible to, or mixed with, another community's data. Committee members can only see the data that belongs to their own platform.</p>
 
           <h3 class="mt-5 mb-3">4. How we use data</h3>
           <ul class="list-check mb-4">
@@ -57,7 +57,7 @@
           <p>If you are a resident and want to know what information a committee has recorded about you, or want it corrected, please contact that community's committee directly, as they control their own platform's data. If you are a committee member and want your account or platform data removed, or have any other request, contact us using the details below.</p>
 
           <h3 class="mt-5 mb-3">8. Security</h3>
-          <p>We use reasonable technical and organizational measures to protect data — including per-community database isolation and hashed passwords — but no system is completely secure, and we cannot guarantee absolute security.</p>
+          <p>We use reasonable technical and organizational measures to protect data — including application-level access controls that isolate each community's records and hashed passwords — but no system is completely secure, and we cannot guarantee absolute security.</p>
 
           <h3 class="mt-5 mb-3">9. Changes to this policy</h3>
           <p>We may update this policy as Oudaa evolves. Material changes will be reflected by updating the "Last updated" date above.</p>

@@ -96,6 +96,9 @@ class CreatePlatformController extends Controller
 
         $data = $request->validate([
             'email' => ['required', 'email', 'max:255'],
+            'accept_terms' => ['accepted'],
+        ], [
+            'accept_terms.accepted' => 'Please accept the Privacy Policy and Terms of Service to continue.',
         ]);
 
         $slug = Session::get('onboarding.slug');

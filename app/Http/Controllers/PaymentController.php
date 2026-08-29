@@ -74,8 +74,9 @@ class PaymentController extends Controller
         return redirect()->route('payments.index')->with('status', 'Payment recorded.');
     }
 
-    public function edit(Payment $payment)
+    public function edit(Request $request)
     {
+        $payment = Payment::findOrFail($request->route('payment'));
         $funds = Fund::active()->orderBy('name')->get();
 
         return view('payments.edit', compact('payment', 'funds'));
@@ -88,8 +89,9 @@ class PaymentController extends Controller
      * what fee it was for, or the amount — those go through a new
      * payment entry instead, so the audit trail stays honest.
      */
-    public function update(Request $request, Payment $payment)
+    public function update(Request $request)
     {
+        $payment = Payment::findOrFail($request->route('payment'));
         $data = $request->validate([
             'status' => ['required', 'in:PAID,PENDING,VOID'],
             'fund_id' => ['required_if:status,PAID', 'nullable', 'exists:funds,id'],

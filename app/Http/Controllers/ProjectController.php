@@ -36,15 +36,17 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('status', 'Project created.');
     }
 
-    public function edit(Project $project)
+    public function edit(Request $request)
     {
+        $project = Project::findOrFail($request->route('project'));
         $funds = Fund::active()->orderBy('name')->get();
 
         return view('projects.form', compact('project', 'funds'));
     }
 
-    public function update(Request $request, Project $project)
+    public function update(Request $request)
     {
+        $project = Project::findOrFail($request->route('project'));
         $project->update($this->validated($request));
 
         return redirect()->route('projects.index')->with('status', 'Project updated.');
@@ -55,15 +57,17 @@ class ProjectController extends Controller
      * linked fund and every expense recorded against it — the
      * "inter-project" view tying spend back to funds.
      */
-    public function show(Project $project)
+    public function show(Request $request)
     {
+        $project = Project::findOrFail($request->route('project'));
         $project->load(['fund', 'expenses' => fn ($q) => $q->latest('incurred_at')]);
 
         return view('projects.show', compact('project'));
     }
 
-    public function archive(Project $project)
+    public function archive(Request $request)
     {
+        $project = Project::findOrFail($request->route('project'));
         $project->update([
             'status' => $project->status === 'archived' ? 'active' : 'archived',
         ]);

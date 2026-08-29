@@ -6,9 +6,7 @@ use App\Models\Fee;
 use App\Models\Fund;
 use App\Models\Payment;
 use App\Models\Resident;
-use App\Support\CurrentCommunity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class FeeController extends Controller
 {
@@ -47,17 +45,17 @@ class FeeController extends Controller
         return redirect()->route('fees.index')->with('status', 'Fee created.');
     }
 
-    public function edit(string $fee)
+    public function edit(Request $request)
     {
-        $fee = Fee::findOrFail($fee);
+        $fee = Fee::findOrFail($request->route('fee'));
         $funds = Fund::active()->orderBy('name')->get();
 
         return view('fees.form', compact('fee', 'funds'));
     }
 
-    public function update(Request $request, string $fee)
+    public function update(Request $request)
     {
-        $fee = Fee::findOrFail($fee);
+        $fee = Fee::findOrFail($request->route('fee'));
         $data = $this->validated($request);
         $data['status'] = $request->input('status', $fee->status); // status only settable here, on edit
 
@@ -70,9 +68,9 @@ class FeeController extends Controller
         return redirect()->route('fees.index')->with('status', 'Fee updated.');
     }
 
-    public function deactivate(string $fee)
+    public function deactivate(Request $request)
     {
-        $fee = Fee::findOrFail($fee);
+        $fee = Fee::findOrFail($request->route('fee'));
         $fee->update(['status' => $fee->status === 'active' ? 'inactive' : 'active']);
 
         return back()->with('status', 'Fee status updated.');
@@ -82,20 +80,19 @@ class FeeController extends Controller
      * Unpaid summary for a single fee: active residents who have no PAID
      * payment against this fee for the fee's current period.
      */
-    public function unpaid(string $fee)
+    public function unpaid(Request $request)
     {
-        // TEMPORARY diagnostic logging -- remove once the 404 here is
-        // root-caused. Tells us the community scope in effect and
-        // whether a row with this ID exists at all vs. exists but is
-        // scoped out.
-        Log::info('fees.unpaid debug', [
-            'route_param_fee' => $fee,
-            'current_community_id' => app(CurrentCommunity::class)->id(),
-            'exists_unscoped' => Fee::withoutCommunityScope()->where('id', $fee)->exists(),
-            'unscoped_row' => Fee::withoutCommunityScope()->where('id', $fee)->first(['id', 'community_id', 'name']),
-        ]);
-
-        $fee = Fee::findOrFail($fee);
+        // Pulled explicitly by route parameter NAME via $request->route('fee')
+        // rather than a bound method argument (Fee $fee, or even a plain
+        // string $fee). On this {tenant}/fees/{fee}/... route, Laravel's
+        // reflection-based method-parameter resolution was handing the
+        // controller the WRONG route segment -- the tenant slug landed in
+        // the argument meant for the fee ID (confirmed via temporary
+        // logging: route_param_fee came through as the tenant's slug).
+        // $request->route('name') looks the value up by its literal route
+        // parameter name and sidesteps whatever reflection mismatch was
+        // causing that, at the cost of being one line more explicit.
+        $fee = Fee::findOrFail($request->route('fee'));
 
         $periodKey = $fee->currentPeriodKey();
 

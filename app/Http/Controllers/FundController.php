@@ -36,13 +36,16 @@ class FundController extends Controller
         return redirect()->route('funds.index')->with('status', 'Fund created.');
     }
 
-    public function edit(Fund $fund)
+    public function edit(Request $request)
     {
+        $fund = Fund::findOrFail($request->route('fund'));
+
         return view('funds.form', compact('fund'));
     }
 
-    public function update(Request $request, Fund $fund)
+    public function update(Request $request)
     {
+        $fund = Fund::findOrFail($request->route('fund'));
         $fund->update($this->validated($request));
 
         return redirect()->route('funds.index')->with('status', 'Fund updated.');
@@ -51,8 +54,9 @@ class FundController extends Controller
     /**
      * No delete for funds — archive instead, same pattern as residents.
      */
-    public function archive(Fund $fund)
+    public function archive(Request $request)
     {
+        $fund = Fund::findOrFail($request->route('fund'));
         $fund->update(['status' => $fund->status === 'active' ? 'archived' : 'active']);
 
         return back()->with('status', 'Fund status updated.');

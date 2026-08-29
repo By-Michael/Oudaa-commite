@@ -43,17 +43,20 @@ class ResidentController extends Controller
         return redirect()->route('residents.index')->with('status', 'Resident added.');
     }
 
-    public function edit(Resident $resident)
+    public function edit(Request $request)
     {
+        $resident = Resident::findOrFail($request->route('resident'));
+
         return view('residents.form', [
             'resident' => $resident,
             'isCondo' => $this->isCondo(),
         ]);
     }
 
-    public function update(Request $request, Resident $resident)
+    public function update(Request $request)
     {
-        $data = $this->validated($request);
+        $resident = Resident::findOrFail($request->route('resident'));
+        $data = $this->validated($request, $resident);
         $data['status'] = $request->input('status', $resident->status); // status only settable here, on edit
         $resident->update($data);
 
@@ -74,18 +77,19 @@ class ResidentController extends Controller
     /**
      * No delete for residents — deactivate instead so payment history stays intact.
      */
-    public function deactivate(Resident $resident)
+    public function deactivate(Request $request)
     {
+        $resident = Resident::findOrFail($request->route('resident'));
         $resident->update(['status' => $resident->status === 'active' ? 'inactive' : 'active']);
 
         return back()->with('status', 'Resident status updated.');
     }
 
-    private function validated(Request $request): array
+    private function validated(Request $request, ?Resident $resident = null): array
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'id_number' => ['required', 'string', 'max:100', 'unique:residents,id_number,'.($request->route('resident')?->id ?? 'NULL').',id'],
+            'id_number' => ['required', 'string', 'max:100', 'unique:residents,id_number,'.($resident?->id ?? 'NULL').',id'],
             'unit_number' => ['required', 'string', 'max:50'],
             'block_number' => ['nullable', 'string', 'max:50'],
             'phone' => ['nullable', 'string', 'max:50'],

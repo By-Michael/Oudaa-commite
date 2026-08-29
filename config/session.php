@@ -2,7 +2,7 @@
 
 return [
     'driver' => env('SESSION_DRIVER', 'file'),
-    'lifetime' => (int) env('SESSION_LIFETIME', 120),
+    'lifetime' => (int) env('SESSION_LIFETIME', 480), // 8 hours of inactivity — see also the silent keep-alive ping in layouts/app.blade.php, which resets this while the tab is open.
     'expire_on_close' => false,
     'encrypt' => false,
     'files' => storage_path('framework/sessions'),

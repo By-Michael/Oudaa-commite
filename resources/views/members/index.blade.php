@@ -4,7 +4,7 @@
 
 <div class="toolbar">
     <p class="muted" style="margin:0;">Everyone here can sign in and use the panel. Every action is attributed to the person who did it in the <a href="{{ route('audit.index') }}">Audit Log</a>.</p>
-    <a href="{{ route('members.create') }}" class="btn btn-primary">+ Add Committee Member</a>
+    <a href="{{ route('members.create') }}" class="js-modal-link btn btn-primary">+ Add Committee Member</a>
 </div>
 
 <div class="panel">

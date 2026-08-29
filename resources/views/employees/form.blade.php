@@ -25,7 +25,7 @@
                     <input type="text" name="role" value="{{ old('role', $employee->role) }}" placeholder="e.g. Security Guard, Cleaner, Groundskeeper" required>
                 </div>
                 <div class="form-row">
-                    <label>Salary</label>
+                    <label>Salary (ETB)</label>
                     <input type="number" step="0.01" min="0" name="salary" value="{{ old('salary', $employee->salary) }}" required>
                 </div>
             </div>

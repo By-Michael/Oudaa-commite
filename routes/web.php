@@ -7,7 +7,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FeeController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\Onboarding\CreatePlatformController;
@@ -73,12 +75,22 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
         Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+
+        Route::get('/forgot-password', [ForgotPasswordController::class, 'showRequestForm'])->name('password.request');
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+        Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+        Route::post('/reset-password/{token}', [ForgotPasswordController::class, 'reset'])->name('password.update');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Hit silently in the background by the front-end (see layouts/app.blade.php)
+        // to keep the session alive while the tab is open, without ever
+        // navigating the user or interrupting what they're doing.
+        Route::get('/ping', fn () => response()->noContent())->name('ping');
 
         Route::get('/residents', [ResidentController::class, 'index'])->name('residents.index');
         Route::get('/residents/create', [ResidentController::class, 'create'])->name('residents.create');
@@ -135,6 +147,8 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/members', [MemberController::class, 'index'])->name('members.index');
         Route::get('/members/create', [MemberController::class, 'create'])->name('members.create');
         Route::post('/members', [MemberController::class, 'store'])->name('members.store');
+
+        Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 
         // Read-only: no store/update/destroy routes exist for the audit log.
         Route::get('/audit-log', [AuditLogController::class, 'index'])->name('audit.index');

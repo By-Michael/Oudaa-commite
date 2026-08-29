@@ -18,7 +18,7 @@
             </select>
         @endif
     </form>
-    <a href="{{ route('funds.create') }}" class="btn btn-primary">+ Add Fund</a>
+    <a href="{{ route('funds.create') }}" class="js-modal-link btn btn-primary">+ Add Fund</a>
 </div>
 
 <div class="panel">
@@ -36,11 +36,12 @@
                         <td>{{ $fund->name }}</td>
                         <td>{{ $fund->category ?: '—' }}</td>
                         <td>{{ \Illuminate\Support\Str::limit($fund->description, 50) ?: '—' }}</td>
-                        <td class="right">{{ number_format($fund->balance(), 2) }}</td>
+                        <td class="right">{{ money($fund->balance()) }}</td>
                         <td><span class="badge badge-{{ $fund->status === 'active' ? 'active' : 'archived' }}">{{ ucfirst($fund->status) }}</span></td>
                         <td class="right actions-cell">
-                            <a href="{{ route('funds.edit', $fund) }}" class="btn btn-sm">Edit</a>
-                            <form method="POST" action="{{ route('funds.toggle', $fund) }}" style="display:inline">
+                            <a href="{{ route('funds.edit', $fund) }}" class="js-modal-link btn btn-sm">Edit</a>
+                            <form method="POST" action="{{ route('funds.toggle', $fund) }}" style="display:inline"
+                                  data-confirm="{{ $fund->status === 'active' ? 'Archive' : 'Restore' }} {{ addslashes($fund->name) }}?">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="btn btn-sm {{ $fund->status === 'active' ? 'btn-danger' : '' }}">
                                     {{ $fund->status === 'active' ? 'Archive' : 'Restore' }}

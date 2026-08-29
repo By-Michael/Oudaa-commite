@@ -7,7 +7,7 @@
         <p class="muted">
             {{ $payment->resident->name }} ({{ $payment->resident->unit_number }}) —
             {{ $payment->fee->name ?? 'No linked fee' }} —
-            {{ number_format($payment->amount, 2) }}, paid {{ $payment->paid_at->format('Y-m-d') }}
+            {{ money($payment->amount) }}, paid {{ $payment->paid_at->format('Y-m-d') }}
         </p>
         <p class="muted" style="margin-top:-8px;font-size:12px;">
             Only status, fund, and note can be corrected here. To fix the resident, fee, or amount, void this entry and record a new payment instead.

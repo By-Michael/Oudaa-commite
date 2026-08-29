@@ -18,7 +18,7 @@
             <option value="archived" @selected(request('status') == 'archived')>Archived</option>
         </select>
     </form>
-    <a href="{{ route('projects.create') }}" class="btn btn-primary">+ Add Project</a>
+    <a href="{{ route('projects.create') }}" class="js-modal-link btn btn-primary">+ Add Project</a>
 </div>
 
 <div class="panel">
@@ -35,13 +35,14 @@
                     <tr>
                         <td><a href="{{ route('projects.show', $project) }}">{{ $project->name }}</a></td>
                         <td>{{ $project->fund->name ?? '—' }}</td>
-                        <td class="right">{{ number_format($project->planned_budget, 2) }}</td>
-                        <td class="right">{{ number_format($project->spent(), 2) }}</td>
-                        <td class="right">{{ number_format($project->remaining(), 2) }}</td>
+                        <td class="right">{{ money($project->planned_budget) }}</td>
+                        <td class="right">{{ money($project->spent()) }}</td>
+                        <td class="right">{{ money($project->remaining()) }}</td>
                         <td><span class="badge badge-{{ $project->status === 'archived' ? 'archived' : 'active' }}">{{ ucfirst($project->status) }}</span></td>
                         <td class="right actions-cell">
-                            <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm">Edit</a>
-                            <form method="POST" action="{{ route('projects.toggle', $project) }}" style="display:inline">
+                            <a href="{{ route('projects.edit', $project) }}" class="js-modal-link btn btn-sm">Edit</a>
+                            <form method="POST" action="{{ route('projects.toggle', $project) }}" style="display:inline"
+                                  data-confirm="{{ $project->status === 'archived' ? 'Restore' : 'Archive' }} {{ addslashes($project->name) }}?">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="btn btn-sm {{ $project->status !== 'archived' ? 'btn-danger' : '' }}">
                                     {{ $project->status === 'archived' ? 'Restore' : 'Archive' }}

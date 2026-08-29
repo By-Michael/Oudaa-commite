@@ -43,6 +43,53 @@
   --md-shadow-sm:0 1px 3px rgba(28,27,31,.08), 0 1px 2px rgba(28,27,31,.06);
   --md-shadow-md:0 4px 14px rgba(28,27,31,.12), 0 2px 6px rgba(28,27,31,.06);
   --md-shadow-lg:0 10px 30px rgba(28,27,31,.16), 0 4px 10px rgba(28,27,31,.08);
+
+  --md-topbar-bg:rgba(255,251,254,.85);
+}
+
+/* ---- Dark theme ----
+   Same variable names, dark-mode values — every rule elsewhere already
+   reads from these variables, so this block is the entire theme swap. */
+[data-theme="dark"]{
+  --md-bg:#141218;
+  --md-on-bg:#E6E1E9;
+  --md-primary:#D0BCFF;
+  --md-primary-hover:#E4D6FF;
+  --md-on-primary:#381E72;
+  --md-primary-container:#4F378B;
+  --md-on-primary-container:#EADDFF;
+  --md-secondary-container:#4A4458;
+  --md-on-secondary-container:#E8DEF8;
+  --md-tertiary:#EFB8C8;
+  --md-on-tertiary:#492532;
+  --md-tertiary-container:#633B48;
+  --md-surface:#141218;
+  --md-surface-container:#211F26;
+  --md-surface-container-low:#1D1B20;
+  --md-surface-container-high:#2B2930;
+  --md-outline:#948F99;
+  --md-outline-variant:#49454F;
+  --md-on-surface-variant:#CAC4D0;
+
+  --md-success:#8BD5A2;
+  --md-success-container:#0F3D1E;
+  --md-error:#F2B8B5;
+  --md-error-container:#601410;
+  --md-warning:#F4CB7E;
+  --md-warning-container:#4A3400;
+
+  --md-shadow-sm:0 1px 3px rgba(0,0,0,.32), 0 1px 2px rgba(0,0,0,.24);
+  --md-shadow-md:0 4px 14px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.24);
+  --md-shadow-lg:0 10px 30px rgba(0,0,0,.5), 0 4px 10px rgba(0,0,0,.28);
+
+  --md-topbar-bg:rgba(20,18,24,.85);
+}
+
+[data-theme="dark"] .auth-wrap{
+  background:
+    radial-gradient(circle at 12% 15%, rgba(208,188,255,.14) 0%, transparent 42%),
+    radial-gradient(circle at 88% 85%, rgba(239,184,200,.12) 0%, transparent 45%),
+    var(--md-bg);
 }
 
 *{box-sizing:border-box}
@@ -146,7 +193,7 @@ h1,h2,h3{font-weight:500;letter-spacing:-.005em;color:var(--md-on-bg)}
 .main{flex:1;min-width:0}
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:6px 32px 2px;background:rgba(255,251,254,.85);
+  padding:6px 32px 2px;background:var(--md-topbar-bg);
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--md-outline-variant);
   position:sticky;top:0;z-index:10;
@@ -161,6 +208,14 @@ h1,h2,h3{font-weight:500;letter-spacing:-.005em;color:var(--md-on-bg)}
   transition:background-color .2s var(--md-ease), color .2s var(--md-ease);
 }
 .icon-btn:hover{background:var(--md-surface-container);color:var(--md-on-surface);}
+
+/* Theme toggle: show sun in light mode (click to go dark), moon in dark
+   mode (click to go light) — one icon at a time, no layout shift. */
+#themeToggle{position:relative}
+#themeToggle .theme-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transition:opacity .15s var(--md-ease);}
+#themeToggle .theme-icon-moon{opacity:0;}
+[data-theme="dark"] #themeToggle .theme-icon-sun{opacity:0;}
+[data-theme="dark"] #themeToggle .theme-icon-moon{opacity:1;}
 
 .account-menu{position:relative}
 .account-trigger{
@@ -332,3 +387,45 @@ input:focus,select:focus,textarea:focus{
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition-duration:.01ms !important}
 }
+
+/* ---------------------------------------------------------------------
+   Modal system: used for "add/edit" popups and confirmation dialogs
+   instead of full-page navigation and native confirm(). See app.js.
+--------------------------------------------------------------------- */
+.modal-overlay{
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(28,27,31,.4);
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:5vh 16px;
+  overflow-y:auto;
+  opacity:0; pointer-events:none;
+  transition:opacity .18s var(--md-ease);
+}
+.modal-overlay.open{opacity:1; pointer-events:auto;}
+.modal-card{
+  background:var(--md-surface, #FFFBFE);
+  border-radius:var(--md-r-lg, 24px);
+  box-shadow:var(--md-shadow-lg);
+  width:100%; max-width:640px;
+  transform:translateY(-12px) scale(.98);
+  transition:transform .18s var(--md-ease);
+  max-height:90vh; overflow-y:auto;
+  position:relative;
+}
+.modal-overlay.open .modal-card{transform:none;}
+.modal-card .panel{box-shadow:none; margin:0; max-width:none !important;}
+.modal-close{
+  position:absolute; top:14px; right:14px; z-index:5;
+  width:32px; height:32px; border-radius:50%; border:none;
+  background:var(--md-surface-container-high, #ECE6F0);
+  color:var(--md-on-surface-variant, #49454F);
+  font-size:18px; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-close:hover{background:var(--md-surface-container, #F3EDF7);}
+.modal-loading{padding:40px; text-align:center; color:var(--md-on-surface-variant,#49454F);}
+
+/* Small confirmation dialog variant */
+.confirm-card{max-width:380px; padding:28px 24px 24px;}
+.confirm-card p{margin:0 0 20px; font-size:14.5px; color:var(--md-on-bg);}
+.confirm-actions{display:flex; gap:10px; justify-content:flex-end;}

@@ -17,7 +17,7 @@
             @endforeach
         </select>
     </form>
-    <a href="{{ route('payments.create') }}" class="btn btn-primary">+ Record Payment</a>
+    <a href="{{ route('payments.create') }}" class="js-modal-link btn btn-primary">+ Record Payment</a>
 </div>
 
 <div class="panel">
@@ -36,11 +36,11 @@
                         <td>{{ $payment->resident->name }} ({{ $payment->resident->unit_number }})</td>
                         <td>{{ $payment->fee->name ?? '—' }}</td>
                         <td>{{ $payment->fund->name ?? '—' }}</td>
-                        <td class="right">{{ number_format($payment->amount, 2) }}</td>
+                        <td class="right">{{ money($payment->amount) }}</td>
                         <td>{{ ucfirst(str_replace('_', ' ', $payment->method)) }}</td>
                         <td><span class="badge badge-{{ strtolower($payment->status) }}">{{ $payment->status }}</span></td>
                         <td>{{ $payment->note ?: '—' }}</td>
-                        <td class="right actions-cell"><a href="{{ route('payments.edit', $payment) }}" class="btn btn-sm">Edit Status</a></td>
+                        <td class="right actions-cell"><a href="{{ route('payments.edit', $payment) }}" class="js-modal-link btn btn-sm">Edit Status</a></td>
                     </tr>
                 @endforeach
                 </tbody>

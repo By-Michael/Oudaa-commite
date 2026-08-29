@@ -11,7 +11,7 @@
             @endforeach
         </select>
     </form>
-    <a href="{{ route('expenses.create') }}" class="btn btn-primary">+ Record Expense</a>
+    <a href="{{ route('expenses.create') }}" class="js-modal-link btn btn-primary">+ Record Expense</a>
 </div>
 
 <div class="panel">
@@ -32,7 +32,7 @@
                         <td>{{ $expense->fund->name ?? '—' }}</td>
                         <td>{{ $expense->project->name ?? '—' }}</td>
                         <td>{{ $expense->employee->name ?? '—' }}</td>
-                        <td class="right">{{ number_format($expense->amount, 2) }}</td>
+                        <td class="right">{{ money($expense->amount) }}</td>
                         <td>{{ $expense->note ?: '—' }}</td>
                         <td>
                             @if ($expense->receiptUrl())

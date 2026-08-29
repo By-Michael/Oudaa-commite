@@ -32,12 +32,12 @@ class LandingController extends Controller
                 'title' => 'Residents',
                 'icon' => 'bi-people',
                 'intro' => "A committee's most basic job is knowing who actually lives in the community — and that's harder than it sounds once it's spread across old spreadsheets, WhatsApp threads and paper forms.",
-                'body' => "Oudaa keeps one record per household: name, ID number, unit number (plus block number, for condo/apartment communities), phone, email, and whether they're an owner or a renter. Search finds a resident instantly by any of those fields, and residents are deactivated rather than deleted when they move out — so payment history always stays intact.",
+                'body' => "Oudaa keeps one record per household: name, ID number, unit number (plus block number, for condo/apartment communities), phone, email, and whether they're an owner or a tenant. Search finds a resident instantly by any of those fields, and residents are deactivated rather than deleted when they move out — so payment history always stays intact.",
                 'points' => [
                     ['icon' => 'bi-search', 'title' => 'Instant search', 'desc' => 'Find anyone by name, unit, block or ID number.'],
                     ['icon' => 'bi-building', 'title' => 'Condo-ready', 'desc' => 'Block numbers appear automatically for condo communities.'],
                     ['icon' => 'bi-toggle-on', 'title' => 'Active/inactive status', 'desc' => 'Deactivate a resident without losing their history.'],
-                    ['icon' => 'bi-person-badge', 'title' => 'Owner or renter', 'desc' => 'Track occupancy type per household.'],
+                    ['icon' => 'bi-person-badge', 'title' => 'Owner or tenant', 'desc' => 'Track occupancy type per household.'],
                 ],
             ],
             'fees' => [

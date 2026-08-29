@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Dashboard') — Oudaa</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/favicon-192.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
+    <script>
+        // Applied before first paint (and before app.css loads) so there's
+        // no flash of the wrong theme on load. Reads the same key the
+        // toggle button in the topbar writes to.
+        (function () {
+            var saved = localStorage.getItem('oudaa-theme');
+            var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -27,7 +42,7 @@
         <div class="foot">
             Signed in as<br><strong>{{ auth()->user()->name ?? 'Committee' }}</strong>
             <div style="margin-top:8px;">
-                <a href="#" style="color:#D0C6E4;">Help and support</a>
+                <a href="{{ route('help.index') }}" style="color:#D0C6E4;">Help and support</a>
             </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -40,6 +55,10 @@
         <div class="topbar">
             <h1>@yield('title', 'Dashboard')</h1>
             <div class="topbar-actions">
+                <button type="button" class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+                </button>
                 <button type="button" class="icon-btn" aria-label="Notifications">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 </button>
@@ -86,5 +105,39 @@
         });
     })();
 </script>
+<script>
+    // Dark / light theme toggle. Persists to localStorage under the same
+    // key the inline <head> script reads on next load, so the choice
+    // sticks across pages and reloads without a flash of the old theme.
+    (function () {
+        var STORAGE_KEY = 'oudaa-theme';
+        var toggle = document.getElementById('themeToggle');
+        if (!toggle) return;
+        toggle.addEventListener('click', function () {
+            var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+        });
+    })();
+</script>
+<script>
+    // Silent session keep-alive: as long as this tab stays open, ping the
+    // server every few minutes so the session never times out mid-work.
+    // It only renews an already-valid session — it can't resurrect one
+    // that's expired (e.g. laptop closed overnight), and logging out
+    // still ends the session immediately as normal.
+    (function () {
+        var PING_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+        function ping() {
+            fetch('{{ route('ping') }}', { credentials: 'same-origin', cache: 'no-store' }).catch(function () {});
+        }
+        setInterval(ping, PING_INTERVAL_MS);
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') ping();
+        });
+    })();
+</script>
+<script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

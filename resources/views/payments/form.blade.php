@@ -28,7 +28,7 @@
                         <option value="">No fee — pay into a fund directly</option>
                         @foreach ($fees as $fee)
                             <option value="{{ $fee->id }}" data-amount="{{ $fee->amount }}" data-fund="{{ $fee->fund_id }}" @selected(old('fee_id') == $fee->id)>
-                                {{ $fee->name }} ({{ number_format($fee->amount, 2) }}) — {{ $fee->fund->name }}
+                                {{ $fee->name }} ({{ money($fee->amount) }}) — {{ $fee->fund->name }}
                             </option>
                         @endforeach
                     </select>
@@ -52,7 +52,7 @@
 
             <div class="form-grid">
                 <div class="form-row lock-hover-wrap" id="amount-wrap">
-                    <label>Amount</label>
+                    <label>Amount (ETB)</label>
                     <input type="number" step="0.01" min="0.01" name="amount" id="amount" value="{{ old('amount') }}" required>
                     <span class="hover-hint">The amount will be the fee amount set in the selected fee.</span>
                 </div>
@@ -88,7 +88,7 @@
 
 <style>
 .resident-results{
-    position:absolute; left:0; right:0; top:100%; z-index:20;
+    position:fixed; z-index:1100;
     background:var(--md-surface-container-high, #ECE6F0);
     border-radius:var(--md-r-sm, 12px);
     box-shadow:var(--md-shadow-md, 0 4px 14px rgba(0,0,0,.15));
@@ -102,6 +102,7 @@
 .resident-results .opt:hover, .resident-results .opt.active{background:rgba(103,80,164,.12)}
 .resident-results .opt small{display:block;color:var(--md-on-surface-variant,#49454F);font-size:11.5px;margin-top:2px}
 .resident-results .empty{padding:10px 14px;font-size:13px;color:var(--md-on-surface-variant,#49454F)}
+.resident-results .exact-match{border-left:3px solid var(--md-primary, #6750A4)}
 
 .lock-hover-wrap{position:relative;}
 .lock-hover-wrap .hover-hint{
@@ -125,6 +126,7 @@
 
 <script>
 (function () {
+  try {
     // ---- Resident search-select ----
     const residents = [
         @foreach ($residents as $resident)
@@ -140,42 +142,109 @@
     const searchInput = document.getElementById('resident-search');
     const hiddenInput = document.getElementById('resident_id');
     const resultsBox = document.getElementById('resident-results');
+    let activeIndex = -1;
+    let currentList = [];
+
+    // Positioned with position:fixed (not absolute) and recalculated here,
+    // so the dropdown is never clipped when this form is opened inside the
+    // scrollable popup modal — an absolutely-positioned box would get cut
+    // off by the modal's own overflow:auto.
+    function positionResultsBox() {
+        const rect = searchInput.getBoundingClientRect();
+        resultsBox.style.left = rect.left + 'px';
+        resultsBox.style.top = (rect.bottom + 4) + 'px';
+        resultsBox.style.width = rect.width + 'px';
+    }
+
+    function closeResults() {
+        resultsBox.classList.remove('open');
+        activeIndex = -1;
+    }
+
+    function highlight(index) {
+        const opts = resultsBox.querySelectorAll('.opt');
+        opts.forEach((el, i) => el.classList.toggle('active', i === index));
+        if (opts[index]) opts[index].scrollIntoView({ block: 'nearest' });
+        activeIndex = index;
+    }
+
+    function selectResident(r) {
+        hiddenInput.value = r.id;
+        searchInput.value = r.label;
+        closeResults();
+    }
 
     function renderResults(list) {
+        currentList = list.slice(0, 25);
         resultsBox.innerHTML = '';
-        if (!list.length) {
+        if (!currentList.length) {
             resultsBox.innerHTML = '<div class="empty">No matching residents.</div>';
+            positionResultsBox();
             resultsBox.classList.add('open');
             return;
         }
-        list.slice(0, 25).forEach(r => {
+        currentList.forEach((r, i) => {
             const div = document.createElement('div');
-            div.className = 'opt';
+            div.className = 'opt' + (currentList.length === 1 ? ' exact-match' : '');
             div.innerHTML = r.label + '<small>' + r.sub + '</small>';
-            div.addEventListener('click', () => {
-                hiddenInput.value = r.id;
-                searchInput.value = r.label;
-                resultsBox.classList.remove('open');
+            div.addEventListener('mousedown', (e) => {
+                // mousedown (not click) fires before the input's blur,
+                // so the selection registers before the list gets closed.
+                e.preventDefault();
+                selectResident(r);
             });
             resultsBox.appendChild(div);
         });
+        positionResultsBox();
         resultsBox.classList.add('open');
+        // Typing has narrowed it to exactly one resident — highlight it so
+        // Enter picks it immediately, matching what the field is meant to do.
+        highlight(currentList.length === 1 ? 0 : -1);
+    }
+
+    function runSearch() {
+        const q = searchInput.value.trim().toLowerCase();
+        if (!q) { closeResults(); return; }
+        renderResults(residents.filter(r => r.search.includes(q)));
     }
 
     searchInput.addEventListener('input', () => {
         hiddenInput.value = ''; // typing invalidates a prior selection
-        const q = searchInput.value.trim().toLowerCase();
-        if (!q) { resultsBox.classList.remove('open'); return; }
-        renderResults(residents.filter(r => r.search.includes(q)));
+        runSearch();
     });
 
     searchInput.addEventListener('focus', () => {
-        if (searchInput.value.trim()) renderResults(residents.filter(r => r.search.includes(searchInput.value.trim().toLowerCase())));
+        if (searchInput.value.trim()) runSearch();
     });
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (!resultsBox.classList.contains('open') || !currentList.length) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            highlight((activeIndex + 1) % currentList.length);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            highlight((activeIndex - 1 + currentList.length) % currentList.length);
+        } else if (e.key === 'Enter') {
+            // Enter picks the highlighted row, or the sole remaining
+            // match if typing has already narrowed it down to one.
+            const index = activeIndex >= 0 ? activeIndex : (currentList.length === 1 ? 0 : -1);
+            if (index >= 0) {
+                e.preventDefault();
+                selectResident(currentList[index]);
+            }
+        } else if (e.key === 'Escape') {
+            closeResults();
+        }
+    });
+
+    window.addEventListener('resize', () => { if (resultsBox.classList.contains('open')) positionResultsBox(); });
+    document.addEventListener('scroll', () => { if (resultsBox.classList.contains('open')) positionResultsBox(); }, true);
 
     document.addEventListener('click', (e) => {
         if (!resultsBox.contains(e.target) && e.target !== searchInput) {
-            resultsBox.classList.remove('open');
+            closeResults();
         }
     });
 
@@ -184,8 +253,21 @@
         const match = residents.find(r => String(r.id) === String(hiddenInput.value));
         if (match) searchInput.value = match.label;
     }
+  } catch (err) {
+    console.error('Resident search failed to initialize:', err);
+  }
+})();
+</script>
 
+<script>
+(function () {
+  try {
     // ---- Fee <-> Fund are mutually exclusive; Fee locks the Amount ----
+    // Kept in its own <script>/IIFE, isolated from the resident-search
+    // block above: if that block ever throws, JS execution stops right
+    // there and nothing after it in the same script would run — which
+    // would silently disable this locking behavior. Splitting them means
+    // a problem in one can never take out the other.
     const feeSelect = document.getElementById('fee_id');
     const fundSelect = document.getElementById('fund_id');
     const amountInput = document.getElementById('amount');
@@ -240,6 +322,9 @@
     });
 
     applyLocks(); // handle old() redisplay after a validation error
+  } catch (err) {
+    console.error('Fee/Fund locking failed to initialize:', err);
+  }
 })();
 </script>
 

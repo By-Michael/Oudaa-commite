@@ -19,7 +19,7 @@
             <div class="alert alert-error">{{ $errors->first() }}</div>
         @endif
 
-        <form method="POST" action="{{ route('login.attempt') }}">
+        <form method="POST" action="{{ route('login.attempt') }}" id="login-form">
             @csrf
             <div class="form-row">
                 <label for="email">Email</label>
@@ -29,14 +29,33 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <div class="form-row">
+            <div class="form-row" style="display:flex;align-items:center;justify-content:space-between;">
                 <label style="display:inline-flex;align-items:center;gap:6px;text-transform:none;font-weight:400;">
-                    <input type="checkbox" name="remember" style="width:auto;" value="1"> Remember me
+                    <input type="checkbox" id="remember" name="remember" style="width:auto;" value="1" @checked(old('remember'))> Remember me
                 </label>
+                <a href="{{ route('password.request', ['tenant' => request()->route('tenant')]) }}" style="font-size:13px;">Forgot password?</a>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Sign in</button>
+            <button type="submit" class="btn btn-primary" id="login-submit" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <span class="spinner" id="login-spinner" style="display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;"></span>
+                <span id="login-submit-label">Sign in</span>
+            </button>
         </form>
     </div>
 </div>
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+<script>
+    document.getElementById('login-form').addEventListener('submit', function () {
+        var btn = document.getElementById('login-submit');
+        var spinner = document.getElementById('login-spinner');
+        var label = document.getElementById('login-submit-label');
+        if (btn.dataset.submitting === '1') return; // guard against double-submit
+        btn.dataset.submitting = '1';
+        btn.disabled = true;
+        spinner.style.display = 'inline-block';
+        label.textContent = 'Signing in…';
+    });
+</script>
 </body>
 </html>

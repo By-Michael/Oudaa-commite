@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="form-row">
-                    <label>Planned Budget</label>
+                    <label>Planned Budget (ETB)</label>
                     <input type="number" step="0.01" min="0" name="planned_budget" value="{{ old('planned_budget', $project->planned_budget) }}" required>
                 </div>
             </div>

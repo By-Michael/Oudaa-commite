@@ -5,15 +5,15 @@
 <div class="stats-grid">
     <div class="stat {{ $totalFundsBalance >= 0 ? 'pos' : 'neg' }}">
         <div class="label">Total Funds Balance</div>
-        <div class="value">{{ number_format($totalFundsBalance, 2) }}</div>
+        <div class="value">{{ money($totalFundsBalance) }}</div>
     </div>
     <div class="stat pos">
         <div class="label">Total Collected</div>
-        <div class="value">{{ number_format($totalCollected, 2) }}</div>
+        <div class="value">{{ money($totalCollected) }}</div>
     </div>
     <div class="stat neg">
         <div class="label">Total Spent</div>
-        <div class="value">{{ number_format($totalSpent, 2) }}</div>
+        <div class="value">{{ money($totalSpent) }}</div>
     </div>
     <div class="stat">
         <div class="label">Active Funds</div>
@@ -34,7 +34,7 @@
                     <tr>
                         <td>{{ $fund->name }}</td>
                         <td>{{ $fund->category ?: '—' }}</td>
-                        <td class="right">{{ number_format($fund->balance(), 2) }}</td>
+                        <td class="right">{{ money($fund->balance()) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -57,7 +57,7 @@
                         <tr>
                             <td>{{ $payment->resident->name }}</td>
                             <td>{{ $payment->fee->name ?? '—' }}</td>
-                            <td class="right">{{ number_format($payment->amount, 2) }}</td>
+                            <td class="right">{{ money($payment->amount) }}</td>
                             <td>{{ $payment->paid_at->format('Y-m-d') }}</td>
                             <td><span class="badge badge-{{ strtolower($payment->status) }}">{{ $payment->status }}</span></td>
                         </tr>
@@ -81,7 +81,7 @@
                         <tr>
                             <td>{{ $expense->category }}</td>
                             <td>{{ $expense->fund->name ?? '—' }}</td>
-                            <td class="right">{{ number_format($expense->amount, 2) }}</td>
+                            <td class="right">{{ money($expense->amount) }}</td>
                             <td>{{ $expense->incurred_at->format('Y-m-d') }}</td>
                         </tr>
                     @endforeach

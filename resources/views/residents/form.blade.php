@@ -45,7 +45,7 @@
                     <label>Occupancy</label>
                     <select name="occupancy">
                         <option value="owner" @selected(old('occupancy', $resident->occupancy) === 'owner')>Owner</option>
-                        <option value="renter" @selected(old('occupancy', $resident->occupancy) === 'renter')>Renter</option>
+                        <option value="renter" @selected(old('occupancy', $resident->occupancy) === 'renter')>Tenant</option>
                     </select>
                 </div>
                 @if ($resident->exists)

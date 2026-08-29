@@ -16,7 +16,7 @@
             <option value="inactive" @selected(request('status') == 'inactive')>Inactive</option>
         </select>
     </form>
-    <a href="{{ route('fees.create') }}" class="btn btn-primary">+ Add Fee</a>
+    <a href="{{ route('fees.create') }}" class="js-modal-link btn btn-primary">+ Add Fee</a>
 </div>
 
 <div class="panel">
@@ -33,14 +33,14 @@
                     <tr>
                         <td>{{ $fee->name }}</td>
                         <td>{{ $fee->fund->name }}</td>
-                        <td>{{ number_format($fee->amount, 2) }}</td>
+                        <td>{{ money($fee->amount) }}</td>
                         <td>{{ ucfirst(str_replace('_', ' ', $fee->frequency)) }}</td>
                         <td><span class="badge badge-{{ $fee->status }}">{{ ucfirst($fee->status) }}</span></td>
                         <td class="right actions-cell">
                             <a href="{{ route('fees.unpaid', $fee) }}" class="btn btn-sm">Unpaid</a>
-                            <a href="{{ route('fees.edit', $fee) }}" class="btn btn-sm">Edit</a>
+                            <a href="{{ route('fees.edit', $fee) }}" class="js-modal-link btn btn-sm">Edit</a>
                             <form method="POST" action="{{ route('fees.toggle', $fee) }}" style="display:inline"
-                                  onsubmit="return confirm('{{ $fee->status === 'active' ? 'Deactivate' : 'Activate' }} {{ addslashes($fee->name) }}?');">
+                                  data-confirm="{{ $fee->status === 'active' ? 'Deactivate' : 'Activate' }} {{ addslashes($fee->name) }}?">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="btn btn-sm {{ $fee->status === 'active' ? 'btn-danger' : '' }}">
                                     {{ $fee->status === 'active' ? 'Deactivate' : 'Activate' }}

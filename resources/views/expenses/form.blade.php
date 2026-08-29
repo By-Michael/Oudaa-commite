@@ -23,7 +23,7 @@
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Amount</label>
+                    <label>Amount (ETB)</label>
                     <input type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required>
                 </div>
                 <div class="form-row">

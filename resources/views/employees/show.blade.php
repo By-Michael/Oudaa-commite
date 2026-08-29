@@ -9,18 +9,18 @@
     </div>
     <div class="stat">
         <div class="label">Salary</div>
-        <div class="value">{{ number_format($employee->salary, 2) }}</div>
+        <div class="value">{{ money($employee->salary) }}</div>
     </div>
     <div class="stat neg">
         <div class="label">Total Paid</div>
-        <div class="value">{{ number_format($employee->totalPaid(), 2) }}</div>
+        <div class="value">{{ money($employee->totalPaid()) }}</div>
     </div>
 </div>
 
 <div class="panel">
     <div class="panel-head">
         <h2>Details</h2>
-        <a href="{{ route('employees.edit', $employee) }}" class="btn btn-sm">Edit</a>
+        <a href="{{ route('employees.edit', $employee) }}" class="js-modal-link btn btn-sm">Edit</a>
     </div>
     <div class="panel-body">
         <div class="form-grid">
@@ -44,7 +44,7 @@
                 @foreach ($employee->expenses as $expense)
                     <tr>
                         <td>{{ $expense->incurred_at->format('Y-m-d') }}</td>
-                        <td>{{ number_format($expense->amount, 2) }}</td>
+                        <td>{{ money($expense->amount) }}</td>
                         <td>{{ $expense->note ?: '—' }}</td>
                     </tr>
                 @endforeach
@@ -54,6 +54,6 @@
     </div>
 </div>
 
-<a href="{{ route('expenses.create') }}" class="btn btn-primary">+ Log Salary Payment</a>
+<a href="{{ route('expenses.create') }}" class="js-modal-link btn btn-primary">+ Log Salary Payment</a>
 
 @endsection

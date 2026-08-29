@@ -21,7 +21,7 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Committee::orderBy('name')->get();
+        $members = Committee::orderBy('name')->paginate(15);
 
         return view('members.index', compact('members'));
     }

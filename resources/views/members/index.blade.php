@@ -25,4 +25,6 @@
     </div>
 </div>
 
+<div class="pagination">{{ $members->links() }}</div>
+
 @endsection

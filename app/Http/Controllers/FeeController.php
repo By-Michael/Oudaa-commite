@@ -6,7 +6,9 @@ use App\Models\Fee;
 use App\Models\Fund;
 use App\Models\Payment;
 use App\Models\Resident;
+use App\Support\CurrentCommunity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FeeController extends Controller
 {
@@ -82,12 +84,17 @@ class FeeController extends Controller
      */
     public function unpaid(string $fee)
     {
-        // Resolved manually rather than via implicit route-model binding
-        // (Fee $fee): that binding wasn't being applied for this route in
-        // production, and the raw route segment arrived here as a plain
-        // string instead of a Fee instance. findOrFail() still goes
-        // through the BelongsToCommunity global scope, so this can't
-        // fetch a fee belonging to a different community.
+        // TEMPORARY diagnostic logging -- remove once the 404 here is
+        // root-caused. Tells us the community scope in effect and
+        // whether a row with this ID exists at all vs. exists but is
+        // scoped out.
+        Log::info('fees.unpaid debug', [
+            'route_param_fee' => $fee,
+            'current_community_id' => app(CurrentCommunity::class)->id(),
+            'exists_unscoped' => Fee::withoutCommunityScope()->where('id', $fee)->exists(),
+            'unscoped_row' => Fee::withoutCommunityScope()->where('id', $fee)->first(['id', 'community_id', 'name']),
+        ]);
+
         $fee = Fee::findOrFail($fee);
 
         $periodKey = $fee->currentPeriodKey();

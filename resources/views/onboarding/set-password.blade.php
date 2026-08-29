@@ -18,13 +18,13 @@
     @csrf
 
     <div class="mb-3">
-        <label for="password" class="form-label">New password</label>
+        <label for="password" class="form-label">New password<span class="req">*</span></label>
         <input type="password" id="password" name="password" class="form-control" minlength="8" required autofocus>
         <div class="form-text text-slate">At least 8 characters.</div>
     </div>
 
     <div class="mb-4">
-        <label for="password_confirmation" class="form-label">Confirm password</label>
+        <label for="password_confirmation" class="form-label">Confirm password<span class="req">*</span></label>
         <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" minlength="8" required>
     </div>
 

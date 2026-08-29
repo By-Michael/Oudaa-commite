@@ -112,6 +112,46 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Field character filtering (data-filter="..."), delegated so it
+    // works no matter when a field appears. Never touches password
+    // fields — restricting characters there only weakens the
+    // passwords people are able to choose.
+    (function () {
+      var FIELD_FILTERS = {
+        letters: function (v) { return v.replace(/[^A-Za-z\u00C0-\u024F\s.'-]/g, ''); },
+        digits: function (v) { return v.replace(/[^0-9]/g, ''); },
+        decimal: function (v) {
+          v = v.replace(/[^0-9.]/g, '');
+          var firstDot = v.indexOf('.');
+          if (firstDot !== -1) v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, '');
+          return v;
+        },
+        phone: function (v) { return v.replace(/[^0-9+\-\s()]/g, ''); },
+        alnum: function (v) { return v.replace(/[^A-Za-z0-9\s\-\/]/g, ''); },
+        'safe-text': function (v) { return v.replace(/[<>{}\[\]\\`^~]/g, ''); },
+      };
+
+      document.addEventListener('input', function (e) {
+        var el = e.target;
+        var filterName = el.getAttribute && el.getAttribute('data-filter');
+        if (!filterName || el.type === 'password') return;
+
+        var fn = FIELD_FILTERS[filterName];
+        if (!fn) return;
+
+        var start = el.selectionStart, end = el.selectionEnd;
+        var next = fn(el.value);
+        if (next !== el.value) {
+          var diff = el.value.length - next.length;
+          el.value = next;
+          if (start != null && end != null) {
+            el.setSelectionRange(Math.max(0, start - diff), Math.max(0, end - diff));
+          }
+        }
+      });
+    })();
+  </script>
   @stack('scripts')
 </body>
 </html>

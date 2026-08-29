@@ -63,22 +63,22 @@
 
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label" for="fullName">Full Name</label>
-                <input type="text" class="form-control" id="fullName" name="full_name" value="{{ old('full_name') }}" required>
+                <label class="form-label" for="fullName">Full Name<span class="req">*</span></label>
+                <input type="text" class="form-control" id="fullName" name="full_name" value="{{ old('full_name') }}" required data-filter="letters">
                 <div class="invalid-feedback">Please enter your name.</div>
               </div>
               <div class="col-md-6">
-                <label class="form-label" for="email">Email</label>
+                <label class="form-label" for="email">Email<span class="req">*</span></label>
                 <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
                 <div class="invalid-feedback">Please enter a valid email address.</div>
               </div>
               <div class="col-12">
                 <label class="form-label" for="communityName">Community Name (if you're already a customer)</label>
-                <input type="text" class="form-control" id="communityName" name="community_name" value="{{ old('community_name') }}" placeholder="Optional">
+                <input type="text" class="form-control" id="communityName" name="community_name" value="{{ old('community_name') }}" placeholder="Optional" data-filter="safe-text">
               </div>
               <div class="col-12">
-                <label class="form-label" for="message">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you need help with." required>{{ old('message') }}</textarea>
+                <label class="form-label" for="message">Message<span class="req">*</span></label>
+                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you need help with." required data-filter="safe-text">{{ old('message') }}</textarea>
                 <div class="invalid-feedback">Please share a few details.</div>
               </div>
               <div class="col-12">

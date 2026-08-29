@@ -9,11 +9,11 @@
             @if ($fee->exists) @method('PUT') @endif
 
             <div class="form-row">
-                <label>Fee Name</label>
-                <input type="text" name="name" value="{{ old('name', $fee->name) }}" required>
+                <label>Fee Name<span class="req">*</span></label>
+                <input type="text" name="name" value="{{ old('name', $fee->name) }}" required data-filter="safe-text">
             </div>
             <div class="form-row">
-                <label>Linked Fund</label>
+                <label>Linked Fund<span class="req">*</span></label>
                 <select name="fund_id" required>
                     <option value="">Select a fund…</option>
                     @foreach ($funds as $fund)
@@ -24,8 +24,8 @@
             </div>
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Amount (ETB)</label>
-                    <input type="number" step="0.01" min="0" name="amount" value="{{ old('amount', $fee->amount) }}" required>
+                    <label>Amount (ETB)<span class="req">*</span></label>
+                    <input type="number" step="0.01" min="0" name="amount" value="{{ old('amount', $fee->amount) }}" required data-filter="decimal">
                 </div>
                 <div class="form-row">
                     <label>Frequency</label>
@@ -40,7 +40,7 @@
                 <label>Recurs on Day of Month (optional)</label>
                 <input type="number" min="1" max="31" name="recurrence_day" id="recurrence_day"
                        value="{{ old('recurrence_day', $fee->recurrence_day) }}"
-                       placeholder="e.g. 5">
+                       placeholder="e.g. 5" data-filter="digits">
                 <p class="muted" style="font-size:12px;margin-top:6px;">
                     The day of the month this fee recurs on (for monthly: due every month on this day; for quarterly/yearly: due on this day of the recurring month). Leave blank to use today's date.
                 </p>

@@ -118,7 +118,7 @@
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Saving…';
+            submitBtn.textContent = submitBtn.getAttribute('data-loading-label') || 'Saving…';
         }
 
         fetch(form.getAttribute('action') || currentUrl, {
@@ -205,5 +205,53 @@
                 form.submit();
             }
         });
+    });
+
+    // ---- 3. Character filtering on data-filter="..." fields ----
+    // Delegated (not bound per-element) so it works on fields injected
+    // later into a modal too, without needing to be re-wired.
+    // Never applied to password fields — restricting characters there
+    // would only weaken the passwords people are able to choose.
+    var FIELD_FILTERS = {
+        // Personal names: letters, spaces, and the punctuation real names use.
+        letters: function (v) { return v.replace(/[^A-Za-z\u00C0-\u024F\s.'-]/g, ''); },
+        // Whole numbers only (recurrence day, counts, etc).
+        digits: function (v) { return v.replace(/[^0-9]/g, ''); },
+        // Money/quantity fields: digits and a single decimal point.
+        decimal: function (v) {
+            v = v.replace(/[^0-9.]/g, '');
+            var firstDot = v.indexOf('.');
+            if (firstDot !== -1) {
+                v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, '');
+            }
+            return v;
+        },
+        // Phone numbers: digits and the punctuation people format them with.
+        phone: function (v) { return v.replace(/[^0-9+\-\s()]/g, ''); },
+        // Unit/block/ID numbers: letters, digits, spaces, hyphens, slashes.
+        alnum: function (v) { return v.replace(/[^A-Za-z0-9\s\-\/]/g, ''); },
+        // Free text (notes, vendor, descriptions): block markup/script-y
+        // symbols people never legitimately need here, allow everything else.
+        'safe-text': function (v) { return v.replace(/[<>{}\[\]\\`^~]/g, ''); },
+    };
+
+    document.addEventListener('input', function (e) {
+        var el = e.target;
+        var filterName = el.getAttribute && el.getAttribute('data-filter');
+        if (!filterName || el.type === 'password') return;
+
+        var fn = FIELD_FILTERS[filterName];
+        if (!fn) return;
+
+        var start = el.selectionStart, end = el.selectionEnd;
+        var next = fn(el.value);
+        if (next !== el.value) {
+            var diff = el.value.length - next.length;
+            el.value = next;
+            // Keep the caret where the user was typing instead of jumping to the end.
+            if (start != null && end != null) {
+                el.setSelectionRange(Math.max(0, start - diff), Math.max(0, end - diff));
+            }
+        }
     });
 })();

@@ -4,7 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Resident;
 use App\Models\TenantSetting;
+use App\Support\CurrentCommunity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class ResidentController extends Controller
 {
@@ -41,6 +50,183 @@ class ResidentController extends Controller
         Resident::create($data);
 
         return redirect()->route('residents.index')->with('status', 'Resident added.');
+    }
+
+    public function bulkImportForm()
+    {
+        return view('residents.bulk-import', [
+            'isCondo' => $this->isCondo(),
+        ]);
+    }
+
+    /**
+     * Downloadable .xlsx starter template. Columns match validated()
+     * below exactly (minus block_number when the community isn't a
+     * condo), so anything filled in correctly here imports cleanly.
+     */
+    public function bulkImportTemplate()
+    {
+        $isCondo = $this->isCondo();
+
+        $headers = ['Name', 'Unit Number'];
+        if ($isCondo) {
+            $headers[] = 'Block Number';
+        }
+        $headers = array_merge($headers, ['ID Number', 'Phone', 'Email', 'Occupancy']);
+
+        $example = ['Abebe Kebede', '12'];
+        if ($isCondo) {
+            $example[] = 'A';
+        }
+        $example = array_merge($example, ['ETH-0192837', '0911223344', 'abebe@example.com', 'owner']);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Residents');
+
+        $sheet->fromArray($headers, null, 'A1');
+        $sheet->fromArray($example, null, 'A2');
+
+        $lastCol = chr(ord('A') + count($headers) - 1);
+
+        $sheet->getStyle("A1:{$lastCol}1")->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
+        $sheet->getStyle("A1:{$lastCol}1")->getFill()
+            ->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('14919B');
+        $sheet->getStyle("A2:{$lastCol}2")->getFont()->setItalic(true)->getColor()->setRGB('667085');
+
+        foreach (range('A', $lastCol) as $col) {
+            $sheet->getColumnDimension($col)->setWidth(20);
+        }
+
+        // Dropdown restricting the Occupancy column to valid values.
+        $occupancyCol = chr(ord('A') + count($headers) - 1);
+        for ($row = 2; $row <= 200; $row++) {
+            $validation = $sheet->getCell("{$occupancyCol}{$row}")->getDataValidation();
+            $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+            $validation->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP);
+            $validation->setAllowBlank(true);
+            $validation->setShowDropDown(true);
+            $validation->setShowErrorMessage(true);
+            $validation->setErrorTitle('Invalid occupancy');
+            $validation->setError('Please choose "owner" or "renter" from the list.');
+            $validation->setFormula1('"owner,renter"');
+        }
+
+        $sheet->getStyle("A1:{$lastCol}200")->getBorders()
+            ->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E2E8F0');
+
+        $writer = new Xlsx($spreadsheet);
+
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, 'resident-import-template.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    }
+
+    /**
+     * All-or-nothing: every row in the file is validated first (including
+     * duplicate ID numbers within the file itself, not just against the
+     * database) before anything is written, so a bad row can't leave a
+     * partial import behind. New residents from a bulk import always
+     * start active, same as one added through the regular form.
+     */
+    public function bulkImport(Request $request)
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls', 'max:5120'],
+        ]);
+
+        $isCondo = $this->isCondo();
+
+        try {
+            $spreadsheet = IOFactory::load($request->file('file')->getRealPath());
+        } catch (\Throwable $e) {
+            return back()->withErrors(['file' => 'Could not read that file. Please use the downloaded template and try again.']);
+        }
+
+        $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, false);
+        array_shift($rows); // header row
+
+        $seenIdNumbers = [];
+        $rowErrors = [];
+        $toInsert = [];
+        $rowNumber = 1; // header was row 1
+
+        foreach ($rows as $row) {
+            $rowNumber++;
+
+            $col = 0;
+            $name = trim((string) ($row[$col++] ?? ''));
+            $unitNumber = trim((string) ($row[$col++] ?? ''));
+            $blockNumber = $isCondo ? trim((string) ($row[$col++] ?? '')) : null;
+            $idNumber = trim((string) ($row[$col++] ?? ''));
+            $phone = trim((string) ($row[$col++] ?? ''));
+            $email = trim((string) ($row[$col++] ?? ''));
+            $occupancy = strtolower(trim((string) ($row[$col++] ?? '')));
+
+            // Skip fully blank rows (e.g. trailing empty rows in the sheet).
+            if ($name === '' && $unitNumber === '' && $idNumber === '') {
+                continue;
+            }
+
+            $candidate = [
+                'name' => $name,
+                'unit_number' => $unitNumber,
+                'block_number' => $blockNumber !== '' ? $blockNumber : null,
+                'id_number' => $idNumber,
+                'phone' => $phone !== '' ? $phone : null,
+                'email' => $email !== '' ? $email : null,
+                'occupancy' => $occupancy,
+            ];
+
+            $validator = Validator::make($candidate, [
+                'name' => ['required', 'string', 'max:255'],
+                'unit_number' => ['required', 'string', 'max:50'],
+                'block_number' => ['nullable', 'string', 'max:50'],
+                'id_number' => [
+                    'required', 'string', 'max:100',
+                    Rule::unique('residents', 'id_number')
+                        ->where(fn ($q) => $q->where('community_id', app(CurrentCommunity::class)->id())),
+                ],
+                'phone' => ['nullable', 'string', 'max:50'],
+                'email' => ['nullable', 'email', 'max:255'],
+                'occupancy' => ['required', 'in:owner,renter'],
+            ]);
+
+            if ($validator->fails()) {
+                $rowErrors[] = "Row {$rowNumber}: ".implode(' ', $validator->errors()->all());
+
+                continue;
+            }
+
+            if ($idNumber !== '' && isset($seenIdNumbers[$idNumber])) {
+                $rowErrors[] = "Row {$rowNumber}: ID Number \"{$idNumber}\" is duplicated in this file (first seen on row {$seenIdNumbers[$idNumber]}).";
+
+                continue;
+            }
+            $seenIdNumbers[$idNumber] = $rowNumber;
+
+            $candidate['status'] = 'active';
+            $toInsert[] = $candidate;
+        }
+
+        if (empty($rows)) {
+            return back()->withErrors(['file' => 'That file has no resident rows below the header. Nothing was imported.']);
+        }
+
+        if (! empty($rowErrors)) {
+            return back()->withErrors(['bulk_import' => $rowErrors])->withInput();
+        }
+
+        DB::transaction(function () use ($toInsert) {
+            foreach ($toInsert as $data) {
+                Resident::create($data);
+            }
+        });
+
+        return redirect()->route('residents.index')
+            ->with('status', count($toInsert).' resident'.(count($toInsert) === 1 ? '' : 's').' imported.');
     }
 
     public function edit(Request $request)
@@ -89,7 +275,12 @@ class ResidentController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'id_number' => ['required', 'string', 'max:100', 'unique:residents,id_number,'.($resident?->id ?? 'NULL').',id'],
+            'id_number' => [
+                'required', 'string', 'max:100',
+                Rule::unique('residents', 'id_number')
+                    ->where(fn ($q) => $q->where('community_id', app(CurrentCommunity::class)->id()))
+                    ->ignore($resident?->id),
+            ],
             'unit_number' => ['required', 'string', 'max:50'],
             'block_number' => ['nullable', 'string', 'max:50'],
             'phone' => ['nullable', 'string', 'max:50'],

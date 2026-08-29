@@ -12,7 +12,7 @@
             @csrf
 
             <div class="form-row" style="position:relative;">
-                <label>Resident</label>
+                <label>Resident<span class="req">*</span></label>
                 <input
                     type="text"
                     id="resident-search"
@@ -56,12 +56,12 @@
 
             <div class="form-grid">
                 <div class="form-row lock-hover-wrap" id="amount-wrap">
-                    <label>Amount (ETB)</label>
-                    <input type="number" step="0.01" min="0.01" name="amount" id="amount" value="{{ old('amount') }}" required>
+                    <label>Amount (ETB)<span class="req">*</span></label>
+                    <input type="number" step="0.01" min="0.01" name="amount" id="amount" value="{{ old('amount') }}" required data-filter="decimal">
                     <span class="hover-hint">The amount will be the fee amount set in the selected fee.</span>
                 </div>
                 <div class="form-row">
-                    <label>Date Paid</label>
+                    <label>Date Paid<span class="req">*</span></label>
                     <input type="date" name="paid_at" value="{{ old('paid_at', now()->toDateString()) }}" required>
                 </div>
             </div>
@@ -77,7 +77,7 @@
 
             <div class="form-row">
                 <label>Note</label>
-                <input type="text" name="note" value="{{ old('note') }}">
+                <input type="text" name="note" value="{{ old('note') }}" data-filter="safe-text">
             </div>
 
             <p class="muted" style="font-size:12px;margin:0 0 18px;">

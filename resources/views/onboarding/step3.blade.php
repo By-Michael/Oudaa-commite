@@ -25,7 +25,7 @@
 <form method="POST" action="{{ route('onboarding.step3.store') }}">
     @csrf
     <div class="mb-3">
-        <label for="email" class="form-label">Your email</label>
+        <label for="email" class="form-label">Your email<span class="req">*</span></label>
         <input
             type="email"
             id="email"

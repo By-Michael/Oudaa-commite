@@ -762,6 +762,7 @@ a { text-decoration: none; }
 
 .form-control.is-invalid, .form-select.is-invalid { border-color: #DC3545; }
 .form-control.is-valid, .form-select.is-valid { border-color: var(--n-success); }
+.req { color: #DC3545; margin-left: 3px; font-weight: 600; }
 
 /* Newsletter / CTA section */
 .cta-section {

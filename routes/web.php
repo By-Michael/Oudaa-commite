@@ -97,6 +97,9 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/residents', [ResidentController::class, 'index'])->name('residents.index');
         Route::get('/residents/create', [ResidentController::class, 'create'])->name('residents.create');
         Route::post('/residents', [ResidentController::class, 'store'])->name('residents.store');
+        Route::get('/residents/bulk-import', [ResidentController::class, 'bulkImportForm'])->name('residents.bulk-import.form');
+        Route::get('/residents/bulk-import/template', [ResidentController::class, 'bulkImportTemplate'])->name('residents.bulk-import.template');
+        Route::post('/residents/bulk-import', [ResidentController::class, 'bulkImport'])->name('residents.bulk-import');
         Route::get('/residents/{resident}/edit', [ResidentController::class, 'edit'])->name('residents.edit');
         Route::put('/residents/{resident}', [ResidentController::class, 'update'])->name('residents.update');
         Route::patch('/residents/{resident}/toggle', [ResidentController::class, 'deactivate'])->name('residents.toggle');

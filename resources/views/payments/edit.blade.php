@@ -38,7 +38,7 @@
 
             <div class="form-row">
                 <label>Note</label>
-                <input type="text" name="note" value="{{ old('note', $payment->note) }}">
+                <input type="text" name="note" value="{{ old('note', $payment->note) }}" data-filter="safe-text">
             </div>
 
             <button type="submit" class="btn btn-primary">Save</button>

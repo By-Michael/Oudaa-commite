@@ -22,15 +22,15 @@
         <form method="POST" action="{{ route('password.update', ['tenant' => $tenant, 'token' => $token]) }}">
             @csrf
             <div class="form-row">
-                <label for="email">Email</label>
+                <label for="email">Email<span class="req">*</span></label>
                 <input type="email" id="email" name="email" value="{{ old('email', $email) }}" required autofocus>
             </div>
             <div class="form-row">
-                <label for="password">New password</label>
+                <label for="password">New password<span class="req">*</span></label>
                 <input type="password" id="password" name="password" required minlength="8">
             </div>
             <div class="form-row">
-                <label for="password_confirmation">Confirm new password</label>
+                <label for="password_confirmation">Confirm new password<span class="req">*</span></label>
                 <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8">
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;">Reset password</button>

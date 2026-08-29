@@ -10,30 +10,30 @@
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Name</label>
-                    <input type="text" name="name" value="{{ old('name', $resident->name) }}" required>
+                    <label>Name<span class="req">*</span></label>
+                    <input type="text" name="name" value="{{ old('name', $resident->name) }}" required data-filter="letters">
                 </div>
                 <div class="form-row">
-                    <label>Unit Number</label>
-                    <input type="text" name="unit_number" value="{{ old('unit_number', $resident->unit_number) }}" required>
+                    <label>Unit Number<span class="req">*</span></label>
+                    <input type="text" name="unit_number" value="{{ old('unit_number', $resident->unit_number) }}" required data-filter="alnum">
                 </div>
             </div>
             <div class="form-grid">
                 @if ($isCondo)
                 <div class="form-row">
                     <label>Block Number (optional)</label>
-                    <input type="text" name="block_number" value="{{ old('block_number', $resident->block_number) }}">
+                    <input type="text" name="block_number" value="{{ old('block_number', $resident->block_number) }}" data-filter="alnum">
                 </div>
                 @endif
                 <div class="form-row">
-                    <label>ID Number</label>
-                    <input type="text" name="id_number" value="{{ old('id_number', $resident->id_number) }}" required>
+                    <label>ID Number<span class="req">*</span></label>
+                    <input type="text" name="id_number" value="{{ old('id_number', $resident->id_number) }}" required data-filter="alnum">
                 </div>
             </div>
             <div class="form-grid">
                 <div class="form-row">
                     <label>Phone</label>
-                    <input type="text" name="phone" value="{{ old('phone', $resident->phone) }}">
+                    <input type="text" name="phone" value="{{ old('phone', $resident->phone) }}" data-filter="phone">
                 </div>
                 <div class="form-row">
                     <label>Email (optional)</label>

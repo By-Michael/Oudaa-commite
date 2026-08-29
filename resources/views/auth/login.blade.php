@@ -32,11 +32,11 @@
         <form method="POST" action="{{ route('login.attempt') }}" id="login-form">
             @csrf
             <div class="form-row">
-                <label for="email">Email</label>
+                <label for="email">Email<span class="req">*</span></label>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
             </div>
             <div class="form-row">
-                <label for="password">Password</label>
+                <label for="password">Password<span class="req">*</span></label>
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-row" style="display:flex;align-items:center;justify-content:space-between;">

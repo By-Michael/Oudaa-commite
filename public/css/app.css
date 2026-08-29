@@ -23,6 +23,7 @@
   --md-surface-container-high:#ECE6F0;
   --md-outline:#79747E;
   --md-outline-variant:#CAC4D0;
+  --md-on-surface:#1D1B20;
   --md-on-surface-variant:#49454F;
 
   --md-success:#146C2E;
@@ -69,6 +70,7 @@
   --md-surface-container-high:#2B2930;
   --md-outline:#948F99;
   --md-outline-variant:#49454F;
+  --md-on-surface:#E6E1E9;
   --md-on-surface-variant:#CAC4D0;
 
   --md-success:#8BD5A2;
@@ -328,6 +330,7 @@ input:focus,select:focus,textarea:focus{
 }
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field-error{color:var(--md-error);font-size:12px;margin-top:6px;font-weight:500}
+.req{color:var(--md-error);margin-left:3px;font-weight:600;}
 
 /* ---- Buttons (pill-shaped, state layers) ---- */
 .btn{

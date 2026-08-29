@@ -8,27 +8,21 @@
             @csrf
 
             <div class="form-row">
-                <label>Name</label>
-                <input type="text" name="name" value="{{ old('name') }}" required>
+                <label>Name<span class="req">*</span></label>
+                <input type="text" name="name" value="{{ old('name') }}" required data-filter="letters">
             </div>
             <div class="form-row">
-                <label>Email</label>
+                <label>Email<span class="req">*</span></label>
                 <input type="email" name="email" value="{{ old('email') }}" required>
             </div>
             <div class="form-row">
                 <label>Phone</label>
-                <input type="tel" name="phone" value="{{ old('phone') }}">
+                <input type="tel" name="phone" value="{{ old('phone') }}" data-filter="phone">
             </div>
-            <div class="form-grid">
-                <div class="form-row">
-                    <label>Password</label>
-                    <input type="password" name="password" required minlength="8">
-                </div>
-                <div class="form-row">
-                    <label>Confirm Password</label>
-                    <input type="password" name="password_confirmation" required minlength="8">
-                </div>
-            </div>
+
+            <p style="color:var(--n-slate, var(--md-on-surface-variant)); font-size:0.85rem; margin: 4px 0 16px;">
+                We'll email them a link to set their own password — no need to set one here.
+            </p>
 
             <button type="submit" class="btn btn-primary">Add Member</button>
             <a href="{{ route('members.index') }}" class="btn">Cancel</a>

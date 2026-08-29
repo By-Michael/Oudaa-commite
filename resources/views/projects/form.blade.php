@@ -9,16 +9,16 @@
             @if ($project->exists) @method('PUT') @endif
 
             <div class="form-row">
-                <label>Name</label>
-                <input type="text" name="name" value="{{ old('name', $project->name) }}" required>
+                <label>Name<span class="req">*</span></label>
+                <input type="text" name="name" value="{{ old('name', $project->name) }}" required data-filter="safe-text">
             </div>
             <div class="form-row">
                 <label>Description</label>
-                <textarea name="description" rows="3">{{ old('description', $project->description) }}</textarea>
+                <textarea name="description" rows="3" data-filter="safe-text">{{ old('description', $project->description) }}</textarea>
             </div>
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Linked Fund</label>
+                    <label>Linked Fund<span class="req">*</span></label>
                     <select name="fund_id" required>
                         <option value="">Select a fund…</option>
                         @foreach ($funds as $fund)
@@ -27,8 +27,8 @@
                     </select>
                 </div>
                 <div class="form-row">
-                    <label>Planned Budget (ETB)</label>
-                    <input type="number" step="0.01" min="0" name="planned_budget" value="{{ old('planned_budget', $project->planned_budget) }}" required>
+                    <label>Planned Budget (ETB)<span class="req">*</span></label>
+                    <input type="number" step="0.01" min="0" name="planned_budget" value="{{ old('planned_budget', $project->planned_budget) }}" required data-filter="decimal">
                 </div>
             </div>
             <div class="form-grid">

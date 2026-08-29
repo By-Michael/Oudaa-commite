@@ -8,8 +8,8 @@
             @csrf
 
             <div class="form-row">
-                <label>Category</label>
-                <select name="category" id="category">
+                <label>Category<span class="req">*</span></label>
+                <select name="category" id="category" required>
                     <option value="">Select category…</option>
                     @foreach (['Repairs', 'Utilities', 'Salary', 'Cleaning', 'Security', 'Landscaping', 'Insurance', 'Supplies', 'Other'] as $cat)
                         <option value="{{ $cat }}" @selected(old('category') === $cat)>{{ $cat }}</option>
@@ -17,17 +17,17 @@
                 </select>
             </div>
             <div class="form-row" id="category-other-row" style="display:none;">
-                <label>Specify Category</label>
-                <input type="text" name="category_other" id="category_other" value="{{ old('category_other') }}" placeholder="Enter the category name">
+                <label>Specify Category<span class="req" id="category-other-required-mark" style="display:none;">*</span></label>
+                <input type="text" name="category_other" id="category_other" value="{{ old('category_other') }}" placeholder="Enter the category name" data-filter="letters">
             </div>
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Amount (ETB)</label>
-                    <input type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required>
+                    <label>Amount (ETB)<span class="req">*</span></label>
+                    <input type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required data-filter="decimal">
                 </div>
                 <div class="form-row">
-                    <label>Date</label>
+                    <label>Date<span class="req">*</span></label>
                     <input type="date" name="incurred_at" value="{{ old('incurred_at', now()->toDateString()) }}" required>
                 </div>
             </div>
@@ -35,10 +35,10 @@
             <div class="form-grid">
                 <div class="form-row">
                     <label>Vendor</label>
-                    <input type="text" name="vendor" value="{{ old('vendor') }}">
+                    <input type="text" name="vendor" value="{{ old('vendor') }}" data-filter="safe-text">
                 </div>
                 <div class="form-row">
-                    <label>Fund</label>
+                    <label>Fund<span class="req">*</span></label>
                     <select name="fund_id" id="fund_id" required>
                         <option value="">Select fund...</option>
                         @foreach ($funds as $fund)
@@ -71,8 +71,8 @@
             </div>
 
             <div class="form-row">
-                <label>Note<span id="note-required-mark" style="display:none;color:var(--md-error);"> *</span></label>
-                <input type="text" name="note" id="note" value="{{ old('note') }}">
+                <label>Note<span class="req" id="note-required-mark" style="display:none;">*</span></label>
+                <input type="text" name="note" id="note" value="{{ old('note') }}" data-filter="safe-text">
                 <p class="muted" id="note-hint" style="font-size:12px;margin-top:6px;"></p>
             </div>
 
@@ -99,9 +99,11 @@ function syncCategoryOther() {
     if (categorySelect.value === 'Other') {
         otherRow.style.display = '';
         otherInput.required = true;
+        document.getElementById('category-other-required-mark').style.display = 'inline';
     } else {
         otherRow.style.display = 'none';
         otherInput.required = false;
+        document.getElementById('category-other-required-mark').style.display = 'none';
     }
 }
 categorySelect.addEventListener('change', syncCategoryOther);

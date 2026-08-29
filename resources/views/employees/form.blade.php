@@ -10,23 +10,23 @@
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Name</label>
-                    <input type="text" name="name" value="{{ old('name', $employee->name) }}" required>
+                    <label>Name<span class="req">*</span></label>
+                    <input type="text" name="name" value="{{ old('name', $employee->name) }}" required data-filter="letters">
                 </div>
                 <div class="form-row">
-                    <label>ID Number</label>
-                    <input type="text" name="id_number" value="{{ old('id_number', $employee->id_number) }}" required>
+                    <label>ID Number<span class="req">*</span></label>
+                    <input type="text" name="id_number" value="{{ old('id_number', $employee->id_number) }}" required data-filter="alnum">
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Role</label>
-                    <input type="text" name="role" value="{{ old('role', $employee->role) }}" placeholder="e.g. Security Guard, Cleaner, Groundskeeper" required>
+                    <label>Role<span class="req">*</span></label>
+                    <input type="text" name="role" value="{{ old('role', $employee->role) }}" placeholder="e.g. Security Guard, Cleaner, Groundskeeper" required data-filter="letters">
                 </div>
                 <div class="form-row">
-                    <label>Salary (ETB)</label>
-                    <input type="number" step="0.01" min="0" name="salary" value="{{ old('salary', $employee->salary) }}" required>
+                    <label>Salary (ETB)<span class="req">*</span></label>
+                    <input type="number" step="0.01" min="0" name="salary" value="{{ old('salary', $employee->salary) }}" required data-filter="decimal">
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-row">
                     <label>Phone</label>
-                    <input type="text" name="phone" value="{{ old('phone', $employee->phone) }}">
+                    <input type="text" name="phone" value="{{ old('phone', $employee->phone) }}" data-filter="phone">
                 </div>
             </div>
 

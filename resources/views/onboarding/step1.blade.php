@@ -20,7 +20,7 @@
 <form method="POST" action="{{ route('onboarding.step1.store') }}">
     @csrf
     <div class="mb-3">
-        <label for="name" class="form-label">Community name</label>
+        <label for="name" class="form-label">Community name<span class="req">*</span></label>
         <input
             type="text"
             id="name"
@@ -28,6 +28,7 @@
             class="form-control"
             placeholder="e.g. Green Valley Residences"
             value="{{ old('name', $name) }}"
+            data-filter="safe-text"
             autofocus
             required
             minlength="2"

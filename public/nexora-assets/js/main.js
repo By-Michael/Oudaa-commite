@@ -134,3 +134,42 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 });
+
+/* ---------- Field character filtering (data-filter="...") ---------- */
+/* Delegated, so it works regardless of load timing. Never touches
+   password fields — restricting characters there only weakens the
+   passwords people are able to choose. */
+(function () {
+  const FIELD_FILTERS = {
+    letters: (v) => v.replace(/[^A-Za-z\u00C0-\u024F\s.'-]/g, ''),
+    digits: (v) => v.replace(/[^0-9]/g, ''),
+    decimal: (v) => {
+      v = v.replace(/[^0-9.]/g, '');
+      const firstDot = v.indexOf('.');
+      if (firstDot !== -1) v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, '');
+      return v;
+    },
+    phone: (v) => v.replace(/[^0-9+\-\s()]/g, ''),
+    alnum: (v) => v.replace(/[^A-Za-z0-9\s\-\/]/g, ''),
+    'safe-text': (v) => v.replace(/[<>{}\[\]\\`^~]/g, ''),
+  };
+
+  document.addEventListener('input', (e) => {
+    const el = e.target;
+    const filterName = el.getAttribute && el.getAttribute('data-filter');
+    if (!filterName || el.type === 'password') return;
+
+    const fn = FIELD_FILTERS[filterName];
+    if (!fn) return;
+
+    const start = el.selectionStart, end = el.selectionEnd;
+    const next = fn(el.value);
+    if (next !== el.value) {
+      const diff = el.value.length - next.length;
+      el.value = next;
+      if (start != null && end != null) {
+        el.setSelectionRange(Math.max(0, start - diff), Math.max(0, end - diff));
+      }
+    }
+  });
+})();

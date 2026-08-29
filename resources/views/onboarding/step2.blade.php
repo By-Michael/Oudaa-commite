@@ -23,7 +23,7 @@
     @csrf
 
     <div class="mb-2">
-        <label for="slug" class="form-label">Your platform link</label>
+        <label for="slug" class="form-label">Your platform link<span class="req">*</span></label>
         <div class="input-group">
             <span class="input-group-text" style="background:var(--n-bg-alt); color:var(--n-slate); border-radius: var(--n-radius-sm) 0 0 var(--n-radius-sm); font-size:0.85rem;">
                 {{ rtrim(url('/'), '/') }}/
@@ -43,7 +43,7 @@
     </div>
 
     <div class="mb-4 mt-3">
-        <label class="form-label d-block">Community type</label>
+        <label class="form-label d-block">Community type<span class="req">*</span></label>
 
         <div class="form-check mb-2">
             <input class="form-check-input" type="radio" name="community_type" id="type-normal" value="normal"

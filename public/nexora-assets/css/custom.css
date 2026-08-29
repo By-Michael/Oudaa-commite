@@ -52,6 +52,63 @@
   --bs-body-font-family: var(--n-font-body);
   --bs-body-color: var(--n-slate);
   --bs-body-bg: var(--n-white);
+
+  /* Surface tokens — indirection layer so components never hardcode #fff */
+  --n-surface: #FFFFFF;
+  --n-surface-alt: var(--n-bg);
+  --n-navbar-scrolled-bg: rgba(255, 255, 255, 0.92);
+  --n-overlay-soft: rgba(255, 255, 255, 0.7);
+}
+
+/* =====================================================
+   DARK THEME
+   Toggled via [data-theme="dark"] on <html>. Every color
+   above is consumed through a var(), so this block is the
+   single source of truth — no component overrides needed.
+   ===================================================== */
+[data-theme="dark"] {
+  --n-primary: #2DD4C7;
+  --n-primary-dark: #14919B;
+  --n-secondary: #5B9DE8;
+  --n-navy: #E8EEF2;
+  --n-success: #34D399;
+  --n-slate: #A9B4C0;
+  --n-slate-light: #7C8896;
+  --n-bg: #101A22;
+  --n-bg-alt: #16232D;
+  --n-border: #263340;
+  --n-white: #0B1319;
+
+  --n-gradient-soft: linear-gradient(135deg, #16232D 0%, #14202B 100%);
+  --n-gradient-dark: linear-gradient(135deg, #060B0F 0%, #0D1721 100%);
+
+  --n-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.28);
+  --n-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.34);
+  --n-shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --n-shadow-primary: 0 12px 28px rgba(45, 212, 199, 0.22);
+
+  --bs-body-color: var(--n-slate);
+  --bs-body-bg: var(--n-white);
+
+  --n-surface: #14202B;
+  --n-surface-alt: #16232D;
+  --n-navbar-scrolled-bg: rgba(11, 19, 25, 0.85);
+  --n-overlay-soft: rgba(255, 255, 255, 0.08);
+
+  color-scheme: dark;
+}
+
+/* Smooth, cheap theme transition — background/color only, no layout cost */
+body,
+.navbar-nexora,
+.card-premium,
+.pricing-card,
+.testimonial-card,
+.widget,
+.accordion-custom .accordion-button,
+.form-control,
+.form-select {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 /* =====================================================
@@ -172,7 +229,7 @@ a { text-decoration: none; }
 }
 
 .btn-light-custom {
-  background: #fff;
+  background: var(--n-surface);
   color: var(--n-navy);
   border: 1.5px solid var(--n-border);
 }
@@ -207,7 +264,7 @@ a { text-decoration: none; }
 
 .navbar-nexora.scrolled {
   padding: 0.75rem 0;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--n-navbar-scrolled-bg);
   backdrop-filter: blur(12px);
   box-shadow: var(--n-shadow-sm);
 }
@@ -226,20 +283,41 @@ a { text-decoration: none; }
   font-family: var(--n-font-display);
   font-weight: 600;
   font-size: 0.95rem;
-  color: rgb(152, 119, 119) !important;
+  color: var(--n-navy) !important;
+  opacity: 0.75;
   padding: 0.5rem 1.1rem !important;
   border-radius: var(--n-radius-sm);
   transition: all 0.2s ease;
 }
 
-.nav2{
-  color: yellow !important;;
-}
 .navbar-nexora .nav-link:hover,
 .navbar-nexora .nav-link.active {
-  color: rgb(15, 15, 64) !important;
+  color: var(--n-primary) !important;
   background: var(--n-bg-alt);
 }
+
+/* =====================================================
+   THEME TOGGLE
+   ===================================================== */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--n-border);
+  background: var(--n-bg-alt);
+  color: var(--n-navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover { border-color: var(--n-primary); color: var(--n-primary); }
+.theme-toggle .bi-moon-stars-fill { display: none; }
+[data-theme="dark"] .theme-toggle .bi-sun-fill { display: none; }
+[data-theme="dark"] .theme-toggle .bi-moon-stars-fill { display: inline-block; }
 
 .navbar-toggler-custom {
   border: none;
@@ -326,7 +404,7 @@ a { text-decoration: none; }
 }
 
 .hero-mock-card {
-  background: #fff;
+  background: var(--n-surface);
   border-radius: var(--n-radius-lg);
   box-shadow: var(--n-shadow-lg);
   padding: var(--n-space-md);
@@ -343,7 +421,7 @@ a { text-decoration: none; }
 
 .hero-float-badge {
   position: absolute;
-  background: #fff;
+  background: var(--n-surface);
   border-radius: var(--n-radius-md);
   box-shadow: var(--n-shadow-md);
   padding: 0.9rem 1.25rem;
@@ -410,8 +488,8 @@ a { text-decoration: none; }
 }
 
 .icon-box-primary { background: var(--n-bg-alt); color: var(--n-primary); }
-.icon-box-secondary { background: #EAF1FB; color: var(--n-secondary); }
-.icon-box-success { background: #E7F9F0; color: var(--n-success); }
+.icon-box-secondary { background: var(--n-bg-alt); color: var(--n-secondary); }
+.icon-box-success { background: var(--n-bg-alt); color: var(--n-success); }
 
 .icon-box-lg { width: 72px; height: 72px; font-size: 2rem; border-radius: var(--n-radius-md); }
 
@@ -424,7 +502,7 @@ a { text-decoration: none; }
    CARDS — premium card system
    ===================================================== */
 .card-premium {
-  background: #fff;
+  background: var(--n-surface);
   border: 1px solid var(--n-border);
   border-radius: var(--n-radius-md);
   box-shadow: var(--n-shadow-sm);
@@ -459,7 +537,7 @@ a { text-decoration: none; }
 
 /* Pricing card */
 .pricing-card {
-  background: #fff;
+  background: var(--n-surface);
   border: 1px solid var(--n-border);
   border-radius: var(--n-radius-lg);
   padding: var(--n-space-lg);
@@ -595,7 +673,7 @@ a { text-decoration: none; }
 
 /* Testimonial card */
 .testimonial-card {
-  background: #fff;
+  background: var(--n-surface);
   border-radius: var(--n-radius-md);
   box-shadow: var(--n-shadow-sm);
   border: 1px solid var(--n-border);
@@ -671,7 +749,7 @@ a { text-decoration: none; }
 .form-select:focus {
   border-color: var(--n-primary);
   box-shadow: 0 0 0 4px rgba(20, 145, 155, 0.1);
-  background-color: #fff;
+  background-color: var(--n-surface);
 }
 
 .form-label {
@@ -856,7 +934,7 @@ a { text-decoration: none; }
 
 /* Author / sidebar widgets (blog details) */
 .widget {
-  background: #fff;
+  background: var(--n-surface);
   border: 1px solid var(--n-border);
   border-radius: var(--n-radius-md);
   padding: var(--n-space-md);
@@ -890,7 +968,7 @@ a { text-decoration: none; }
   font-family: var(--n-font-display);
   font-weight: 700;
   color: var(--n-navy);
-  background: #fff;
+  background: var(--n-surface);
   padding: 1.25rem 1.5rem;
 }
 

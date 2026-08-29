@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    // Applied before first paint to avoid a light/dark flash on load.
+    (function () {
+      var stored = localStorage.getItem('oudaa-theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Oudaa — Community Management, Simplified')</title>
@@ -32,6 +40,12 @@
           <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.about') }}">About</a></li>
           <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.services') }}">Features</a></li>
           <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.contact') }}">Contact</a></li>
+          <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+              <i class="bi bi-sun-fill"></i>
+              <i class="bi bi-moon-stars-fill"></i>
+            </button>
+          </li>
           <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
             <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom w-100">Create Platform</a>
           </li>

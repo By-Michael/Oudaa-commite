@@ -4,6 +4,21 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  /* ---------- Dark theme toggle ---------- */
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('oudaa-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('oudaa-theme', 'dark');
+      }
+    });
+  }
+
   /* ---------- Sticky navbar on scroll ---------- */
   const navbar = document.querySelector('.navbar-nexora');
   const handleScroll = () => {

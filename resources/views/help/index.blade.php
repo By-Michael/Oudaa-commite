@@ -11,7 +11,7 @@
         </div>
         <p id="faq-no-results" class="muted" style="display:none;">No matching questions — try different words, or message us on Telegram below.</p>
     </div>
-    <div class="panel-body faq-list" id="faq-list">
+    <div class="faq-list" id="faq-list">
 
         <details class="faq-item" open>
             <summary>How is the app organized?</summary>
@@ -149,7 +149,7 @@
 </div>
 
 <style>
-.faq-list{display:flex;flex-direction:column;gap:4px;}
+.faq-list{display:flex;flex-direction:column;gap:4px;padding:0 24px 24px;}
 .faq-item{border-bottom:1px solid var(--md-outline-variant,#CAC4D0);padding:12px 0;}
 .faq-item:last-child{border-bottom:none;}
 .faq-item summary{
@@ -168,11 +168,14 @@
 .faq-search-wrap{
     display:flex; align-items:center; gap:10px;
     background:var(--md-surface-container, #F3EDF7); border-radius:9999px;
-    padding:10px 16px; color:var(--md-on-surface-variant,#49454F);
-    margin:0 0 4px;
+    padding:9px 16px; color:var(--md-on-surface-variant,#49454F);
+    margin:0 0 4px; max-width:380px;
+    border:1px solid var(--md-outline-variant, #CAC4D0);
 }
+.faq-search-wrap:focus-within{border-color:var(--md-primary, #6750A4);}
+.faq-search-wrap svg{flex-shrink:0;opacity:.7;}
 .faq-search-wrap input{
-    border:none; background:transparent; outline:none; flex:1;
+    border:none; background:transparent; outline:none; flex:1; min-width:0;
     font-size:13.5px; font-family:inherit; color:var(--md-on-bg,#1C1B1F);
 }
 .faq-item.is-hidden{display:none;}

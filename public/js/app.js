@@ -35,6 +35,10 @@
     function openModal(variantClass) {
         ensureOverlay();
         card.className = 'modal-card' + (variantClass ? ' ' + variantClass : '');
+        // Belt-and-braces alongside the CSS :has() rule for older browsers:
+        // confirmation popups center vertically, add/edit forms sit near
+        // the top so long forms are reachable without feeling awkward.
+        overlay.classList.toggle('modal-overlay--center', variantClass === 'confirm-card');
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
@@ -65,6 +69,7 @@
     }
 
     function loadIntoModal(url) {
+        ensureOverlay(); // must exist before we touch overlay.querySelector below
         var body = overlay.querySelector('.modal-body');
         body.innerHTML = '<div class="modal-loading">Loading…</div>';
         openModal();

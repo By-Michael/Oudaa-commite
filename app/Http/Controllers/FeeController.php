@@ -45,15 +45,17 @@ class FeeController extends Controller
         return redirect()->route('fees.index')->with('status', 'Fee created.');
     }
 
-    public function edit(Fee $fee)
+    public function edit(string $fee)
     {
+        $fee = Fee::findOrFail($fee);
         $funds = Fund::active()->orderBy('name')->get();
 
         return view('fees.form', compact('fee', 'funds'));
     }
 
-    public function update(Request $request, Fee $fee)
+    public function update(Request $request, string $fee)
     {
+        $fee = Fee::findOrFail($fee);
         $data = $this->validated($request);
         $data['status'] = $request->input('status', $fee->status); // status only settable here, on edit
 
@@ -66,8 +68,9 @@ class FeeController extends Controller
         return redirect()->route('fees.index')->with('status', 'Fee updated.');
     }
 
-    public function deactivate(Fee $fee)
+    public function deactivate(string $fee)
     {
+        $fee = Fee::findOrFail($fee);
         $fee->update(['status' => $fee->status === 'active' ? 'inactive' : 'active']);
 
         return back()->with('status', 'Fee status updated.');
@@ -77,8 +80,16 @@ class FeeController extends Controller
      * Unpaid summary for a single fee: active residents who have no PAID
      * payment against this fee for the fee's current period.
      */
-    public function unpaid(Fee $fee)
+    public function unpaid(string $fee)
     {
+        // Resolved manually rather than via implicit route-model binding
+        // (Fee $fee): that binding wasn't being applied for this route in
+        // production, and the raw route segment arrived here as a plain
+        // string instead of a Fee instance. findOrFail() still goes
+        // through the BelongsToCommunity global scope, so this can't
+        // fetch a fee belonging to a different community.
+        $fee = Fee::findOrFail($fee);
+
         $periodKey = $fee->currentPeriodKey();
 
         $paidResidentIds = Payment::where('fee_id', $fee->id)

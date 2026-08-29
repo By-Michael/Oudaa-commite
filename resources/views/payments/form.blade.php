@@ -2,6 +2,10 @@
 @section('title', 'Record Payment')
 @section('content')
 
+@php
+    use Illuminate\Support\Js;
+@endphp
+
 <div class="panel" style="max-width:640px;">
     <div class="panel-body">
         <form method="POST" action="{{ route('payments.store') }}" id="payment-form">
@@ -132,9 +136,9 @@
         @foreach ($residents as $resident)
         {
             id: {{ $resident->id }},
-            label: {{ json_encode($resident->unit_number.' — '.$resident->name) }},
-            sub: {{ json_encode(($resident->id_number ? 'ID: '.$resident->id_number.' — ' : '').($resident->status !== 'active' ? 'Inactive' : 'Active')) }},
-            search: {{ json_encode(strtolower($resident->name.' '.$resident->unit_number.' '.$resident->id_number.' '.($resident->block_number ?? ''))) }}
+            label: {!! Js::from($resident->unit_number.' — '.$resident->name) !!},
+            sub: {!! Js::from(($resident->id_number ? 'ID: '.$resident->id_number.' — ' : '').($resident->status !== 'active' ? 'Inactive' : 'Active')) !!},
+            search: {!! Js::from(strtolower($resident->name.' '.$resident->unit_number.' '.$resident->id_number.' '.($resident->block_number ?? ''))) !!}
         },
         @endforeach
     ];

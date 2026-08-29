@@ -54,12 +54,20 @@
     function runScripts(container) {
         var scripts = container.querySelectorAll('script');
         scripts.forEach(function (old) {
-            var fresh = document.createElement('script');
-            for (var i = 0; i < old.attributes.length; i++) {
-                fresh.setAttribute(old.attributes[i].name, old.attributes[i].value);
+            // A syntax error in one script (e.g. bad data corrupting the
+            // markup) would otherwise throw here and silently skip every
+            // script after it in the list — isolate each one so a single
+            // bad script can't take out the rest of the form's behavior.
+            try {
+                var fresh = document.createElement('script');
+                for (var i = 0; i < old.attributes.length; i++) {
+                    fresh.setAttribute(old.attributes[i].name, old.attributes[i].value);
+                }
+                fresh.textContent = old.textContent;
+                old.parentNode.replaceChild(fresh, old);
+            } catch (err) {
+                console.error('A script inside this popup failed to run:', err);
             }
-            fresh.textContent = old.textContent;
-            old.parentNode.replaceChild(fresh, old);
         });
     }
 

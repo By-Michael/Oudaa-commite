@@ -7,8 +7,10 @@
         <input type="text" name="search" placeholder="Search name, unit, block, or ID number..." value="{{ request('search') }}">
         <button class="btn" type="submit">Search</button>
     </form>
-    <a href="{{ route('residents.create') }}" class="js-modal-link btn btn-primary">+ Add Resident</a>
-    <a href="{{ route('residents.bulk-import.form') }}" class="js-modal-link btn">⬆ Bulk Import</a>
+    <div class="toolbar-actions">
+        <a href="{{ route('residents.create') }}" class="js-modal-link btn btn-primary">+ Add Resident</a>
+        <a href="{{ route('residents.bulk-import.form') }}" class="js-modal-link btn">⬆ Bulk Import</a>
+    </div>
 </div>
 
 <div class="panel">

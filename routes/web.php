@@ -38,6 +38,26 @@ Route::get('/services/{service}', [LandingController::class, 'serviceDetails'])-
 Route::get('/contact', [LandingController::class, 'contact'])->name('landing.contact');
 Route::get('/privacy-policy', [LandingController::class, 'privacy'])->name('landing.privacy');
 Route::get('/terms-of-service', [LandingController::class, 'terms'])->name('landing.terms');
+
+/*
+|--------------------------------------------------------------------------
+| God Admin integration points (separate deployment calls in here).
+| Agent API routes are HMAC-signed and stateless — no 'web' middleware,
+| no CSRF, no session. The bridge route runs on 'web' because it needs
+| to actually start a session for the impersonated user.
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(\App\Http\Middleware\VerifyAdminAgentSignature::class)
+    ->prefix('internal-admin-api')
+    ->group(function () {
+        Route::get('/health', [\App\Http\Controllers\Admin\AgentApiController::class, 'health']);
+        Route::get('/logs/errors', [\App\Http\Controllers\Admin\AgentApiController::class, 'recentErrors']);
+        Route::get('/metrics/performance', [\App\Http\Controllers\Admin\AgentApiController::class, 'performanceSeries']);
+        Route::post('/impersonate/issue', [\App\Http\Controllers\Admin\AgentApiController::class, 'issueImpersonation']);
+    });
+
+Route::middleware('web')->get('/admin-bridge/{token}', [\App\Http\Controllers\Admin\ImpersonationBridgeController::class, 'redeem']);
 Route::post('/contact', [ContactController::class, 'store'])
     ->name('landing.contact.store')
     ->middleware('throttle:5,1'); // 5 submissions per minute per IP — cheap spam guard on a public, unauthenticated form.

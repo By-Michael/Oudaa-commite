@@ -13,6 +13,9 @@ class Kernel extends HttpKernel
         \Illuminate\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        // Feeds the God Admin performance dashboard (response time, error
+        // rate). Cheap (one INSERT) and fails silently if it can't write.
+        \App\Http\Middleware\RecordSystemMetrics::class,
     ];
 
     protected $middlewareGroups = [

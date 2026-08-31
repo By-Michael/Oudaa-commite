@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminConsentRequest;
 use App\Models\Committee;
 use App\Models\SystemMetric;
 use Illuminate\Http\Request;
@@ -101,9 +102,58 @@ class AgentApiController extends Controller
     }
 
     /**
+     * Record a pending "may the admin dashboard act as you?" request and
+     * make it visible to the target committee member next time they load
+     * any page (see the banner partial in layouts/app.blade.php). This
+     * never grants access — it only creates something a human can accept
+     * or deny.
+     */
+    public function requestConsent(Request $request)
+    {
+        $request->validate([
+            'tenant_slug' => 'required|string',
+            'user_id' => 'required|integer',
+            'consent_token' => 'required|string|max:64',
+            'reason' => 'required|string',
+            'callback_url' => 'required|url',
+        ]);
+
+        $tenant = DB::table('tenants')->where('slug', $request->input('tenant_slug'))->first();
+        abort_unless($tenant, 404);
+
+        $user = Committee::where('community_id', $tenant->id)->find($request->input('user_id'));
+        abort_unless($user, 404);
+
+        AdminConsentRequest::updateOrCreate(
+            ['token' => $request->input('consent_token')],
+            [
+                'committee_id' => $user->id,
+                'tenant_slug' => $tenant->slug,
+                'reason' => $request->input('reason'),
+                'callback_url' => $request->input('callback_url'),
+                'status' => 'pending',
+                'expires_at' => now()->addMinutes(15),
+            ]
+        );
+
+        \Log::channel('single')->info('[GOD-ADMIN] Consent request received', [
+            'committee_id' => $user->id,
+            'tenant' => $tenant->slug,
+            'reason' => $request->input('reason'),
+        ]);
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
      * Mint a one-time token the admin's browser will redeem at
      * /admin-bridge/{token} to log in as the target user. Never
      * exposes the session directly to the admin app.
+     *
+     * Gated on an *approved* consent request: this endpoint being
+     * signature-verified only proves the caller is the admin dashboard,
+     * not that the human being impersonated agreed to it. That's a
+     * separate check, on purpose.
      */
     public function issueImpersonation(Request $request)
     {
@@ -119,6 +169,17 @@ class AgentApiController extends Controller
         $user = Committee::where('community_id', $tenant->id)->find($request->input('user_id'));
         abort_unless($user, 404);
 
+        $consent = AdminConsentRequest::where('tenant_slug', $tenant->slug)
+            ->where('committee_id', $user->id)
+            ->where('status', 'approved')
+            ->where('expires_at', '>', now())
+            ->latest('responded_at')
+            ->first();
+
+        if (! $consent) {
+            abort(403, 'No approved consent on file for this user. Ask them to accept the request first.');
+        }
+
         $token = Str::random(64);
 
         DB::table('admin_impersonation_tokens')->insert([
@@ -129,11 +190,16 @@ class AgentApiController extends Controller
             'updated_at' => now(),
         ]);
 
+        // Single-use both ways: a redeemed bridge token can't be re-minted
+        // from the same consent without the user approving again.
+        $consent->update(['status' => 'expired']);
+
         \Log::channel('single')->warning('[GOD-ADMIN] Impersonation token issued', [
             'committee_id' => $user->id,
             'tenant' => $tenant->slug,
             'reason' => $request->input('reason'),
             'requested_from_ip' => $request->input('requested_by_ip'),
+            'consent_id' => $consent->id,
         ]);
 
         return response()->json([

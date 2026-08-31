@@ -54,6 +54,7 @@ Route::middleware(\App\Http\Middleware\VerifyAdminAgentSignature::class)
         Route::get('/health', [\App\Http\Controllers\Admin\AgentApiController::class, 'health']);
         Route::get('/logs/errors', [\App\Http\Controllers\Admin\AgentApiController::class, 'recentErrors']);
         Route::get('/metrics/performance', [\App\Http\Controllers\Admin\AgentApiController::class, 'performanceSeries']);
+        Route::post('/consent/request', [\App\Http\Controllers\Admin\AgentApiController::class, 'requestConsent']);
         Route::post('/impersonate/issue', [\App\Http\Controllers\Admin\AgentApiController::class, 'issueImpersonation']);
     });
 
@@ -113,6 +114,12 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         // to keep the session alive while the tab is open, without ever
         // navigating the user or interrupting what they're doing.
         Route::get('/ping', fn () => response()->noContent())->name('ping');
+
+        // The committee member accepting/denying a God Admin access
+        // request themselves. Requires their own logged-in session — this
+        // is never reachable via a link an admin can hand someone.
+        Route::post('/admin-consent/{token}', [\App\Http\Controllers\AdminConsentController::class, 'respond'])
+            ->name('admin-consent.respond');
 
         Route::get('/residents', [ResidentController::class, 'index'])->name('residents.index');
         Route::get('/residents/create', [ResidentController::class, 'create'])->name('residents.create');

@@ -83,6 +83,38 @@
                 </div>
             @endif
 
+            @auth
+                @php
+                    $pendingAdminConsent = \App\Models\AdminConsentRequest::where('committee_id', auth()->id())
+                        ->where('status', 'pending')
+                        ->where('expires_at', '>', now())
+                        ->latest()
+                        ->first();
+                @endphp
+                @if ($pendingAdminConsent)
+                    <div class="alert" style="border:1px solid #B99FE0;background:#F4EEFB;padding:14px 16px;border-radius:10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+                        <div>
+                            <strong>Platform support is requesting access to your account.</strong>
+                            <div class="muted" style="font-size:13px;margin-top:2px">
+                                Reason given: "{{ $pendingAdminConsent->reason }}". They will not be able to act on your behalf unless you approve this.
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;flex-shrink:0">
+                            <form method="POST" action="{{ route('admin-consent.respond', ['tenant' => request()->route('tenant'), 'token' => $pendingAdminConsent->token]) }}">
+                                @csrf
+                                <input type="hidden" name="decision" value="denied">
+                                <button type="submit" class="btn btn-sm">Deny</button>
+                            </form>
+                            <form method="POST" action="{{ route('admin-consent.respond', ['tenant' => request()->route('tenant'), 'token' => $pendingAdminConsent->token]) }}">
+                                @csrf
+                                <input type="hidden" name="decision" value="approved">
+                                <button type="submit" class="btn btn-sm btn-primary">Approve</button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            @endauth
+
             @yield('content')
         </div>
     </div>

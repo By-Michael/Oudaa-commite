@@ -110,31 +110,68 @@ class AgentApiController extends Controller
      */
     public function requestConsent(Request $request)
     {
-        $request->validate([
-            'tenant_slug' => 'required|string',
-            'user_id' => 'required|integer',
-            'consent_token' => 'required|string|max:64',
-            'reason' => 'required|string',
-            'callback_url' => 'required|url',
-        ]);
+        try {
+            $request->validate([
+                'tenant_slug' => 'required|string',
+                'user_id' => 'required|integer',
+                'consent_token' => 'required|string|max:64',
+                'reason' => 'required|string',
+                'callback_url' => 'required|url',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::warning('[GOD-ADMIN] Consent request rejected: invalid payload.', [
+                'errors' => $e->errors(),
+            ]);
+
+            return response()->json(['ok' => false, 'error' => 'invalid_payload', 'errors' => $e->errors()], 422);
+        }
 
         $tenant = DB::table('tenants')->where('slug', $request->input('tenant_slug'))->first();
-        abort_unless($tenant, 404);
+        if (! $tenant) {
+            \Log::warning('[GOD-ADMIN] Consent request rejected: unknown tenant.', [
+                'tenant_slug' => $request->input('tenant_slug'),
+            ]);
+
+            return response()->json(['ok' => false, 'error' => 'tenant_not_found'], 404);
+        }
 
         $user = Committee::where('community_id', $tenant->id)->find($request->input('user_id'));
-        abort_unless($user, 404);
+        if (! $user) {
+            \Log::warning('[GOD-ADMIN] Consent request rejected: unknown committee member for tenant.', [
+                'tenant' => $tenant->slug,
+                'user_id' => $request->input('user_id'),
+            ]);
 
-        AdminConsentRequest::updateOrCreate(
-            ['token' => $request->input('consent_token')],
-            [
+            return response()->json(['ok' => false, 'error' => 'user_not_found'], 404);
+        }
+
+        try {
+            AdminConsentRequest::updateOrCreate(
+                ['token' => $request->input('consent_token')],
+                [
+                    'committee_id' => $user->id,
+                    'tenant_slug' => $tenant->slug,
+                    'reason' => $request->input('reason'),
+                    'callback_url' => $request->input('callback_url'),
+                    'status' => 'pending',
+                    'expires_at' => now()->addMinutes(15),
+                ]
+            );
+        } catch (\Throwable $e) {
+            // This is the failure mode that matters most: if the write
+            // fails here, the admin app must NOT show a "request sent"
+            // state, because no row exists for the committee member to
+            // act on. Surfacing a 500 (instead of swallowing it) lets
+            // AgentApiClient on the admin side know the prompt was never
+            // actually created.
+            \Log::error('[GOD-ADMIN] Failed to persist consent request.', [
+                'tenant' => $tenant->slug,
                 'committee_id' => $user->id,
-                'tenant_slug' => $tenant->slug,
-                'reason' => $request->input('reason'),
-                'callback_url' => $request->input('callback_url'),
-                'status' => 'pending',
-                'expires_at' => now()->addMinutes(15),
-            ]
-        );
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json(['ok' => false, 'error' => 'storage_failed'], 500);
+        }
 
         \Log::info('[GOD-ADMIN] Consent request received', [
             'committee_id' => $user->id,

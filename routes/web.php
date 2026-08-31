@@ -113,7 +113,11 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         // Hit silently in the background by the front-end (see layouts/app.blade.php)
         // to keep the session alive while the tab is open, without ever
         // navigating the user or interrupting what they're doing.
-        Route::get('/ping', fn () => response()->noContent())->name('ping');
+        // NOTE: this must stay a real controller, not a Closure — route
+        // closures can't survive `php artisan route:cache` (see start.sh),
+        // and start.sh runs under `set -e`, so a closure route here used
+        // to take the whole app down on deploy, silently.
+        Route::get('/ping', \App\Http\Controllers\PingController::class)->name('ping');
 
         // The committee member accepting/denying a God Admin access
         // request themselves. Requires their own logged-in session — this

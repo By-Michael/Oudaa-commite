@@ -7,13 +7,16 @@ use App\Models\Expense;
 use App\Models\Fund;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Support\Export\Exportable;
 
 class ExpenseController extends Controller
 {
+    use Exportable;
+
     public function index(Request $request)
     {
-        $expenses = Expense::with(['fund', 'project', 'employee'])
-            ->when($request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+        $expenses = $this->filtered($request)
+            ->with(['fund', 'project', 'employee'])
             ->latest('incurred_at')->latest('id')
             ->paginate(15)
             ->withQueryString();
@@ -21,6 +24,59 @@ class ExpenseController extends Controller
         $funds = Fund::orderBy('name')->get();
 
         return view('expenses.index', compact('expenses', 'funds'));
+    }
+
+    private function filtered(Request $request)
+    {
+        return Expense::query()
+            ->when($request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+            ->when($request->project_id, fn ($q) => $q->where('project_id', $request->project_id))
+            ->when($request->employee_id, fn ($q) => $q->where('employee_id', $request->employee_id))
+            ->when($request->category, fn ($q) => $q->where('category', $request->category))
+            ->when($request->date_from, fn ($q) => $q->whereDate('incurred_at', '>=', $request->date_from))
+            ->when($request->date_to, fn ($q) => $q->whereDate('incurred_at', '<=', $request->date_to));
+    }
+
+    private function filterSummary(Request $request): array
+    {
+        $lines = [];
+        if ($request->fund_id) $lines[] = 'Fund: '.(Fund::find($request->fund_id)->name ?? '#'.$request->fund_id);
+        if ($request->project_id) $lines[] = 'Project: '.(Project::find($request->project_id)->name ?? '#'.$request->project_id);
+        if ($request->employee_id) $lines[] = 'Employee: '.(Employee::find($request->employee_id)->name ?? '#'.$request->employee_id);
+        if ($request->category) $lines[] = "Category: {$request->category}";
+        if ($request->date_from) $lines[] = "From: {$request->date_from}";
+        if ($request->date_to) $lines[] = "To: {$request->date_to}";
+
+        return $lines;
+    }
+
+    private function exportRows(Request $request): array
+    {
+        $headers = ['Date', 'Category', 'Fund', 'Project', 'Employee', 'Vendor', 'Amount', 'Note'];
+
+        $rows = $this->filtered($request)->with(['fund', 'project', 'employee'])
+            ->latest('incurred_at')->get()
+            ->map(fn (Expense $e) => [
+                $e->incurred_at?->format('Y-m-d'), $e->category, $e->fund->name ?? '—',
+                $e->project->name ?? '—', $e->employee->name ?? '—', $e->vendor ?: '—',
+                money($e->amount), $e->note ?: '—',
+            ])->all();
+
+        return [$headers, $rows];
+    }
+
+    public function exportExcelIndex(Request $request)
+    {
+        [$headers, $rows] = $this->exportRows($request);
+
+        return $this->exportExcel('Expenses', $headers, $rows, 'expenses', $this->filterSummary($request));
+    }
+
+    public function exportPdfIndex(Request $request)
+    {
+        [$headers, $rows] = $this->exportRows($request);
+
+        return $this->exportPdf('Expenses', $headers, $rows, 'expenses', $this->filterSummary($request), 'landscape');
     }
 
     public function create()

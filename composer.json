@@ -4,8 +4,18 @@
     "description": "Committee Site - internal committee management panel (residents, fees, payments, funds, expenses, dashboard).",
     "keywords": ["laravel", "committee", "hoa"],
     "license": "MIT",
+    "repositories": [
+        {"type": "git", "url": "https://github.com/barryvdh/laravel-dompdf"},
+        {"type": "git", "url": "https://github.com/dompdf/dompdf"},
+        {"type": "git", "url": "https://github.com/PhenX/php-font-lib"},
+        {"type": "git", "url": "https://github.com/PhenX/php-svg-lib"},
+        {"type": "git", "url": "https://github.com/sabberworm/PHP-CSS-Parser"},
+        {"type": "git", "url": "https://github.com/Masterminds/html5-php"},
+        {"packagist.org": false}
+    ],
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^11.44",
         "laravel/tinker": "^2.9",
         "phpoffice/phpspreadsheet": "^2.3",

@@ -8,8 +8,6 @@
         <button class="btn" type="submit">Search</button>
     </form>
     <div class="toolbar-actions">
-        <a href="{{ route('residents.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('residents.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
         <a href="{{ route('residents.create') }}" class="js-modal-link btn btn-primary">+ Add Resident</a>
         <a href="{{ route('residents.bulk-import.form') }}" class="js-modal-link btn">⬆ Bulk Import</a>
     </div>

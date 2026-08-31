@@ -18,11 +18,7 @@
             <option value="archived" @selected(request('status') == 'archived')>Archived</option>
         </select>
     </form>
-    <div class="toolbar-actions">
-        <a href="{{ route('projects.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('projects.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
-        <a href="{{ route('projects.create') }}" class="js-modal-link btn btn-primary">+ Add Project</a>
-    </div>
+    <a href="{{ route('projects.create') }}" class="js-modal-link btn btn-primary">+ Add Project</a>
 </div>
 
 <div class="panel">

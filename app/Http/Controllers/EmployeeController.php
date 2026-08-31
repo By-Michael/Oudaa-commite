@@ -4,72 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use App\Support\Export\Exportable;
 
 class EmployeeController extends Controller
 {
-    use Exportable;
-
     public function index(Request $request)
     {
-        $employees = $this->filtered($request)
+        $employees = Employee::query()
+            ->when($request->search, fn ($q) => $q->where('name', 'like', "%{$request->search}%")
+                ->orWhere('role', 'like', "%{$request->search}%")
+                ->orWhere('id_number', 'like', "%{$request->search}%"))
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
 
         return view('employees.index', compact('employees'));
-    }
-
-    private function filtered(Request $request)
-    {
-        return Employee::query()
-            ->when($request->search, fn ($q) => $q->where('name', 'like', "%{$request->search}%")
-                ->orWhere('role', 'like', "%{$request->search}%")
-                ->orWhere('id_number', 'like', "%{$request->search}%"))
-            ->when($request->status, fn ($q) => $q->where('status', $request->status))
-            ->when($request->employee_id, fn ($q) => $q->where('id', $request->employee_id))
-            ->when($request->date_from, fn ($q) => $q->whereDate('created_at', '>=', $request->date_from))
-            ->when($request->date_to, fn ($q) => $q->whereDate('created_at', '<=', $request->date_to));
-    }
-
-    private function filterSummary(Request $request): array
-    {
-        $lines = [];
-        if ($request->search) $lines[] = "Search: {$request->search}";
-        if ($request->status) $lines[] = "Status: {$request->status}";
-        if ($request->employee_id) $lines[] = 'Employee #'.$request->employee_id;
-        if ($request->date_from) $lines[] = "From: {$request->date_from}";
-        if ($request->date_to) $lines[] = "To: {$request->date_to}";
-
-        return $lines;
-    }
-
-    private function exportRows(Request $request): array
-    {
-        $headers = ['Name', 'Role', 'ID Number', 'Salary', 'Payment Date', 'Phone', 'Status', 'Total Paid'];
-
-        $rows = $this->filtered($request)->orderBy('name')->get()
-            ->map(fn (Employee $e) => [
-                $e->name, $e->role, $e->id_number, money($e->salary),
-                $e->payment_date?->format('Y-m-d') ?: '—', $e->phone ?: '—',
-                ucfirst($e->status), money($e->totalPaid()),
-            ])->all();
-
-        return [$headers, $rows];
-    }
-
-    public function exportExcelIndex(Request $request)
-    {
-        [$headers, $rows] = $this->exportRows($request);
-
-        return $this->exportExcel('Employees', $headers, $rows, 'employees', $this->filterSummary($request));
-    }
-
-    public function exportPdfIndex(Request $request)
-    {
-        [$headers, $rows] = $this->exportRows($request);
-
-        return $this->exportPdf('Employees', $headers, $rows, 'employees', $this->filterSummary($request));
     }
 
     public function create()

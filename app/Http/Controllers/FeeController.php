@@ -7,16 +7,14 @@ use App\Models\Fund;
 use App\Models\Payment;
 use App\Models\Resident;
 use Illuminate\Http\Request;
-use App\Support\Export\Exportable;
 
 class FeeController extends Controller
 {
-    use Exportable;
-
     public function index(Request $request)
     {
-        $fees = $this->filtered($request)
-            ->with('fund')
+        $fees = Fee::with('fund')
+            ->when($request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+            ->when($request->status, fn ($q) => $q->where('status', $request->status))
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
@@ -24,55 +22,6 @@ class FeeController extends Controller
         $funds = Fund::orderBy('name')->get();
 
         return view('fees.index', compact('fees', 'funds'));
-    }
-
-    private function filtered(Request $request)
-    {
-        return Fee::query()
-            ->when($request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
-            ->when($request->status, fn ($q) => $q->where('status', $request->status))
-            ->when($request->frequency, fn ($q) => $q->where('frequency', $request->frequency))
-            ->when($request->date_from, fn ($q) => $q->whereDate('created_at', '>=', $request->date_from))
-            ->when($request->date_to, fn ($q) => $q->whereDate('created_at', '<=', $request->date_to));
-    }
-
-    private function filterSummary(Request $request): array
-    {
-        $lines = [];
-        if ($request->fund_id) $lines[] = 'Fund: '.(Fund::find($request->fund_id)->name ?? '#'.$request->fund_id);
-        if ($request->status) $lines[] = "Status: {$request->status}";
-        if ($request->frequency) $lines[] = "Frequency: {$request->frequency}";
-        if ($request->date_from) $lines[] = "From: {$request->date_from}";
-        if ($request->date_to) $lines[] = "To: {$request->date_to}";
-
-        return $lines;
-    }
-
-    private function exportRows(Request $request): array
-    {
-        $headers = ['Name', 'Fund', 'Amount', 'Frequency', 'Recurrence Day', 'Status'];
-
-        $rows = $this->filtered($request)->with('fund')->orderBy('name')->get()
-            ->map(fn (Fee $f) => [
-                $f->name, $f->fund->name ?? '—', money($f->amount),
-                ucfirst(str_replace('_', ' ', $f->frequency)), $f->recurrenceDay(), ucfirst($f->status),
-            ])->all();
-
-        return [$headers, $rows];
-    }
-
-    public function exportExcelIndex(Request $request)
-    {
-        [$headers, $rows] = $this->exportRows($request);
-
-        return $this->exportExcel('Fees', $headers, $rows, 'fees', $this->filterSummary($request));
-    }
-
-    public function exportPdfIndex(Request $request)
-    {
-        [$headers, $rows] = $this->exportRows($request);
-
-        return $this->exportPdf('Fees', $headers, $rows, 'fees', $this->filterSummary($request));
     }
 
     public function create()

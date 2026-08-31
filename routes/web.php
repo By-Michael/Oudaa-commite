@@ -16,7 +16,6 @@ use App\Http\Controllers\Onboarding\CreatePlatformController;
 use App\Http\Controllers\Onboarding\SetPasswordController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
@@ -129,8 +128,6 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/residents/bulk-import', [ResidentController::class, 'bulkImportForm'])->name('residents.bulk-import.form');
         Route::get('/residents/bulk-import/template', [ResidentController::class, 'bulkImportTemplate'])->name('residents.bulk-import.template');
         Route::post('/residents/bulk-import', [ResidentController::class, 'bulkImport'])->name('residents.bulk-import');
-        Route::get('/residents/export/excel', [ResidentController::class, 'exportExcelIndex'])->name('residents.export.excel');
-        Route::get('/residents/export/pdf', [ResidentController::class, 'exportPdfIndex'])->name('residents.export.pdf');
         Route::get('/residents/{resident}/edit', [ResidentController::class, 'edit'])->name('residents.edit');
         Route::put('/residents/{resident}', [ResidentController::class, 'update'])->name('residents.update');
         Route::patch('/residents/{resident}/toggle', [ResidentController::class, 'deactivate'])->name('residents.toggle');
@@ -138,8 +135,6 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/fees', [FeeController::class, 'index'])->name('fees.index');
         Route::get('/fees/create', [FeeController::class, 'create'])->name('fees.create');
         Route::post('/fees', [FeeController::class, 'store'])->name('fees.store');
-        Route::get('/fees/export/excel', [FeeController::class, 'exportExcelIndex'])->name('fees.export.excel');
-        Route::get('/fees/export/pdf', [FeeController::class, 'exportPdfIndex'])->name('fees.export.pdf');
         Route::get('/fees/{fee}/edit', [FeeController::class, 'edit'])->name('fees.edit');
         Route::put('/fees/{fee}', [FeeController::class, 'update'])->name('fees.update');
         Route::patch('/fees/{fee}/toggle', [FeeController::class, 'deactivate'])->name('fees.toggle');
@@ -148,16 +143,12 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
         Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
         Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
-        Route::get('/payments/export/excel', [PaymentController::class, 'exportExcelIndex'])->name('payments.export.excel');
-        Route::get('/payments/export/pdf', [PaymentController::class, 'exportPdfIndex'])->name('payments.export.pdf');
         Route::get('/payments/{payment}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
         Route::put('/payments/{payment}', [PaymentController::class, 'update'])->name('payments.update');
 
         Route::get('/funds', [FundController::class, 'index'])->name('funds.index');
         Route::get('/funds/create', [FundController::class, 'create'])->name('funds.create');
         Route::post('/funds', [FundController::class, 'store'])->name('funds.store');
-        Route::get('/funds/export/excel', [FundController::class, 'exportExcelIndex'])->name('funds.export.excel');
-        Route::get('/funds/export/pdf', [FundController::class, 'exportPdfIndex'])->name('funds.export.pdf');
         Route::get('/funds/{fund}/edit', [FundController::class, 'edit'])->name('funds.edit');
         Route::put('/funds/{fund}', [FundController::class, 'update'])->name('funds.update');
         Route::patch('/funds/{fund}/toggle', [FundController::class, 'archive'])->name('funds.toggle');
@@ -165,8 +156,6 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
         Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
         Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
-        Route::get('/projects/export/excel', [ProjectController::class, 'exportExcelIndex'])->name('projects.export.excel');
-        Route::get('/projects/export/pdf', [ProjectController::class, 'exportPdfIndex'])->name('projects.export.pdf');
         Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
         Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
         Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
@@ -175,21 +164,14 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
         Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
         Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
-        Route::get('/expenses/export/excel', [ExpenseController::class, 'exportExcelIndex'])->name('expenses.export.excel');
-        Route::get('/expenses/export/pdf', [ExpenseController::class, 'exportPdfIndex'])->name('expenses.export.pdf');
 
         Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
         Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');
         Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
-        Route::get('/employees/export/excel', [EmployeeController::class, 'exportExcelIndex'])->name('employees.export.excel');
-        Route::get('/employees/export/pdf', [EmployeeController::class, 'exportPdfIndex'])->name('employees.export.pdf');
         Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
         Route::get('/employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
         Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
         Route::patch('/employees/{employee}/toggle', [EmployeeController::class, 'toggle'])->name('employees.toggle');
-
-        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-        Route::get('/reports/summary/pdf', [ReportController::class, 'summaryPdf'])->name('reports.summary.pdf');
 
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
         Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');

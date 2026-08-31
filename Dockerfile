@@ -15,10 +15,10 @@ WORKDIR /app
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Full source is copied in before `composer install`: composer.json
+# Full source copied in before `composer install`: composer.json
 # autoloads App\ from app/ and requires app/Support/helpers.php
-# directly (autoload.files), so an optimized autoloader can't be built
-# from just composer.json/composer.lock before those paths exist.
+# directly, so an optimized autoloader can't be built before those
+# paths exist.
 COPY . .
 
 RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader \

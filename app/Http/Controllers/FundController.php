@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Fund;
 use Illuminate\Http\Request;
-use App\Support\Export\Exportable;
 
 class FundController extends Controller
 {
-    use Exportable;
-
     public function index(Request $request)
     {
-        $funds = $this->filtered($request)
+        $funds = Fund::when($request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($request->category, fn ($q) => $q->where('category', $request->category))
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
@@ -24,57 +22,6 @@ class FundController extends Controller
             ->pluck('category');
 
         return view('funds.index', compact('funds', 'categories'));
-    }
-
-    private function filtered(Request $request)
-    {
-        return Fund::query()
-            ->when($request->status, fn ($q) => $q->where('status', $request->status))
-            ->when($request->category, fn ($q) => $q->where('category', $request->category))
-            ->when($request->fund_id, fn ($q) => $q->where('id', $request->fund_id))
-            ->when($request->date_from, fn ($q) => $q->whereDate('created_at', '>=', $request->date_from))
-            ->when($request->date_to, fn ($q) => $q->whereDate('created_at', '<=', $request->date_to));
-    }
-
-    private function filterSummary(Request $request): array
-    {
-        $lines = [];
-        if ($request->status) $lines[] = "Status: {$request->status}";
-        if ($request->category) $lines[] = "Category: {$request->category}";
-        if ($request->fund_id) $lines[] = 'Fund #'.$request->fund_id;
-        if ($request->date_from) $lines[] = "From: {$request->date_from}";
-        if ($request->date_to) $lines[] = "To: {$request->date_to}";
-
-        return $lines;
-    }
-
-    private function exportRows(Request $request): array
-    {
-        $headers = ['Name', 'Category', 'Status', 'Balance', 'Total Collected', 'Total Spent'];
-
-        $rows = $this->filtered($request)->orderBy('name')->get()
-            ->map(fn (Fund $f) => [
-                $f->name, $f->category ?: '—', ucfirst($f->status),
-                money($f->balance()),
-                money($f->payments()->where('status', 'PAID')->sum('amount')),
-                money($f->expenses()->sum('amount')),
-            ])->all();
-
-        return [$headers, $rows];
-    }
-
-    public function exportExcelIndex(Request $request)
-    {
-        [$headers, $rows] = $this->exportRows($request);
-
-        return $this->exportExcel('Funds', $headers, $rows, 'funds', $this->filterSummary($request));
-    }
-
-    public function exportPdfIndex(Request $request)
-    {
-        [$headers, $rows] = $this->exportRows($request);
-
-        return $this->exportPdf('Funds', $headers, $rows, 'funds', $this->filterSummary($request));
     }
 
     public function create()

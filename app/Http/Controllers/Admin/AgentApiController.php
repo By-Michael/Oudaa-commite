@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdminConsentRequest;
 use App\Models\Committee;
+use App\Models\LogEntry;
 use App\Models\SystemMetric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,25 +61,19 @@ class AgentApiController extends Controller
         ]);
     }
 
+    /**
+     * Errors only (error/critical/alert/emergency), read from the
+     * database — see recentLogs() for why this isn't a file tail.
+     */
     public function recentErrors(Request $request)
     {
         $limit = min((int) $request->query('limit', 50), 200);
-        $logPath = storage_path('logs/laravel.log');
 
-        if (! file_exists($logPath)) {
-            return response()->json(['entries' => []]);
-        }
-
-        // Tail the log file efficiently without loading it all into memory.
-        $lines = $this->tailFile($logPath, 4000);
-        $entries = [];
-
-        foreach (array_reverse($lines) as $line) {
-            if (count($entries) >= $limit) break;
-            if (preg_match('/^\[(?<ts>[\d\-: ]+)\].*?\.(ERROR|CRITICAL|EMERGENCY|ALERT):\s*(?<msg>.*)/', $line, $m)) {
-                $entries[] = ['timestamp' => $m['ts'], 'message' => Str::limit($m['msg'], 500)];
-            }
-        }
+        $entries = LogEntry::whereIn('level', ['error', 'critical', 'alert', 'emergency'])
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->get(['level', 'message', 'context', 'created_at'])
+            ->map(fn (LogEntry $e) => $this->formatEntry($e));
 
         return response()->json(['entries' => $entries]);
     }
@@ -87,35 +82,42 @@ class AgentApiController extends Controller
      * Live tail of every log level (info, warning, error, etc.), not
      * just errors. Used by the admin dashboard's Logs panel to give a
      * genuinely live view instead of only surfacing failures.
+     *
+     * Reads from the `log_entries` table (populated by the 'database' log
+     * channel, App\Logging\DatabaseLogHandler) rather than tailing
+     * storage/logs/laravel.log. Render — like most container platforms —
+     * gives each instance its own ephemeral disk, so a file tail only ever
+     * shows whichever single container answered this HTTP request, and
+     * loses everything on redeploy. The database is visible from every
+     * instance and survives deploys.
      */
     public function recentLogs(Request $request)
     {
         $limit = min((int) $request->query('limit', 100), 200);
-        $logPath = storage_path('logs/laravel.log');
+        $level = $request->query('level', 'all');
 
-        if (! file_exists($logPath)) {
-            return response()->json(['entries' => []]);
+        $query = LogEntry::query();
+
+        if ($level !== 'all') {
+            $query->where('level', $level);
         }
 
-        $lines = $this->tailFile($logPath, 4000);
-        $entries = [];
-
-        // Laravel log lines start a new entry with "[timestamp] channel.LEVEL: message"
-        // but stack traces span multiple following lines with no such prefix — those
-        // get folded into the entry they belong to instead of showing as blank rows.
-        foreach (array_reverse($lines) as $line) {
-            if (count($entries) >= $limit) break;
-
-            if (preg_match('/^\[(?<ts>[\d\-: ]+)\]\s+\S+\.(?<level>EMERGENCY|ALERT|CRITICAL|ERROR|WARNING|NOTICE|INFO|DEBUG):\s*(?<msg>.*)/', $line, $m)) {
-                $entries[] = [
-                    'timestamp' => $m['ts'],
-                    'level' => strtolower($m['level']),
-                    'message' => Str::limit(trim($m['msg']), 500),
-                ];
-            }
-        }
+        $entries = $query->orderByDesc('created_at')
+            ->limit($limit)
+            ->get(['level', 'message', 'context', 'created_at'])
+            ->map(fn (LogEntry $e) => $this->formatEntry($e));
 
         return response()->json(['entries' => $entries]);
+    }
+
+    private function formatEntry(LogEntry $entry): array
+    {
+        return [
+            'timestamp' => $entry->created_at->format('Y-m-d H:i:s'),
+            'level' => $entry->level,
+            'message' => $entry->message,
+            'context' => $entry->context,
+        ];
     }
 
     public function performanceSeries(Request $request)
@@ -240,22 +242,5 @@ class AgentApiController extends Controller
         return response()->json([
             'bridge_url' => url("/admin-bridge/{$token}"),
         ]);
-    }
-
-    private function tailFile(string $path, int $maxLines): array
-    {
-        $file = new \SplFileObject($path, 'r');
-        $file->seek(PHP_INT_MAX);
-        $totalLines = $file->key();
-
-        $start = max(0, $totalLines - $maxLines);
-        $file->seek($start);
-
-        $lines = [];
-        while (! $file->eof()) {
-            $lines[] = $file->fgets();
-        }
-
-        return $lines;
     }
 }

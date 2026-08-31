@@ -41,6 +41,14 @@ class DatabaseLogHandler extends AbstractProcessingHandler
             // DB is down, the 'stderr' channel in the stack still catches
             // this line — that's exactly why this handler lives in a stack
             // alongside stderr rather than replacing it.
+            //
+            // But swallowing silently made a real bug ("live" panel with
+            // zero rows) invisible for a while. error_log() writes to
+            // php-fpm's stderr directly — outside Monolog entirely, so it
+            // can't recurse back into this handler — and Render captures
+            // container stderr regardless of shell access. Once the real
+            // cause is found and fixed, this can go back to being silent.
+            error_log('[DatabaseLogHandler] insert failed: '.get_class($e).': '.$e->getMessage());
         }
     }
 

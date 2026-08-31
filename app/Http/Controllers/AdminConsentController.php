@@ -51,7 +51,7 @@ class AdminConsentController extends Controller
     {
         $secret = config('services.admin_agent.secret');
         if (! $secret) {
-            \Log::channel('single')->error('[GOD-ADMIN] Cannot notify admin app of consent decision: no shared secret configured.');
+            \Log::error('[GOD-ADMIN] Cannot notify admin app of consent decision: no shared secret configured.');
             return;
         }
 
@@ -70,7 +70,7 @@ class AdminConsentController extends Controller
                 'X-Admin-Signature' => $signature,
             ])->timeout(6)->post($consent->callback_url, json_decode($body, true));
         } catch (\Throwable $e) {
-            \Log::channel('single')->error('[GOD-ADMIN] Failed to deliver consent decision to admin app.', [
+            \Log::error('[GOD-ADMIN] Failed to deliver consent decision to admin app.', [
                 'consent_id' => $consent->id,
                 'error' => $e->getMessage(),
             ]);

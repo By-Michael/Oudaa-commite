@@ -23,7 +23,7 @@ class ImpersonationBridgeController extends Controller
         $user = Committee::find($record->committee_id);
         abort_unless($user, 404);
 
-        \Log::channel('single')->warning('[GOD-ADMIN] Impersonation session started', [
+        \Log::warning('[GOD-ADMIN] Impersonation session started', [
             'committee_id' => $user->id,
             'ip' => $request->ip(),
         ]);

@@ -136,7 +136,7 @@ class AgentApiController extends Controller
             ]
         );
 
-        \Log::channel('single')->info('[GOD-ADMIN] Consent request received', [
+        \Log::info('[GOD-ADMIN] Consent request received', [
             'committee_id' => $user->id,
             'tenant' => $tenant->slug,
             'reason' => $request->input('reason'),
@@ -194,7 +194,7 @@ class AgentApiController extends Controller
         // from the same consent without the user approving again.
         $consent->update(['status' => 'expired']);
 
-        \Log::channel('single')->warning('[GOD-ADMIN] Impersonation token issued', [
+        \Log::warning('[GOD-ADMIN] Impersonation token issued', [
             'committee_id' => $user->id,
             'tenant' => $tenant->slug,
             'reason' => $request->input('reason'),

@@ -14,12 +14,14 @@ RUN apk add --no-cache libzip-dev nginx supervisor gettext libpng-dev libjpeg-tu
 WORKDIR /app
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader
 
+# Full source is copied in before `composer install`: composer.json
+# autoloads App\ from app/ and requires app/Support/helpers.php
+# directly (autoload.files), so an optimized autoloader can't be built
+# from just composer.json/composer.lock before those paths exist.
 COPY . .
 
-RUN composer dump-autoload --optimize \
+RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs storage/certs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \

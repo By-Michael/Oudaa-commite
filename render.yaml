@@ -1,0 +1,75 @@
+services:
+  - type: web
+    name: oudaa-commite
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: APP_NAME
+        value: Oudaa
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        sync: false # set to your Render URL, e.g. https://oudaa-commite.onrender.com
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_LOCALE
+        value: en
+      - key: APP_FALLBACK_LOCALE
+        value: en
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
+
+      # --- Database (Aiven free MySQL) -----------------------------------
+      # Create a free MySQL service at https://aiven.io, then fill these
+      # in from its "Overview" tab. Aiven's default DB is "defaultdb".
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_DATABASE
+        value: defaultdb
+      - key: DB_USERNAME
+        value: avnadmin
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_MYSQL_SSL_CA
+        value: /app/storage/certs/aiven-ca.pem
+      - key: DB_FOREIGN_KEYS
+        value: true
+
+      # --- Queue / Session --------------------------------------------
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: 480
+
+      # --- Mail -----------------------------------------------------------
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_ENCRYPTION
+        value: tls
+      - key: MAIL_FROM_ADDRESS
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: Oudaa
+      - key: MAIL_SUPPORT_ADDRESS
+        sync: false

@@ -10,8 +10,7 @@
         {"type": "git", "url": "https://github.com/PhenX/php-font-lib"},
         {"type": "git", "url": "https://github.com/PhenX/php-svg-lib"},
         {"type": "git", "url": "https://github.com/sabberworm/PHP-CSS-Parser"},
-        {"type": "git", "url": "https://github.com/Masterminds/html5-php"},
-        {"packagist.org": false}
+        {"type": "git", "url": "https://github.com/Masterminds/html5-php"}
     ],
     "require": {
         "php": "^8.2",

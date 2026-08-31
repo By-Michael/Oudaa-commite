@@ -55,23 +55,41 @@ class AdminConsentController extends Controller
             return;
         }
 
-        $body = json_encode([
+        $bodyJson = json_encode([
             'decision' => $decision,
             'responded_by' => auth()->user()->name ?? auth()->user()->email ?? 'committee member',
         ]);
 
         $timestamp = (string) time();
-        $signature = hash_hmac('sha256', $timestamp.'.'.$body, $secret);
+        $signature = hash_hmac('sha256', $timestamp.'.'.$bodyJson, $secret);
 
         try {
-            Http::withHeaders([
-                'Content-Type' => 'application/json',
+            $response = Http::withHeaders([
                 'X-Admin-Timestamp' => $timestamp,
                 'X-Admin-Signature' => $signature,
-            ])->timeout(6)->post($consent->callback_url, json_decode($body, true));
-        } catch (\Throwable $e) {
-            \Log::error('[GOD-ADMIN] Failed to deliver consent decision to admin app.', [
+            ])->withBody($bodyJson, 'application/json')
+                ->timeout(15)
+                ->connectTimeout(8)
+                ->post($consent->callback_url);
+
+            if (! $response->successful()) {
+                \Log::error('[GOD-ADMIN] Admin app rejected consent decision callback.', [
+                    'consent_id' => $consent->id,
+                    'callback_url' => $consent->callback_url,
+                    'status' => $response->status(),
+                    'body' => \Illuminate\Support\Str::limit($response->body(), 500),
+                ]);
+                return;
+            }
+
+            \Log::info('[GOD-ADMIN] Consent decision delivered to admin app.', [
                 'consent_id' => $consent->id,
+                'decision' => $decision,
+            ]);
+        } catch (\Throwable $e) {
+            \Log::error('[GOD-ADMIN] Failed to deliver consent decision to admin app (connection/timeout).', [
+                'consent_id' => $consent->id,
+                'callback_url' => $consent->callback_url,
                 'error' => $e->getMessage(),
             ]);
         }

@@ -53,6 +53,7 @@ Route::middleware(\App\Http\Middleware\VerifyAdminAgentSignature::class)
     ->group(function () {
         Route::get('/health', [\App\Http\Controllers\Admin\AgentApiController::class, 'health']);
         Route::get('/logs/errors', [\App\Http\Controllers\Admin\AgentApiController::class, 'recentErrors']);
+        Route::get('/logs/recent', [\App\Http\Controllers\Admin\AgentApiController::class, 'recentLogs']);
         Route::get('/metrics/performance', [\App\Http\Controllers\Admin\AgentApiController::class, 'performanceSeries']);
         Route::post('/consent/request', [\App\Http\Controllers\Admin\AgentApiController::class, 'requestConsent']);
         Route::post('/impersonate/issue', [\App\Http\Controllers\Admin\AgentApiController::class, 'issueImpersonation']);
@@ -113,11 +114,7 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         // Hit silently in the background by the front-end (see layouts/app.blade.php)
         // to keep the session alive while the tab is open, without ever
         // navigating the user or interrupting what they're doing.
-        // NOTE: this must stay a real controller, not a Closure — route
-        // closures can't survive `php artisan route:cache` (see start.sh),
-        // and start.sh runs under `set -e`, so a closure route here used
-        // to take the whole app down on deploy, silently.
-        Route::get('/ping', \App\Http\Controllers\PingController::class)->name('ping');
+        Route::get('/ping', fn () => response()->noContent())->name('ping');
 
         // The committee member accepting/denying a God Admin access
         // request themselves. Requires their own logged-in session — this

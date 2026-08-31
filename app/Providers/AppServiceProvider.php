@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Support\CurrentCommunity;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,5 +25,13 @@ class AppServiceProvider extends ServiceProvider
         // CSS instead.
         Paginator::defaultView('vendor.pagination.custom');
         Paginator::defaultSimpleView('vendor.pagination.custom');
+
+        // Belt-and-braces on top of TrustProxies: every url()/route() call
+        // (bridge URLs, signed callbacks, etc.) must generate https://,
+        // never http://, or an outbound call from the admin app can get
+        // silently 301-downgraded from POST to GET at Render's edge.
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }

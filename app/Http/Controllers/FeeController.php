@@ -22,9 +22,8 @@ class FeeController extends Controller
             ->withQueryString();
 
         $funds = Fund::orderBy('name')->get();
-        $totalCount = Fee::count();
 
-        return view('fees.index', compact('fees', 'funds', 'totalCount'));
+        return view('fees.index', compact('fees', 'funds'));
     }
 
     private function filtered(Request $request)

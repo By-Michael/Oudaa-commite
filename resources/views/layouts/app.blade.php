@@ -171,22 +171,6 @@
         });
     })();
 </script>
-<script>
-    // Generic filter-panel toggle used by the list-header component's
-    // Filter button: any button with class "js-filter-toggle" shows/hides
-    // the .filter-panel it points at via data-target, so each list page
-    // doesn't need its own copy of this.
-    (function () {
-        document.addEventListener('click', function (e) {
-            var btn = e.target.closest('.js-filter-toggle');
-            if (!btn) return;
-            var panel = document.querySelector(btn.getAttribute('data-target'));
-            if (!panel) return;
-            var isOpen = panel.classList.toggle('open');
-            btn.classList.toggle('is-active', isOpen);
-        });
-    })();
-</script>
 <script src="{{ asset('js/app.js') }}?v={{ @filemtime(public_path('js/app.js')) }}"></script>
 </body>
 </html>

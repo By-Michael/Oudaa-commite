@@ -31,9 +31,7 @@ class ResidentController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $totalCount = Resident::count();
-
-        return view('residents.index', compact('residents', 'totalCount'));
+        return view('residents.index', compact('residents'));
     }
 
     /**

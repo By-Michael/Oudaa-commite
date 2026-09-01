@@ -2,37 +2,25 @@
 @section('title', 'Projects')
 @section('content')
 
-<x-list-header
-    title="Projects"
-    noun="projects"
-    :shown="$projects->total()"
-    :total="$totalCount"
-    :export-excel="route('projects.export.excel', request()->query())"
-    :export-pdf="route('projects.export.pdf', request()->query())"
-    panel-id="filters-projects"
->
-    <x-slot:icon><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></x-slot:icon>
-
-    <form method="GET" style="display:flex;flex-wrap:wrap;gap:10px;">
-        <select name="fund_id">
+<div class="toolbar">
+    <form class="search-form" method="GET">
+        <select name="fund_id" onchange="this.form.submit()">
             <option value="">All funds</option>
             @foreach ($funds as $fund)
                 <option value="{{ $fund->id }}" @selected(request('fund_id') == $fund->id)>{{ $fund->name }}</option>
             @endforeach
         </select>
-        <select name="status">
+        <select name="status" onchange="this.form.submit()">
             <option value="">All statuses</option>
             <option value="planned" @selected(request('status') == 'planned')>Planned</option>
             <option value="active" @selected(request('status') == 'active')>Active</option>
             <option value="completed" @selected(request('status') == 'completed')>Completed</option>
             <option value="archived" @selected(request('status') == 'archived')>Archived</option>
         </select>
-        <button class="btn btn-sm" type="submit">Apply</button>
     </form>
-</x-list-header>
-
-<div class="toolbar">
-    <div class="toolbar-actions" style="margin-left:auto;">
+    <div class="toolbar-actions">
+        <a href="{{ route('projects.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
+        <a href="{{ route('projects.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
         <a href="{{ route('projects.create') }}" class="js-modal-link btn btn-primary">+ Add Project</a>
     </div>
 </div>

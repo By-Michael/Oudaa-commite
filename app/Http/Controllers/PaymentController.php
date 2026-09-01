@@ -23,9 +23,8 @@ class PaymentController extends Controller
 
         $fees = Fee::orderBy('name')->get();
         $residents = Resident::active()->orderBy('unit_number')->get();
-        $totalCount = Payment::count();
 
-        return view('payments.index', compact('payments', 'fees', 'residents', 'totalCount'));
+        return view('payments.index', compact('payments', 'fees', 'residents'));
     }
 
     private function filtered(Request $request)

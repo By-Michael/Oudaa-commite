@@ -15,8 +15,6 @@ WORKDIR /app
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock* ./
-ENV COMPOSER_MEMORY_LIMIT=-1
-ENV COMPOSER_PROCESS_TIMEOUT=900
 RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader
 
 COPY . .

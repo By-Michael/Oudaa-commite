@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ $currentLocale ?? 'en' }}">
 <head>
   <script>
     // Applied before first paint to avoid a light/dark flash on load.
@@ -40,18 +40,24 @@
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-1 mt-3 mt-lg-0">
-          <li class="nav-item"><a class="nav-link nav2 active"  href="{{ route('landing.index') }}">Home</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.about') }}">About</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.services') }}">Features</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.contact') }}">Contact</a></li>
+          <li class="nav-item"><a class="nav-link nav2 active"  href="{{ route('landing.index') }}">{{ __('Home') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.about') }}">{{ __('About') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.services') }}">{{ __('Features') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.contact') }}">{{ __('Contact') }}</a></li>
           <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <div class="lang-toggle" role="group" aria-label="{{ __('Choose language') }}">
+              <a href="{{ route('lang.switch', 'en') }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'en' ? 'active' : '' }}">EN</a>
+              <a href="{{ route('lang.switch', 'am') }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'am' ? 'active' : '' }}">አማ</a>
+            </div>
+          </li>
+          <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="{{ __('Toggle dark mode') }}">
               <i class="bi bi-sun-fill"></i>
               <i class="bi bi-moon-stars-fill"></i>
             </button>
           </li>
           <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-            <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom w-100">Create Platform</a>
+            <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom w-100">{{ __('Create Platform') }}</a>
           </li>
         </ul>
       </div>
@@ -68,7 +74,7 @@
           <a class="navbar-brand-custom d-inline-block mb-3" href="{{ route('landing.index') }}">
             <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="Oudaa" style="height:32px;width:auto;">
           </a>
-          <p class="text-white-50 mb-4" style="max-width:320px;">Oudaa gives your committee one simple platform to manage residents, fees, funds, payments, projects and expenses.</p>
+          <p class="text-white-50 mb-4" style="max-width:320px;">{{ __('Oudaa gives your committee one simple platform to manage residents, fees, funds, payments, projects and expenses.') }}</p>
           <div class="d-flex gap-2">
             <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
             <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
@@ -76,32 +82,32 @@
           </div>
         </div>
         <div class="col-lg-2 col-md-6 col-6">
-          <h6>Company</h6>
-          <a href="{{ route('landing.about') }}">About Us</a>
-          <a href="{{ route('landing.services') }}">Features</a>
-          <a href="{{ route('landing.contact') }}">Contact</a>
+          <h6>{{ __('Company') }}</h6>
+          <a href="{{ route('landing.about') }}">{{ __('About Us') }}</a>
+          <a href="{{ route('landing.services') }}">{{ __('Features') }}</a>
+          <a href="{{ route('landing.contact') }}">{{ __('Contact') }}</a>
         </div>
         <div class="col-lg-2 col-md-6 col-6">
-          <h6>Features</h6>
-          <a href="{{ route('landing.service-details', 'residents') }}">Residents</a>
-          <a href="{{ route('landing.service-details', 'fees') }}">Fees</a>
-          <a href="{{ route('landing.service-details', 'payments') }}">Payments</a>
-          <a href="{{ route('landing.service-details', 'funds') }}">Funds</a>
-          <a href="{{ route('landing.service-details', 'projects') }}">Projects</a>
-          <a href="{{ route('landing.service-details', 'expenses') }}">Expenses</a>
+          <h6>{{ __('Features') }}</h6>
+          <a href="{{ route('landing.service-details', 'residents') }}">{{ __('Residents') }}</a>
+          <a href="{{ route('landing.service-details', 'fees') }}">{{ __('Fees') }}</a>
+          <a href="{{ route('landing.service-details', 'payments') }}">{{ __('Payments') }}</a>
+          <a href="{{ route('landing.service-details', 'funds') }}">{{ __('Funds') }}</a>
+          <a href="{{ route('landing.service-details', 'projects') }}">{{ __('Projects') }}</a>
+          <a href="{{ route('landing.service-details', 'expenses') }}">{{ __('Expenses') }}</a>
         </div>
         <div class="col-lg-4 col-md-6">
-          <h6>Get in touch</h6>
+          <h6>{{ __('Get in touch') }}</h6>
           <p class="text-white-50 mb-2"><i class="bi bi-envelope me-2"></i><a href="mailto:m7020322@gmail.com" style="color:inherit;">m7020322@gmail.com</a></p>
           <p class="text-white-50 mb-3"><i class="bi bi-telephone me-2"></i><a href="tel:+251973069687" style="color:inherit;">+251 973 069 687</a></p>
-          <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom">Create Your Platform</a>
+          <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-sm-custom">{{ __('Create Your Platform') }}</a>
         </div>
       </div>
       <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center text-md-start">
-        <p class="mb-0">&copy; {{ date('Y') }} Oudaa. All rights reserved.</p>
+        <p class="mb-0">&copy; {{ date('Y') }} Oudaa. {{ __('All rights reserved.') }}</p>
         <div class="d-flex gap-4">
-          <a href="{{ route('landing.privacy') }}" class="mb-0">Privacy Policy</a>
-          <a href="{{ route('landing.terms') }}" class="mb-0">Terms of Service</a>
+          <a href="{{ route('landing.privacy') }}" class="mb-0">{{ __('Privacy Policy') }}</a>
+          <a href="{{ route('landing.terms') }}" class="mb-0">{{ __('Terms of Service') }}</a>
         </div>
       </div>
     </div>

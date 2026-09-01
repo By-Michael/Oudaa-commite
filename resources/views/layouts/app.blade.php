@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ $currentLocale ?? 'en' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,25 +29,25 @@
     <aside class="sidebar">
         <div class="brand"><img src="{{ asset('images/logo-transparent.png') }}" alt="Oudaa" class="brand-logo"></div>
         <nav>
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
-            <a href="{{ route('residents.index') }}" class="{{ request()->routeIs('residents.*') ? 'active' : '' }}">Residents</a>
-            <a href="{{ route('fees.index') }}" class="{{ request()->routeIs('fees.*') ? 'active' : '' }}">Fees</a>
-            <a href="{{ route('payments.index') }}" class="{{ request()->routeIs('payments.*') ? 'active' : '' }}">Payments</a>
-            <a href="{{ route('funds.index') }}" class="{{ request()->routeIs('funds.*') ? 'active' : '' }}">Funds</a>
-            <a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">Projects</a>
-            <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'active' : '' }}">Expenses</a>
-            <a href="{{ route('employees.index') }}" class="{{ request()->routeIs('employees.*') ? 'active' : '' }}">Employees</a>
-            <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Reports</a>
-            <a href="{{ route('audit.index') }}" class="{{ request()->routeIs('audit.*') ? 'active' : '' }}">Audit Log</a>
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">{{ __('Dashboard') }}</a>
+            <a href="{{ route('residents.index') }}" class="{{ request()->routeIs('residents.*') ? 'active' : '' }}">{{ __('Residents') }}</a>
+            <a href="{{ route('fees.index') }}" class="{{ request()->routeIs('fees.*') ? 'active' : '' }}">{{ __('Fees') }}</a>
+            <a href="{{ route('payments.index') }}" class="{{ request()->routeIs('payments.*') ? 'active' : '' }}">{{ __('Payments') }}</a>
+            <a href="{{ route('funds.index') }}" class="{{ request()->routeIs('funds.*') ? 'active' : '' }}">{{ __('Funds') }}</a>
+            <a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">{{ __('Projects') }}</a>
+            <a href="{{ route('expenses.index') }}" class="{{ request()->routeIs('expenses.*') ? 'active' : '' }}">{{ __('Expenses') }}</a>
+            <a href="{{ route('employees.index') }}" class="{{ request()->routeIs('employees.*') ? 'active' : '' }}">{{ __('Employees') }}</a>
+            <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">{{ __('Reports') }}</a>
+            <a href="{{ route('audit.index') }}" class="{{ request()->routeIs('audit.*') ? 'active' : '' }}">{{ __('Audit Log') }}</a>
         </nav>
         <div class="foot">
-            Signed in as<br><strong>{{ auth()->user()->name ?? 'Committee' }}</strong>
+            {{ __('Signed in as') }}<br><strong>{{ auth()->user()->name ?? __('Committee') }}</strong>
             <div style="margin-top:8px;">
-                <a href="{{ route('help.index') }}" style="color:#D0C6E4;">Help and support</a>
+                <a href="{{ route('help.index') }}" style="color:#D0C6E4;">{{ __('Help and support') }}</a>
             </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit">Log out</button>
+                <button type="submit">{{ __('Log out') }}</button>
             </form>
         </div>
     </aside>
@@ -56,11 +56,15 @@
         <div class="topbar">
             <h1>@yield('title', 'Dashboard')</h1>
             <div class="topbar-actions">
-                <button type="button" class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
+                <div class="lang-toggle" role="group" aria-label="{{ __('Choose language') }}">
+                    <a href="{{ route('tenant.lang.switch', ['tenant' => request()->route('tenant'), 'locale' => 'en']) }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'en' ? 'active' : '' }}">EN</a>
+                    <a href="{{ route('tenant.lang.switch', ['tenant' => request()->route('tenant'), 'locale' => 'am']) }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'am' ? 'active' : '' }}">አማ</a>
+                </div>
+                <button type="button" class="icon-btn" id="themeToggle" aria-label="{{ __('Toggle dark mode') }}">
                     <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
                     <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
                 </button>
-                <button type="button" class="icon-btn" aria-label="Notifications">
+                <button type="button" class="icon-btn" aria-label="{{ __('Notifications') }}">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 </button>
                 <div class="account-menu">
@@ -69,7 +73,7 @@
                         <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
                     <div class="account-popup" id="accountPopup">
-                        <a href="{{ route('settings.edit') }}">Settings</a>
+                        <a href="{{ route('settings.edit') }}">{{ __('Settings') }}</a>
                     </div>
                 </div>
             </div>

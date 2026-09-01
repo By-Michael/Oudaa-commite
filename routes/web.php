@@ -40,6 +40,17 @@ Route::get('/contact', [LandingController::class, 'contact'])->name('landing.con
 Route::get('/privacy-policy', [LandingController::class, 'privacy'])->name('landing.privacy');
 Route::get('/terms-of-service', [LandingController::class, 'terms'])->name('landing.terms');
 
+// Language toggle (English / Amharic) for the public landing site.
+// Stores the choice in the session so it persists across pages; the
+// same session key is reused by the tenant-side toggle below.
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, \App\Http\Middleware\SetLocale::SUPPORTED, true)) {
+        session(['locale' => $locale]);
+    }
+
+    return redirect()->to(url()->previous() ?: route('landing.index'));
+})->name('lang.switch');
+
 /*
 |--------------------------------------------------------------------------
 | God Admin integration points (separate deployment calls in here).
@@ -96,6 +107,17 @@ Route::post('/set-password/{tenant}/{token}', [SetPasswordController::class, 'st
 
 Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
     Route::redirect('/', '/{tenant}/login');
+
+    // Language toggle (English / Amharic) for the community committee
+    // panel. Same session key as the landing toggle above, so switching
+    // here also carries over if the person visits the public site.
+    Route::get('/lang/{locale}', function (string $tenant, string $locale) {
+        if (in_array($locale, \App\Http\Middleware\SetLocale::SUPPORTED, true)) {
+            session(['locale' => $locale]);
+        }
+
+        return redirect()->to(url()->previous() ?: route('dashboard', ['tenant' => $tenant]));
+    })->name('tenant.lang.switch');
 
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

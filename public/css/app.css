@@ -216,6 +216,23 @@ h1,h2,h3{font-weight:500;letter-spacing:-.005em;color:var(--md-on-bg)}
 }
 .icon-btn:hover{background:var(--md-surface-container);color:var(--md-on-surface);}
 
+/* Language toggle (EN / አማ), sits in the topbar next to theme/notifications */
+.lang-toggle{
+  display:inline-flex;align-items:center;
+  border:1.5px solid var(--md-outline-variant);
+  border-radius:9999px;background:var(--md-surface-container-low);
+  padding:3px;flex-shrink:0;
+}
+.lang-toggle-option{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:32px;padding:4px 10px;border-radius:9999px;
+  font-size:.75rem;font-weight:600;
+  color:var(--md-on-surface-variant);text-decoration:none;
+  transition:background-color .2s var(--md-ease), color .2s var(--md-ease);
+}
+.lang-toggle-option:hover{color:var(--md-on-surface);}
+.lang-toggle-option.active{background:var(--md-primary);color:var(--md-on-primary);}
+
 /* Theme toggle: show sun in light mode (click to go dark), moon in dark
    mode (click to go light) — one icon at a time, no layout shift. */
 #themeToggle{position:relative}

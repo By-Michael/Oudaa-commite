@@ -319,6 +319,39 @@ a { text-decoration: none; }
 [data-theme="dark"] .theme-toggle .bi-sun-fill { display: none; }
 [data-theme="dark"] .theme-toggle .bi-moon-stars-fill { display: inline-block; }
 
+/* =====================================================
+   LANGUAGE TOGGLE (EN / አማ)
+   ===================================================== */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--n-border);
+  border-radius: 999px;
+  background: var(--n-bg-alt);
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.lang-toggle-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--n-navy) !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.lang-toggle-option:hover { color: var(--n-primary) !important; }
+.lang-toggle-option.active {
+  background: var(--n-primary);
+  color: #fff !important;
+}
+
 .navbar-toggler-custom {
   border: none;
   width: 44px;

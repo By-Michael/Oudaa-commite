@@ -362,6 +362,37 @@ input:focus,select:focus,textarea:focus{
 .search-form{display:flex;flex-wrap:nowrap;gap:8px}
 .search-form input{width:200px}
 
+/* ---- List header card: icon + title + live filtered count, with
+   export actions top-right and a collapsible filter panel below.
+   Used by <x-list-header> on every dataset's index page. ---- */
+.list-header{
+  background:var(--md-surface-container);border:1px solid var(--md-outline-variant);
+  border-radius:var(--md-r-lg);padding:20px 24px;margin-bottom:20px;box-shadow:var(--md-shadow-sm);
+}
+.list-header-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.list-header-icon{
+  flex-shrink:0;width:44px;height:44px;border-radius:var(--md-r-md);
+  background:var(--md-surface);display:flex;align-items:center;justify-content:center;
+  color:var(--md-primary);box-shadow:var(--md-shadow-sm);
+}
+.list-header-icon svg{width:22px;height:22px}
+.list-header-text{flex:1;min-width:200px}
+.list-header-text h2{margin:0;font-size:16px;font-weight:700}
+.list-header-text p{margin:2px 0 0;font-size:12.5px;color:var(--md-on-surface-variant)}
+.list-header-actions{display:flex;align-items:center;gap:10px;margin-left:auto}
+.list-header-actions .btn svg{width:15px;height:15px}
+.js-filter-toggle.is-active{background:var(--md-primary-container);border-color:var(--md-primary);color:var(--md-primary)}
+.filter-panel{
+  display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--md-outline-variant);
+  flex-wrap:wrap;gap:10px;align-items:center;
+}
+.filter-panel.open{display:flex}
+.filter-panel input,.filter-panel select{
+  border:1px solid var(--md-outline-variant);border-radius:9999px;background:var(--md-surface);
+  padding:8px 14px;font-size:12.5px;font-family:inherit;color:var(--md-on-bg);
+}
+.filter-panel input[type="text"]{min-width:220px}
+
 /* Search bars & filter dropdowns: plain, fully-rounded pill fields
    (not the MD3 filled/underline style used by regular form fields). */
 .search-form input[type=text],

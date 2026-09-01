@@ -20,8 +20,9 @@ class ProjectController extends Controller
             ->withQueryString();
 
         $funds = Fund::orderBy('name')->get();
+        $totalCount = Project::count();
 
-        return view('projects.index', compact('projects', 'funds'));
+        return view('projects.index', compact('projects', 'funds', 'totalCount'));
     }
 
     private function filtered(Request $request)

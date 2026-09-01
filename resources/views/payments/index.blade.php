@@ -2,24 +2,44 @@
 @section('title', 'Payments')
 @section('content')
 
-<div class="toolbar">
-    <form class="search-form" method="GET">
-        <select name="fee_id" onchange="this.form.submit()">
+<x-list-header
+    title="Payments"
+    noun="payments"
+    :shown="$payments->total()"
+    :total="$totalCount"
+    :export-excel="route('payments.export.excel', request()->query())"
+    :export-pdf="route('payments.export.pdf', request()->query())"
+    panel-id="filters-payments"
+>
+    <x-slot:icon><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></x-slot:icon>
+
+    <form method="GET" style="display:flex;flex-wrap:wrap;gap:10px;">
+        <select name="fee_id">
             <option value="">All fees</option>
             @foreach ($fees as $fee)
                 <option value="{{ $fee->id }}" @selected(request('fee_id') == $fee->id)>{{ $fee->name }}</option>
             @endforeach
         </select>
-        <select name="resident_id" onchange="this.form.submit()">
+        <select name="resident_id">
             <option value="">All residents</option>
             @foreach ($residents as $resident)
                 <option value="{{ $resident->id }}" @selected(request('resident_id') == $resident->id)>{{ $resident->unit_number }} — {{ $resident->name }}</option>
             @endforeach
         </select>
+        <select name="status">
+            <option value="">All statuses</option>
+            <option value="PAID" @selected(request('status') === 'PAID')>Paid</option>
+            <option value="PENDING" @selected(request('status') === 'PENDING')>Pending</option>
+            <option value="VOID" @selected(request('status') === 'VOID')>Void</option>
+        </select>
+        <input type="date" name="date_from" value="{{ request('date_from') }}">
+        <input type="date" name="date_to" value="{{ request('date_to') }}">
+        <button class="btn btn-sm" type="submit">Apply</button>
     </form>
-    <div class="toolbar-actions">
-        <a href="{{ route('payments.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('payments.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
+</x-list-header>
+
+<div class="toolbar">
+    <div class="toolbar-actions" style="margin-left:auto;">
         <a href="{{ route('payments.create') }}" class="js-modal-link btn btn-primary">+ Record Payment</a>
     </div>
 </div>

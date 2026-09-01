@@ -17,7 +17,9 @@ class EmployeeController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('employees.index', compact('employees'));
+        $totalCount = Employee::count();
+
+        return view('employees.index', compact('employees', 'totalCount'));
     }
 
     private function filtered(Request $request)

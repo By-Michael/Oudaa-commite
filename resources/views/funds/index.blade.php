@@ -2,25 +2,37 @@
 @section('title', 'Funds')
 @section('content')
 
-<div class="toolbar">
-    <form class="search-form" method="GET">
-        <select name="status" onchange="this.form.submit()">
+<x-list-header
+    title="Funds"
+    noun="funds"
+    :shown="$funds->total()"
+    :total="$totalCount"
+    :export-excel="route('funds.export.excel', request()->query())"
+    :export-pdf="route('funds.export.pdf', request()->query())"
+    panel-id="filters-funds"
+>
+    <x-slot:icon><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></x-slot:icon>
+
+    <form method="GET" style="display:flex;flex-wrap:wrap;gap:10px;">
+        <select name="status">
             <option value="">All statuses</option>
             <option value="active" @selected(request('status') == 'active')>Active</option>
             <option value="archived" @selected(request('status') == 'archived')>Archived</option>
         </select>
         @if ($categories->isNotEmpty())
-            <select name="category" onchange="this.form.submit()">
+            <select name="category">
                 <option value="">All categories</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category }}" @selected(request('category') == $category)>{{ $category }}</option>
                 @endforeach
             </select>
         @endif
+        <button class="btn btn-sm" type="submit">Apply</button>
     </form>
-    <div class="toolbar-actions">
-        <a href="{{ route('funds.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('funds.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
+</x-list-header>
+
+<div class="toolbar">
+    <div class="toolbar-actions" style="margin-left:auto;">
         <a href="{{ route('funds.create') }}" class="js-modal-link btn btn-primary">+ Add Fund</a>
     </div>
 </div>

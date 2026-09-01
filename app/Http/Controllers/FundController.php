@@ -23,7 +23,9 @@ class FundController extends Controller
             ->orderBy('category')
             ->pluck('category');
 
-        return view('funds.index', compact('funds', 'categories'));
+        $totalCount = Fund::count();
+
+        return view('funds.index', compact('funds', 'categories', 'totalCount'));
     }
 
     private function filtered(Request $request)

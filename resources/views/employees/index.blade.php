@@ -2,14 +2,30 @@
 @section('title', 'Employees')
 @section('content')
 
-<div class="toolbar">
-    <form class="search-form" method="GET">
+<x-list-header
+    title="Employees"
+    noun="employees"
+    :shown="$employees->total()"
+    :total="$totalCount"
+    :export-excel="route('employees.export.excel', request()->query())"
+    :export-pdf="route('employees.export.pdf', request()->query())"
+    panel-id="filters-employees"
+>
+    <x-slot:icon><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 10h2"/><path d="M15 14h2"/><path d="M7 16h4"/></svg></x-slot:icon>
+
+    <form method="GET" style="display:flex;flex-wrap:wrap;gap:10px;">
         <input type="text" name="search" placeholder="Search name, role, or ID number..." value="{{ request('search') }}">
-        <button class="btn" type="submit">Search</button>
+        <select name="status">
+            <option value="">All statuses</option>
+            <option value="active" @selected(request('status') === 'active')>Active</option>
+            <option value="terminated" @selected(request('status') === 'terminated')>Terminated</option>
+        </select>
+        <button class="btn btn-sm" type="submit">Apply</button>
     </form>
-    <div class="toolbar-actions">
-        <a href="{{ route('employees.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('employees.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
+</x-list-header>
+
+<div class="toolbar">
+    <div class="toolbar-actions" style="margin-left:auto;">
         <a href="{{ route('employees.create') }}" class="js-modal-link btn btn-primary">+ Add Employee</a>
     </div>
 </div>

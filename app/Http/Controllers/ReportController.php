@@ -61,7 +61,7 @@ class ReportController extends Controller
             'spent' => $p->spent(),
         ])->values();
 
-        return view('reports.index', [
+        return view('reports.index', array_merge([
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'paymentsByMonth' => $paymentsByMonth,
@@ -74,7 +74,80 @@ class ReportController extends Controller
             'employees' => Employee::orderBy('name')->get(),
             'projects' => Project::orderBy('name')->get(),
             'fees' => Fee::orderBy('name')->get(),
-        ]);
+            'block' => $request->input('block'),
+        ], $this->exportTables($request)));
+    }
+
+    /**
+     * A small paginated, filterable table per dataset for the "Filtered
+     * Exports" panel — so the person can see what a filter/export will
+     * actually return before downloading it. Only one panel's filters are
+     * "live" at a time (indicated by the `block` param), so the same field
+     * names (status, fund_id, ...) used by the export endpoints can be
+     * reused here without prefixing every input. Every table keeps its own
+     * pagination page name so the panels don't step on each other.
+     */
+    private function exportTables(Request $request): array
+    {
+        $block = $request->input('block');
+        $perPage = 6;
+
+        $residents = Resident::query()
+            ->when($block === 'residents' && $request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($block === 'residents' && $request->occupancy, fn ($q) => $q->where('occupancy', $request->occupancy))
+            ->when($block === 'residents' && $request->date_from, fn ($q) => $q->whereDate('created_at', '>=', $request->date_from))
+            ->when($block === 'residents' && $request->date_to, fn ($q) => $q->whereDate('created_at', '<=', $request->date_to))
+            ->orderByDesc('created_at')
+            ->paginate($perPage, ['*'], 'residents_page')->withQueryString();
+
+        $feesTable = Fee::query()
+            ->when($block === 'fees' && $request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+            ->when($block === 'fees' && $request->status, fn ($q) => $q->where('status', $request->status))
+            ->with('fund')->orderBy('name')
+            ->paginate($perPage, ['*'], 'fees_page')->withQueryString();
+
+        $paymentsTable = Payment::query()
+            ->when($block === 'payments' && $request->resident_id, fn ($q) => $q->where('resident_id', $request->resident_id))
+            ->when($block === 'payments' && $request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($block === 'payments' && $request->date_from, fn ($q) => $q->whereDate('paid_at', '>=', $request->date_from))
+            ->when($block === 'payments' && $request->date_to, fn ($q) => $q->whereDate('paid_at', '<=', $request->date_to))
+            ->with(['resident', 'fee'])->orderByDesc('paid_at')
+            ->paginate($perPage, ['*'], 'payments_page')->withQueryString();
+
+        $fundsTable = Fund::query()
+            ->when($block === 'funds' && $request->status, fn ($q) => $q->where('status', $request->status))
+            ->orderBy('name')
+            ->paginate($perPage, ['*'], 'funds_page')->withQueryString();
+
+        $expensesTable = Expense::query()
+            ->when($block === 'expenses' && $request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+            ->when($block === 'expenses' && $request->project_id, fn ($q) => $q->where('project_id', $request->project_id))
+            ->when($block === 'expenses' && $request->employee_id, fn ($q) => $q->where('employee_id', $request->employee_id))
+            ->when($block === 'expenses' && $request->date_from, fn ($q) => $q->whereDate('incurred_at', '>=', $request->date_from))
+            ->when($block === 'expenses' && $request->date_to, fn ($q) => $q->whereDate('incurred_at', '<=', $request->date_to))
+            ->with(['fund', 'project'])->orderByDesc('incurred_at')
+            ->paginate($perPage, ['*'], 'expenses_page')->withQueryString();
+
+        $employeesTable = Employee::query()
+            ->when($block === 'employees' && $request->status, fn ($q) => $q->where('status', $request->status))
+            ->orderBy('name')
+            ->paginate($perPage, ['*'], 'employees_page')->withQueryString();
+
+        $projectsTable = Project::query()
+            ->when($block === 'projects' && $request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+            ->when($block === 'projects' && $request->status, fn ($q) => $q->where('status', $request->status))
+            ->with('fund')->orderBy('name')
+            ->paginate($perPage, ['*'], 'projects_page')->withQueryString();
+
+        return [
+            'residentsTable' => $residents,
+            'feesTable' => $feesTable,
+            'paymentsTable' => $paymentsTable,
+            'fundsTable' => $fundsTable,
+            'expensesTable' => $expensesTable,
+            'employeesTable' => $employeesTable,
+            'projectsTable' => $projectsTable,
+        ];
     }
 
     /**

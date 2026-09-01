@@ -14,16 +14,15 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use App\Support\Export\Exportable;
 
 class ResidentController extends Controller
 {
+    use Exportable;
+
     public function index(Request $request)
     {
-        $residents = Resident::query()
-            ->when($request->search, fn ($q) => $q->where('name', 'like', "%{$request->search}%")
-                ->orWhere('unit_number', 'like', "%{$request->search}%")
-                ->orWhere('block_number', 'like', "%{$request->search}%")
-                ->orWhere('id_number', 'like', "%{$request->search}%"))
+        $residents = $this->filtered($request)
             ->orderBy('name')
             ->orderBy('unit_number')
             ->orderBy('block_number')
@@ -33,6 +32,64 @@ class ResidentController extends Controller
             ->withQueryString();
 
         return view('residents.index', compact('residents'));
+    }
+
+    /**
+     * Filters shared by the index page and both export endpoints, so a
+     * "download what I'm looking at" export always matches the screen.
+     */
+    private function filtered(Request $request)
+    {
+        return Resident::query()
+            ->when($request->search, fn ($q) => $q->where('name', 'like', "%{$request->search}%")
+                ->orWhere('unit_number', 'like', "%{$request->search}%")
+                ->orWhere('block_number', 'like', "%{$request->search}%")
+                ->orWhere('id_number', 'like', "%{$request->search}%"))
+            ->when($request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($request->occupancy, fn ($q) => $q->where('occupancy', $request->occupancy))
+            ->when($request->resident_id, fn ($q) => $q->where('id', $request->resident_id))
+            ->when($request->date_from, fn ($q) => $q->whereDate('created_at', '>=', $request->date_from))
+            ->when($request->date_to, fn ($q) => $q->whereDate('created_at', '<=', $request->date_to));
+    }
+
+    private function filterSummary(Request $request): array
+    {
+        $lines = [];
+        if ($request->search) $lines[] = "Search: {$request->search}";
+        if ($request->status) $lines[] = "Status: {$request->status}";
+        if ($request->occupancy) $lines[] = "Occupancy: {$request->occupancy}";
+        if ($request->resident_id) $lines[] = 'Resident #'.$request->resident_id;
+        if ($request->date_from) $lines[] = "From: {$request->date_from}";
+        if ($request->date_to) $lines[] = "To: {$request->date_to}";
+
+        return $lines;
+    }
+
+    private function exportRows(Request $request): array
+    {
+        $headers = ['Name', 'Unit', 'Block', 'ID Number', 'Phone', 'Email', 'Occupancy', 'Status', 'Added'];
+
+        $rows = $this->filtered($request)->orderBy('name')->get()->map(fn (Resident $r) => [
+            $r->name, $r->unit_number, $r->block_number ?: '—', $r->id_number,
+            $r->phone ?: '—', $r->email ?: '—', ucfirst($r->occupancy), ucfirst($r->status),
+            $r->created_at?->format('Y-m-d'),
+        ])->all();
+
+        return [$headers, $rows];
+    }
+
+    public function exportExcelIndex(Request $request)
+    {
+        [$headers, $rows] = $this->exportRows($request);
+
+        return $this->exportExcel('Residents', $headers, $rows, 'residents', $this->filterSummary($request));
+    }
+
+    public function exportPdfIndex(Request $request)
+    {
+        [$headers, $rows] = $this->exportRows($request);
+
+        return $this->exportPdf('Residents', $headers, $rows, 'residents', $this->filterSummary($request));
     }
 
     public function create()

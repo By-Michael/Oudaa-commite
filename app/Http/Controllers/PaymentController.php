@@ -7,14 +7,16 @@ use App\Models\Fund;
 use App\Models\Payment;
 use App\Models\Resident;
 use Illuminate\Http\Request;
+use App\Support\Export\Exportable;
 
 class PaymentController extends Controller
 {
+    use Exportable;
+
     public function index(Request $request)
     {
-        $payments = Payment::with(['resident', 'fee', 'fund'])
-            ->when($request->fee_id, fn ($q) => $q->where('fee_id', $request->fee_id))
-            ->when($request->resident_id, fn ($q) => $q->where('resident_id', $request->resident_id))
+        $payments = $this->filtered($request)
+            ->with(['resident', 'fee', 'fund'])
             ->latest('paid_at')->latest('id')
             ->paginate(15)
             ->withQueryString();
@@ -23,6 +25,67 @@ class PaymentController extends Controller
         $residents = Resident::active()->orderBy('unit_number')->get();
 
         return view('payments.index', compact('payments', 'fees', 'residents'));
+    }
+
+    private function filtered(Request $request)
+    {
+        return Payment::query()
+            ->when($request->fee_id, fn ($q) => $q->where('fee_id', $request->fee_id))
+            ->when($request->fund_id, fn ($q) => $q->where('fund_id', $request->fund_id))
+            ->when($request->resident_id, fn ($q) => $q->where('resident_id', $request->resident_id))
+            ->when($request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($request->method, fn ($q) => $q->where('method', $request->method))
+            ->when($request->date_from, fn ($q) => $q->whereDate('paid_at', '>=', $request->date_from))
+            ->when($request->date_to, fn ($q) => $q->whereDate('paid_at', '<=', $request->date_to));
+    }
+
+    private function filterSummary(Request $request): array
+    {
+        $lines = [];
+        if ($request->fee_id) $lines[] = 'Fee: '.(Fee::find($request->fee_id)->name ?? '#'.$request->fee_id);
+        if ($request->fund_id) $lines[] = 'Fund: '.(Fund::find($request->fund_id)->name ?? '#'.$request->fund_id);
+        if ($request->resident_id) $lines[] = 'Resident: '.(Resident::find($request->resident_id)->name ?? '#'.$request->resident_id);
+        if ($request->status) $lines[] = "Status: {$request->status}";
+        if ($request->method) $lines[] = 'Method: '.ucfirst(str_replace('_', ' ', $request->method));
+        if ($request->date_from) $lines[] = "From: {$request->date_from}";
+        if ($request->date_to) $lines[] = "To: {$request->date_to}";
+
+        return $lines;
+    }
+
+    private function exportRows(Request $request): array
+    {
+        $headers = ['Date', 'Resident', 'Unit', 'Fee', 'Fund', 'Amount', 'Method', 'Status', 'Note'];
+
+        $rows = $this->filtered($request)->with(['resident', 'fee', 'fund'])
+            ->latest('paid_at')->get()
+            ->map(fn (Payment $p) => [
+                $p->paid_at?->format('Y-m-d'),
+                $p->resident->name ?? '—',
+                $p->resident->unit_number ?? '—',
+                $p->fee->name ?? '—',
+                $p->fund->name ?? '—',
+                money($p->amount),
+                ucfirst(str_replace('_', ' ', $p->method)),
+                $p->status,
+                $p->note ?: '—',
+            ])->all();
+
+        return [$headers, $rows];
+    }
+
+    public function exportExcelIndex(Request $request)
+    {
+        [$headers, $rows] = $this->exportRows($request);
+
+        return $this->exportExcel('Payments', $headers, $rows, 'payments', $this->filterSummary($request));
+    }
+
+    public function exportPdfIndex(Request $request)
+    {
+        [$headers, $rows] = $this->exportRows($request);
+
+        return $this->exportPdf('Payments', $headers, $rows, 'payments', $this->filterSummary($request), 'landscape');
     }
 
     public function create()

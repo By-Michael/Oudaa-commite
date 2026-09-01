@@ -7,21 +7,19 @@
 # something fixable from inside the Dockerfile.
 FROM php:8.4-fpm-alpine
 
-RUN apk add --no-cache libzip-dev nginx supervisor gettext libpng-dev libjpeg-turbo-dev freetype-dev \
+RUN apk add --no-cache libzip-dev nginx supervisor gettext libpng-dev libjpeg-turbo-dev freetype-dev oniguruma-dev \
     && docker-php-ext-configure gd --with-jpeg --with-freetype \
-    && docker-php-ext-install pdo pdo_mysql gd zip
+    && docker-php-ext-install pdo pdo_mysql gd zip mbstring
 
 WORKDIR /app
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY composer.json composer.lock* ./
+RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader
 
-# Full source copied in before `composer install`: composer.json
-# autoloads App\ from app/ and requires app/Support/helpers.php
-# directly, so an optimized autoloader can't be built before those
-# paths exist.
 COPY . .
 
-RUN composer install --no-dev --no-scripts --no-interaction --optimize-autoloader \
+RUN composer dump-autoload --optimize \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs storage/certs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \

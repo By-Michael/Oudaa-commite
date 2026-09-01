@@ -7,7 +7,11 @@
         <input type="text" name="search" placeholder="Search name, role, or ID number..." value="{{ request('search') }}">
         <button class="btn" type="submit">Search</button>
     </form>
-    <a href="{{ route('employees.create') }}" class="js-modal-link btn btn-primary">+ Add Employee</a>
+    <div class="toolbar-actions">
+        <a href="{{ route('employees.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
+        <a href="{{ route('employees.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
+        <a href="{{ route('employees.create') }}" class="js-modal-link btn btn-primary">+ Add Employee</a>
+    </div>
 </div>
 
 <div class="panel">

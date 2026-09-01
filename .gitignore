@@ -11,4 +11,3 @@
 /database/database.sqlite
 .DS_Store
 /storage/certs/*.pem
-defaultdb

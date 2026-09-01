@@ -18,7 +18,11 @@
             </select>
         @endif
     </form>
-    <a href="{{ route('funds.create') }}" class="js-modal-link btn btn-primary">+ Add Fund</a>
+    <div class="toolbar-actions">
+        <a href="{{ route('funds.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
+        <a href="{{ route('funds.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
+        <a href="{{ route('funds.create') }}" class="js-modal-link btn btn-primary">+ Add Fund</a>
+    </div>
 </div>
 
 <div class="panel">

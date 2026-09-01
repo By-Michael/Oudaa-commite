@@ -12,8 +12,6 @@
         </select>
     </form>
     <div class="toolbar-actions">
-        <a href="{{ route('expenses.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('expenses.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
         <a href="{{ route('expenses.create') }}" class="js-modal-link btn btn-primary">+ Record Expense</a>
     </div>
 </div>

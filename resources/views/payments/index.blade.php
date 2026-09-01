@@ -18,8 +18,6 @@
         </select>
     </form>
     <div class="toolbar-actions">
-        <a href="{{ route('payments.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('payments.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
         <a href="{{ route('payments.create') }}" class="js-modal-link btn btn-primary">+ Record Payment</a>
     </div>
 </div>

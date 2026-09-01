@@ -8,8 +8,6 @@
         <button class="btn" type="submit">Search</button>
     </form>
     <div class="toolbar-actions">
-        <a href="{{ route('employees.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('employees.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
         <a href="{{ route('employees.create') }}" class="js-modal-link btn btn-primary">+ Add Employee</a>
     </div>
 </div>

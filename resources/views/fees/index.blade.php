@@ -17,8 +17,6 @@
         </select>
     </form>
     <div class="toolbar-actions">
-        <a href="{{ route('fees.export.excel', request()->query()) }}" class="btn">⬇ Excel</a>
-        <a href="{{ route('fees.export.pdf', request()->query()) }}" class="btn">⬇ PDF</a>
         <a href="{{ route('fees.create') }}" class="js-modal-link btn btn-primary">+ Add Fee</a>
     </div>
 </div>

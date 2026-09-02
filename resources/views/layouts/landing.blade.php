@@ -35,7 +35,7 @@
       <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.index') }}">
         <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="{{ __('Oudaa') }}" style="height:34px;width:auto;">
       </a>
-      <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
@@ -72,7 +72,7 @@
         <div class="col-lg-4 col-md-6">
         
           <a class="navbar-brand-custom d-inline-block mb-3" href="{{ route('landing.index') }}">
-            <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="Oudaa" style="height:32px;width:auto;">
+            <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="{{ __('Oudaa') }}" style="height:32px;width:auto;">
           </a>
           <p class="text-white-50 mb-4" style="max-width:320px;">{{ __('Oudaa gives your committee one simple platform to manage residents, fees, funds, payments, projects and expenses.') }}</p>
           <div class="d-flex gap-2">
@@ -113,7 +113,7 @@
     </div>
   </footer>
 
-  <button class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+  <button class="back-to-top" aria-label="{{ __('Back to top') }}"><i class="bi bi-arrow-up"></i></button>
 
   <!-- Bootstrap Bundle JS -->
   <script src="{{ asset('js/ethiopian-date.js') }}?v={{ @filemtime(public_path('js/ethiopian-date.js')) }}"></script>

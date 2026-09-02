@@ -65,12 +65,12 @@
               <div class="col-md-6">
                 <label class="form-label" for="fullName">{{ __('Full Name') }}<span class="req">*</span></label>
                 <input type="text" class="form-control" id="fullName" name="full_name" value="{{ old('full_name') }}" required data-filter="letters">
-                <div class="invalid-feedback">Please enter your name.</div>
+                <div class="invalid-feedback">{{ __('Please enter your name.') }}</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label" for="email">{{ __('Email') }}<span class="req">*</span></label>
                 <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
-                <div class="invalid-feedback">Please enter a valid email address.</div>
+                <div class="invalid-feedback">{{ __('Please enter a valid email address.') }}</div>
               </div>
               <div class="col-12">
                 <label class="form-label" for="communityName">{{ __('Community Name (if you\'re already a customer)') }}</label>
@@ -82,7 +82,7 @@
                 <div class="invalid-feedback">{{ __('Please share a few details.') }}</div>
               </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-lg-custom">Send Message <i class="bi bi-send ms-1"></i></button>
+                <button type="submit" class="btn btn-primary btn-lg-custom">{{ __('Send Message') }} <i class="bi bi-send ms-1"></i></button>
               </div>
             </div>
           </form>
@@ -108,7 +108,7 @@
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cfaq1">{{ __('How soon will I hear back?') }}</button>
               </h2>
               <div id="cfaq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaq">
-                <div class="accordion-body">We respond to all inquiries within one business day.</div>
+                <div class="accordion-body">{{ __('We respond to all inquiries within one business day.') }}</div>
               </div>
             </div>
             <div class="accordion-item">
@@ -121,7 +121,7 @@
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cfaq3">Can I get a demo before signing up?</button>
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cfaq3">{{ __('Can I get a demo before signing up?') }}</button>
               </h2>
               <div id="cfaq3" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
                 <div class="accordion-body">{{ __('Signup is free and takes a couple of minutes — the fastest way to see Oudaa is to create your own platform and try it directly.') }}</div>

@@ -59,28 +59,28 @@
           <div class="card-premium text-center">
             <div class="icon-box icon-box-primary mx-auto mb-3"><i class="bi bi-bullseye"></i></div>
             <h3 class="card-title">{{ __('Simple over feature-heavy') }}</h3>
-            <p>We'd rather nail residents, fees, funds and expenses than bury them under features nobody uses.</p>
+            <p>{{ __('We\'d rather nail residents, fees, funds and expenses than bury them under features nobody uses.') }}</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium text-center">
             <div class="icon-box icon-box-secondary mx-auto mb-3"><i class="bi bi-eye"></i></div>
             <h3 class="card-title">{{ __('One shared source of truth') }}</h3>
-            <p>Every committee member sees the same numbers — no more conflicting spreadsheets.</p>
+            <p>{{ __('Every committee member sees the same numbers — no more conflicting spreadsheets.') }}</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium text-center">
             <div class="icon-box icon-box-success mx-auto mb-3"><i class="bi bi-shield-check"></i></div>
             <h3 class="card-title">{{ __('Your community\'s data is yours') }}</h3>
-            <p>Every community gets its own isolated database — nothing shared, nothing mixed up.</p>
+            <p>{{ __('Every community gets its own isolated database — nothing shared, nothing mixed up.') }}</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium text-center">
             <div class="icon-box icon-box-primary mx-auto mb-3"><i class="bi bi-arrow-repeat"></i></div>
             <h3 class="card-title">{{ __('Built to grow with you') }}</h3>
-            <p>Whether it's five houses or a full apartment building, Oudaa adapts to your community.</p>
+            <p>{{ __('Whether it\'s five houses or a full apartment building, Oudaa adapts to your community.') }}</p>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@
         <div class="row align-items-center">
           <div class="col-lg-8">
             <h2 class="mb-2">{{ __('See it for yourself') }}</h2>
-            <p class="mb-0 fs-5">Create your platform for free and try it with your own community.</p>
+            <p class="mb-0 fs-5">{{ __('Create your platform for free and try it with your own community.') }}</p>
           </div>
           <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
             <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-lg-custom">{{ __('Create Your Platform') }} <i class="bi bi-arrow-right ms-1"></i></a>

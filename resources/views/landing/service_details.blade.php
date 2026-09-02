@@ -54,12 +54,12 @@
           </div>
           <div class="widget bg-gradient-dark text-white border-0">
             <div class="icon-box icon-box-white mb-3"><i class="bi bi-lightning-charge-fill"></i></div>
-            <h5 class="text-white">Ready to try it?</h5>
+            <h5 class="text-white">{{ __('Ready to try it?') }}</h5>
             <p class="text-white-50 small mb-3">{{ __('Free to get started — no credit card, no sales call.') }}</p>
             <a href="{{ route('onboarding.step1') }}" class="btn btn-primary w-100">{{ __('Create Your Platform') }}</a>
           </div>
           <div class="widget">
-            <h5>Questions?</h5>
+            <h5>{{ __('Questions?') }}</h5>
             <p class="small text-slate mb-3">{{ __('Reach out and we\'ll help you get set up.') }}</p>
             <a href="{{ route('landing.contact') }}" class="card-link-arrow d-inline-flex">{{ __('Contact us') }} <i class="bi bi-arrow-right"></i></a>
           </div>

@@ -11,12 +11,12 @@
         <div class="col-lg-6 hero-content">
           <span class="eyebrow">{{ __('Free to get started') }}</span>
           <h1 class="mb-4">{{ __('Run your community without the') }} <span class="text-primary-custom">{{ __('spreadsheets and paperwork') }}</span>.</h1>
-          <p class="fs-5 mb-4" style="max-width: 540px;">Oudaa gives your committee one simple platform to manage residents, collect fees, track funds, and record every payment and expense — replacing the scattered spreadsheets and paper files most communities still run on.</p>
+          <p class="fs-5 mb-4" style="max-width: 540px;">{{ __('Oudaa gives your committee one simple platform to manage residents, collect fees, track funds, and record every payment and expense — replacing the scattered spreadsheets and paper files most communities still run on.') }}</p>
           <div class="d-flex flex-wrap gap-3 mb-4 justify-content-lg-start justify-content-center">
             <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-lg-custom">{{ __('Create Your Platform') }} <i class="bi bi-arrow-right ms-1"></i></a>
             <a href="{{ route('landing.services') }}" class="btn btn-light-custom btn-lg-custom">{{ __('See What It Does') }}</a>
           </div>
-          <p class="text-slate mb-0" style="font-size:0.9rem;"><i class="bi bi-check-circle-fill text-success me-1"></i>No credit card required &nbsp; · &nbsp; Ready in a couple of minutes</p>
+          <p class="text-slate mb-0" style="font-size:0.9rem;"><i class="bi bi-check-circle-fill text-success me-1"></i>{{ __('No credit card required &nbsp; · &nbsp; Ready in a couple of minutes') }}</p>
         </div>
         <div class="col-lg-6">
           <div class="hero-visual position-relative mx-auto" style="max-width: 480px;">
@@ -55,7 +55,7 @@
             </div>
             <div class="hero-float-badge badge-2 d-none d-sm-flex">
               <div class="icon-box icon-box-primary" style="width:36px;height:36px;border-radius:10px;font-size:1.1rem;"><i class="bi bi-envelope-check"></i></div>
-              <div>{{ __('Setup Link Sent') }}<br><small class="text-slate fw-normal">to your admin email</small></div>
+              <div>{{ __('Setup Link Sent') }}<br><small class="text-slate fw-normal">{{ __('to your admin email') }}</small></div>
             </div>
           </div>
         </div>
@@ -88,8 +88,8 @@
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium">
             <div class="icon-box icon-box-secondary mb-4"><i class="bi bi-receipt"></i></div>
-            <h3 class="card-title">Fees &amp; Payments</h3>
-            <p class="mb-3">Set recurring or one-off fees, then track exactly who's paid, who hasn't, and record payments as they come in.</p>
+            <h3 class="card-title">{{ __('Fees &amp; Payments') }}</h3>
+            <p class="mb-3">{{ __('Set recurring or one-off fees, then track exactly who\'s paid, who hasn\'t, and record payments as they come in.') }}</p>
             <a href="{{ route('landing.service-details', 'fees') }}" class="card-link-arrow">{{ __('Learn more') }} <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
@@ -104,8 +104,8 @@
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium">
             <div class="icon-box icon-box-primary mb-4"><i class="bi bi-kanban"></i></div>
-            <h3 class="card-title">Projects &amp; Expenses</h3>
-            <p class="mb-3">Plan community projects against a fund's budget and log every expense against the right project.</p>
+            <h3 class="card-title">{{ __('Projects &amp; Expenses') }}</h3>
+            <p class="mb-3">{{ __('Plan community projects against a fund\'s budget and log every expense against the right project.') }}</p>
             <a href="{{ route('landing.service-details', 'projects') }}" class="card-link-arrow">{{ __('Learn more') }} <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
@@ -119,7 +119,7 @@
       <div class="row align-items-center g-5">
         <div class="col-lg-6 reveal">
           <div class="position-relative">
-            <img src="{{ asset('nexora-assets/img/villa-community.jpg') }}" class="rounded-img w-100" alt="Villa community in Addis Ababa, Ethiopia" style="aspect-ratio: 5/4; object-fit:cover;">
+            <img src="{{ asset('nexora-assets/img/villa-community.jpg') }}" class="rounded-img w-100" alt="{{ __('Villa community in Addis Ababa, Ethiopia') }}" style="aspect-ratio: 5/4; object-fit:cover;">
             <div class="hero-float-badge badge-2 d-none d-sm-flex" style="position:absolute; bottom:-1.5rem; left:-1.5rem; right:auto;">
               <div class="icon-box icon-box-primary" style="width:36px;height:36px;border-radius:10px;font-size:1.1rem;"><i class="bi bi-lightning-charge-fill"></i></div>
               <div>{{ __('Ready in minutes') }}<br><small class="text-slate fw-normal">{{ __('No setup calls needed') }}</small></div>
@@ -131,9 +131,9 @@
           <h2 class="section-title">{{ __('Built for how committees actually work') }}</h2>
           <p class="section-subtitle mb-4">{{ __('Most communities run on a mix of spreadsheets, WhatsApp messages and paper receipts — which works, until someone forgets who paid, or a fund balance doesn\'t add up. Oudaa replaces that with one shared source of truth every committee member can trust.') }}</p>
           <ul class="list-check mb-4">
-            <li><i class="bi bi-check"></i><div><strong class="text-navy">{{ __('Works for any community') }}</strong> — houses/villas or condo/apartment buildings with block numbers.</div></li>
+            <li><i class="bi bi-check"></i><div><strong class="text-navy">{{ __('Works for any community') }}</strong> {{ __('— houses/villas or condo/apartment buildings with block numbers.') }}</div></li>
             <li><i class="bi bi-check"></i><div><strong class="text-navy">{{ __('Every committee member sees the same numbers') }}</strong> {{ __('— no more "let me check my spreadsheet."') }}</div></li>
-            <li><i class="bi bi-check"></i><div><strong class="text-navy">{{ __('Free to start') }}</strong> — sign up, get your own platform, and try it with your real community.</div></li>
+            <li><i class="bi bi-check"></i><div><strong class="text-navy">{{ __('Free to start') }}</strong> {{ __('— sign up, get your own platform, and try it with your real community.') }}</div></li>
           </ul>
           <a href="{{ route('landing.about') }}" class="btn btn-primary btn-lg-custom">{{ __('More About Us') }}</a>
         </div>
@@ -156,28 +156,28 @@
           <div class="process-step">
             <span class="process-number">01</span>
             <h3 class="card-title">{{ __('Name it') }}</h3>
-            <p>Tell us your community's name and whether it's a normal community or a condo/apartment building.</p>
+            <p>{{ __('Tell us your community\'s name and whether it\'s a normal community or a condo/apartment building.') }}</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 reveal">
           <div class="process-step">
             <span class="process-number">02</span>
             <h3 class="card-title">{{ __('Pick your link') }}</h3>
-            <p>Choose your platform's web address — this is what your committee will use to log in from now on.</p>
+            <p>{{ __('Choose your platform\'s web address — this is what your committee will use to log in from now on.') }}</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 reveal">
           <div class="process-step">
             <span class="process-number">03</span>
             <h3 class="card-title">{{ __('Check your email') }}</h3>
-            <p>We build your platform and email you a link to set your admin password — usually within a minute.</p>
+            <p>{{ __('We build your platform and email you a link to set your admin password — usually within a minute.') }}</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 reveal">
           <div class="process-step">
             <span class="process-number">04</span>
             <h3 class="card-title">{{ __('Start managing') }}</h3>
-            <p>Add residents, set fees, and start tracking funds and payments right away.</p>
+            <p>{{ __('Add residents, set fees, and start tracking funds and payments right away.') }}</p>
           </div>
         </div>
       </div>

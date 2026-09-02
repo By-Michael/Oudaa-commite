@@ -1,12 +1,12 @@
 @extends('layouts.wizard')
 
-@section('title', 'Set your password — Oudaa')
+@section('title', __('Set your password') . ' — Oudaa')
 
 @section('content')
 
 <h1>Set your password</h1>
 <p class="sub">
-    Welcome to <strong>{{ $tenant->name }}</strong>. Choose a password for your admin account
+    {{ __('Welcome to') }} <strong>{{ $tenant->name }}</strong>. Choose a password for your admin account
     (<strong>{{ $tenant->owner_email }}</strong>) to finish setting up your platform.
 </p>
 
@@ -18,13 +18,13 @@
     @csrf
 
     <div class="mb-3">
-        <label for="password" class="form-label">New password<span class="req">*</span></label>
+        <label for="password" class="form-label">{{ __('New password') }}<span class="req">*</span></label>
         <input type="password" id="password" name="password" class="form-control" minlength="8" required autofocus>
         <div class="form-text text-slate">At least 8 characters.</div>
     </div>
 
     <div class="mb-4">
-        <label for="password_confirmation" class="form-label">Confirm password<span class="req">*</span></label>
+        <label for="password_confirmation" class="form-label">{{ __('Confirm password') }}<span class="req">*</span></label>
         <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" minlength="8" required>
     </div>
 

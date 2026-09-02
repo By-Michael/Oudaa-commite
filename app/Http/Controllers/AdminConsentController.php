@@ -23,7 +23,7 @@ class AdminConsentController extends Controller
         $request->validate(['decision' => 'required|in:approved,denied']);
 
         if (! $consent->isPendingAndLive()) {
-            return back()->with('status', 'That request is no longer active.');
+            return back()->with('status', __('That request is no longer active.'));
         }
 
         $decision = $request->input('decision');

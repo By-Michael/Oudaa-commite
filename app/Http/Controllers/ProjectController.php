@@ -85,7 +85,7 @@ class ProjectController extends Controller
     {
         Project::create($this->validated($request));
 
-        return redirect()->route('projects.index')->with('status', 'Project created.');
+        return redirect()->route('projects.index')->with('status', __('Project created.'));
     }
 
     public function edit(Request $request)
@@ -101,7 +101,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($request->route('project'));
         $project->update($this->validated($request));
 
-        return redirect()->route('projects.index')->with('status', 'Project updated.');
+        return redirect()->route('projects.index')->with('status', __('Project updated.'));
     }
 
     /**
@@ -124,7 +124,7 @@ class ProjectController extends Controller
             'status' => $project->status === 'archived' ? 'active' : 'archived',
         ]);
 
-        return back()->with('status', 'Project status updated.');
+        return back()->with('status', __('Project status updated.'));
     }
 
     private function validated(Request $request): array

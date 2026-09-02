@@ -66,7 +66,7 @@ class CreatePlatformController extends Controller
 
         if (! $this->slugAvailable($data['slug'])) {
             return back()->withErrors([
-                'slug' => 'That link is already taken. Try another one.',
+                'slug' => __('That link is already taken. Try another one.'),
             ])->withInput();
         }
 
@@ -109,7 +109,7 @@ class CreatePlatformController extends Controller
             Session::forget('onboarding.slug');
 
             return redirect()->route('onboarding.step2')->withErrors([
-                'slug' => 'That link was just taken by someone else. Please choose another.',
+                'slug' => __('That link was just taken by someone else. Please choose another.'),
             ]);
         }
 

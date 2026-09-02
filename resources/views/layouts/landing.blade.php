@@ -33,7 +33,7 @@
 <nav class="navbar navbar-expand-lg navbar-nexora fixed-top">
     <div class="container">
       <a class="navbar-brand navbar-brand-custom" href="{{ route('landing.index') }}">
-        <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="Oudaa" style="height:34px;width:auto;">
+        <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="{{ __('Oudaa') }}" style="height:34px;width:auto;">
       </a>
       <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
@@ -116,6 +116,7 @@
   <button class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
 
   <!-- Bootstrap Bundle JS -->
+  <script src="{{ asset('js/ethiopian-date.js') }}?v={{ @filemtime(public_path('js/ethiopian-date.js')) }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ asset('nexora-assets/js/main.js') }}"></script>
   @stack('scripts')

@@ -1,18 +1,18 @@
 @component('mail::message')
-# Welcome to the committee
+# {{ __('Welcome to the committee') }}
 
-Hi {{ $committeeName }},
+{{ __('Hi :name,', ['name' => $committeeName]) }}
 
-You've been added as a committee member for **{{ $communityName }}** on Oudaa. Click the button below to set your password and get started.
+{{ __("You've been added as a committee member for **:community** on Oudaa. Click the button below to set your password and get started.", ['community' => $communityName]) }}
 
 @component('mail::button', ['url' => $setPasswordUrl])
 Set your password
 @endcomponent
 
-This link is valid for 60 minutes and can only be used once.
+{{ __('This link is valid for 60 minutes and can only be used once.') }}
 
-If you weren't expecting this, you can safely ignore this email.
+{{ __('If you weren\'t expecting this, you can safely ignore this email.') }}
 
-Thanks,<br>
+{{ __('Thanks,') }}<br>
 The Oudaa Team
 @endcomponent

@@ -4,12 +4,12 @@
 
 <div class="toolbar">
     <form class="search-form" method="GET" action="{{ route('reports.index') }}">
-        <label style="font-size:13px;color:var(--md-on-surface-variant);align-self:center;">From</label>
-        <input type="date" name="from" value="{{ $from }}" onchange="this.form.submit()">
-        <label style="font-size:13px;color:var(--md-on-surface-variant);align-self:center;">To</label>
-        <input type="date" name="to" value="{{ $to }}" onchange="this.form.submit()">
+        <label style="font-size:13px;color:var(--md-on-surface-variant);align-self:center;">{{ __('From') }}</label>
+        {!! eth_date_input('from', $from, [], true) !!}
+        <label style="font-size:13px;color:var(--md-on-surface-variant);align-self:center;">{{ __('To') }}</label>
+        {!! eth_date_input('to', $to, [], true) !!}
     </form>
-    <a href="{{ route('reports.summary.pdf', request()->only('from', 'to')) }}" class="btn btn-primary">Download Summary PDF</a>
+    <a href="{{ route('reports.summary.pdf', request()->only('from', 'to')) }}" class="btn btn-primary">{{ __('Download Summary PDF') }}</a>
 </div>
 
 <div class="form-grid">
@@ -18,7 +18,7 @@
         <div class="panel-body"><canvas id="chartPayments" height="220"></canvas></div>
     </div>
     <div class="panel">
-        <div class="panel-head"><h2>Expenses by Category</h2></div>
+        <div class="panel-head"><h2>{{ __('Expenses by Category') }}</h2></div>
         <div class="panel-body"><canvas id="chartExpenses" height="220"></canvas></div>
     </div>
 </div>
@@ -29,7 +29,7 @@
         <div class="panel-body"><canvas id="chartFunds" height="220"></canvas></div>
     </div>
     <div class="panel">
-        <div class="panel-head"><h2>Residents Breakdown</h2></div>
+        <div class="panel-head"><h2>{{ __('Residents Breakdown') }}</h2></div>
         <div class="panel-body"><canvas id="chartResidents" height="220"></canvas></div>
     </div>
 </div>
@@ -48,15 +48,15 @@
 @endphp
 
 <div class="panel">
-    <div class="panel-head"><h2>Filtered Exports</h2></div>
+    <div class="panel-head"><h2>{{ __('Filtered Exports') }}</h2></div>
     <div class="panel-body">
         <p class="muted" style="margin-top:0;">
-            Pick filters for a dataset, review the matching records below, then export just that selection to Excel or PDF.
+            {{ __('Pick filters for a dataset, review the matching records below, then export just that selection to Excel or PDF.') }}
         </p>
 
         <div class="export-stack">
 
-            {{-- Residents --}}
+            {{-- {{ __('Residents') }} --}}
             <div class="export-card">
                 <form method="GET" action="{{ route('reports.index') }}" class="export-card-form" id="form-residents">
                     <input type="hidden" name="block" value="residents">
@@ -65,7 +65,7 @@
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
                                 <h3>Residents</h3>
-                                <div class="export-sub muted">{{ $residentsTable->total() }} of {{ \App\Models\Resident::count() }} members match the current filters</div>
+                                <div class="export-sub muted">{{ __(':shown of :total members match the current filters', ['shown' => $residentsTable->total(), 'total' => \App\Models\Resident::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -75,31 +75,31 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-residents">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-residents">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-residents">
                         <select name="status">
                             <option value="">All statuses</option>
-                            <option value="active" @selected($block === 'residents' && request('status') === 'active')>Active</option>
+                            <option value="active" @selected($block === 'residents' && request('status') === 'active')>{{ __('Active') }}</option>
                             <option value="inactive" @selected($block === 'residents' && request('status') === 'inactive')>Inactive</option>
                         </select>
                         <select name="occupancy">
-                            <option value="">All occupancy</option>
+                            <option value="">{{ __('All occupancy') }}</option>
                             <option value="owner" @selected($block === 'residents' && request('occupancy') === 'owner')>Owner</option>
-                            <option value="renter" @selected($block === 'residents' && request('occupancy') === 'renter')>Renter</option>
+                            <option value="renter" @selected($block === 'residents' && request('occupancy') === 'renter')>{{ __('Renter') }}</option>
                         </select>
-                        <input type="date" name="date_from" placeholder="From" value="{{ $block === 'residents' ? request('date_from') : '' }}">
-                        <input type="date" name="date_to" placeholder="To" value="{{ $block === 'residents' ? request('date_to') : '' }}">
+                        {!! eth_date_input('date_from', $block === 'residents' ? request('date_from') : null, ['placeholder' => __('From')]) !!}
+                        {!! eth_date_input('date_to', $block === 'residents' ? request('date_to') : null, ['placeholder' => __('To')]) !!}
                         <button type="submit" class="btn btn-sm btn-primary">Apply</button>
                     </div>
 
                     <div class="export-table-wrap">
-                        @if ($residentsTable->isEmpty())
+                        @if ($residentsTable->{{ __('isEmpty())') }}
                             <div class="empty">No residents found.</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>Unit</th><th>Email</th><th>Status</th><th>Joined</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>Unit</th><th>Email</th><th>Status</th><th>{{ __('Joined') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($residentsTable as $row)
                                     <tr>
@@ -107,7 +107,7 @@
                                         <td>{{ $row->unit_number }}</td>
                                         <td>{{ $row->email ?: '—' }}</td>
                                         <td><span class="badge badge-{{ $row->status }}">{{ ucfirst($row->status) }}</span></td>
-                                        <td>{{ $row->created_at?->format('d M Y') }}</td>
+                                        <td>{!! eth_date($row->created_at) !!}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -126,8 +126,8 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Fees</h3>
-                                <div class="export-sub muted">{{ $feesTable->total() }} of {{ \App\Models\Fee::count() }} fees match the current filters</div>
+                                <h3>{{ __('Fees') }}</h3>
+                                <div class="export-sub muted">{{ __(':shown of :total fees match the current filters', ['shown' => $feesTable->total(), 'total' => \App\Models\Fee::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -137,30 +137,30 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-fees">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-fees">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-fees">
                         <select name="fund_id">
-                            <option value="">All funds</option>
+                            <option value="">{{ __('All funds') }}</option>
                             @foreach ($funds as $fund)
                                 <option value="{{ $fund->id }}" @selected($block === 'fees' && (string) request('fund_id') === (string) $fund->id)>{{ $fund->name }}</option>
                             @endforeach
                         </select>
                         <select name="status">
                             <option value="">All statuses</option>
-                            <option value="active" @selected($block === 'fees' && request('status') === 'active')>Active</option>
+                            <option value="active" @selected($block === 'fees' && request('status') === 'active')>{{ __('Active') }}</option>
                             <option value="inactive" @selected($block === 'fees' && request('status') === 'inactive')>Inactive</option>
                         </select>
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
                         @if ($feesTable->isEmpty())
-                            <div class="empty">No fees found.</div>
+                            <div class="empty">{{ __('No fees found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>Fund</th><th>Amount</th><th>Frequency</th><th>Status</th></tr></thead>
+                                <thead><tr><th>Name</th><th>{{ __('Fund') }}</th><th>Amount</th><th>Frequency</th><th>{{ __('Status') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($feesTable as $row)
                                     <tr>
@@ -187,8 +187,8 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Payments</h3>
-                                <div class="export-sub muted">{{ $paymentsTable->total() }} of {{ \App\Models\Payment::count() }} payments match the current filters</div>
+                                <h3>{{ __('Payments') }}</h3>
+                                <div class="export-sub muted">{{ __(':shown of :total payments match the current filters', ['shown' => $paymentsTable->total(), 'total' => \App\Models\Payment::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -198,7 +198,7 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-payments">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-payments">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-payments">
@@ -209,22 +209,22 @@
                             @endforeach
                         </select>
                         <select name="status">
-                            <option value="">All statuses</option>
+                            <option value="">{{ __('All statuses') }}</option>
                             <option value="PAID" @selected($block === 'payments' && request('status') === 'PAID')>Paid</option>
-                            <option value="PENDING" @selected($block === 'payments' && request('status') === 'PENDING')>Pending</option>
+                            <option value="PENDING" @selected($block === 'payments' && request('status') === 'PENDING')>{{ __('Pending') }}</option>
                             <option value="VOID" @selected($block === 'payments' && request('status') === 'VOID')>Void</option>
                         </select>
-                        <input type="date" name="date_from" placeholder="From" value="{{ $block === 'payments' ? request('date_from') : '' }}">
-                        <input type="date" name="date_to" placeholder="To" value="{{ $block === 'payments' ? request('date_to') : '' }}">
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        {!! eth_date_input('date_from', $block === 'payments' ? request('date_from') : null, ['placeholder' => __('From')]) !!}
+                        {!! eth_date_input('date_to', $block === 'payments' ? request('date_to') : null, ['placeholder' => __('To')]) !!}
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
                         @if ($paymentsTable->isEmpty())
-                            <div class="empty">No payments found.</div>
+                            <div class="empty">{{ __('No payments found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Resident</th><th>Fee</th><th>Amount</th><th>Status</th><th>Paid At</th></tr></thead>
+                                <thead><tr><th>Resident</th><th>{{ __('Fee') }}</th><th>Amount</th><th>Status</th><th>{{ __('Paid At') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($paymentsTable as $row)
                                     <tr>
@@ -232,7 +232,7 @@
                                         <td>{{ $row->fee->name ?? '—' }}</td>
                                         <td>{{ $money($row->amount) }}</td>
                                         <td><span class="badge badge-{{ strtolower($row->status) }}">{{ ucfirst(strtolower($row->status)) }}</span></td>
-                                        <td>{{ $row->paid_at?->format('d M Y') ?: '—' }}</td>
+                                        <td>{!! $row->paid_at ? eth_date($row->paid_at) : '—' !!}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -251,8 +251,8 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Funds</h3>
-                                <div class="export-sub muted">{{ $fundsTable->total() }} of {{ \App\Models\Fund::count() }} funds match the current filters</div>
+                                <h3>{{ __('Funds') }}</h3>
+                                <div class="export-sub muted">{{ __(':shown of :total funds match the current filters', ['shown' => $fundsTable->total(), 'total' => \App\Models\Fund::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -262,24 +262,24 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-funds">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-funds">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-funds">
                         <select name="status">
-                            <option value="">All statuses</option>
+                            <option value="">{{ __('All statuses') }}</option>
                             <option value="active" @selected($block === 'funds' && request('status') === 'active')>Active</option>
-                            <option value="archived" @selected($block === 'funds' && request('status') === 'archived')>Archived</option>
+                            <option value="archived" @selected($block === 'funds' && request('status') === 'archived')>{{ __('Archived') }}</option>
                         </select>
                         <button type="submit" class="btn btn-sm btn-primary">Apply</button>
                     </div>
 
                     <div class="export-table-wrap">
-                        @if ($fundsTable->isEmpty())
+                        @if ($fundsTable->{{ __('isEmpty())') }}
                             <div class="empty">No funds found.</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>Category</th><th>Status</th><th>Balance</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>Category</th><th>Status</th><th>{{ __('Balance') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($fundsTable as $row)
                                     <tr>
@@ -305,8 +305,8 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Expenses</h3>
-                                <div class="export-sub muted">{{ $expensesTable->total() }} of {{ \App\Models\Expense::count() }} expenses match the current filters</div>
+                                <h3>{{ __('Expenses') }}</h3>
+                                <div class="export-sub muted">{{ __(':shown of :total expenses match the current filters', ['shown' => $expensesTable->total(), 'total' => \App\Models\Expense::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -316,7 +316,7 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-expenses">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-expenses">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-expenses">
@@ -327,7 +327,7 @@
                             @endforeach
                         </select>
                         <select name="project_id">
-                            <option value="">All projects</option>
+                            <option value="">{{ __('All projects') }}</option>
                             @foreach ($projects as $project)
                                 <option value="{{ $project->id }}" @selected($block === 'expenses' && (string) request('project_id') === (string) $project->id)>{{ $project->name }}</option>
                             @endforeach
@@ -338,17 +338,17 @@
                                 <option value="{{ $employee->id }}" @selected($block === 'expenses' && (string) request('employee_id') === (string) $employee->id)>{{ $employee->name }}</option>
                             @endforeach
                         </select>
-                        <input type="date" name="date_from" placeholder="From" value="{{ $block === 'expenses' ? request('date_from') : '' }}">
-                        <input type="date" name="date_to" placeholder="To" value="{{ $block === 'expenses' ? request('date_to') : '' }}">
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        {!! eth_date_input('date_from', $block === 'expenses' ? request('date_from') : null, ['placeholder' => __('From')]) !!}
+                        {!! eth_date_input('date_to', $block === 'expenses' ? request('date_to') : null, ['placeholder' => __('To')]) !!}
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
                         @if ($expensesTable->isEmpty())
-                            <div class="empty">No expenses found.</div>
+                            <div class="empty">{{ __('No expenses found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Category</th><th>Fund</th><th>Project</th><th>Amount</th><th>Date</th></tr></thead>
+                                <thead><tr><th>Category</th><th>{{ __('Fund') }}</th><th>Project</th><th>Amount</th><th>{{ __('Date') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($expensesTable as $row)
                                     <tr>
@@ -356,7 +356,7 @@
                                         <td>{{ $row->fund->name ?? '—' }}</td>
                                         <td>{{ $row->project->name ?? '—' }}</td>
                                         <td>{{ $money($row->amount) }}</td>
-                                        <td>{{ $row->incurred_at?->format('d M Y') }}</td>
+                                        <td>{!! eth_date($row->incurred_at) !!}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -375,8 +375,8 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Employees</h3>
-                                <div class="export-sub muted">{{ $employeesTable->total() }} of {{ \App\Models\Employee::count() }} employees match the current filters</div>
+                                <h3>{{ __('Employees') }}</h3>
+                                <div class="export-sub muted">{{ __(':shown of :total employees match the current filters', ['shown' => $employeesTable->total(), 'total' => \App\Models\Employee::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -386,24 +386,24 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-employees">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-employees">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-employees">
                         <select name="status">
                             <option value="">All statuses</option>
-                            <option value="active" @selected($block === 'employees' && request('status') === 'active')>Active</option>
+                            <option value="active" @selected($block === 'employees' && request('status') === 'active')>{{ __('Active') }}</option>
                             <option value="terminated" @selected($block === 'employees' && request('status') === 'terminated')>Terminated</option>
                         </select>
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
                         @if ($employeesTable->isEmpty())
-                            <div class="empty">No employees found.</div>
+                            <div class="empty">{{ __('No employees found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>Role</th><th>Phone</th><th>Status</th></tr></thead>
+                                <thead><tr><th>Name</th><th>{{ __('Role') }}</th><th>Phone</th><th>Status</th></tr></thead>
                                 <tbody>
                                 @foreach ($employeesTable as $row)
                                     <tr>
@@ -421,7 +421,7 @@
                 <div class="pagination export-pagination">{{ $employeesTable->onEachSide(1)->links('vendor.pagination.custom') }}</div>
             </div>
 
-            {{-- Projects --}}
+            {{-- {{ __('Projects') }} --}}
             <div class="export-card">
                 <form method="GET" action="{{ route('reports.index') }}" class="export-card-form" id="form-projects">
                     <input type="hidden" name="block" value="projects">
@@ -430,7 +430,7 @@
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
                                 <h3>Projects</h3>
-                                <div class="export-sub muted">{{ $projectsTable->total() }} of {{ \App\Models\Project::count() }} projects match the current filters</div>
+                                <div class="export-sub muted">{{ __(':shown of :total projects match the current filters', ['shown' => $projectsTable->total(), 'total' => \App\Models\Project::count()]) }}</div>
                             </div>
                         </div>
                         <div class="export-card-actions">
@@ -440,7 +440,7 @@
                     </div>
 
                     <div class="export-card-toolbar">
-                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-projects">{!! $filterIcon !!} Filter</button>
+                        <button type="button" class="btn btn-sm filter-toggle" data-target="filters-projects">{!! $filterIcon !!} {{ __('Filter') }}</button>
                     </div>
 
                     <div class="export-filters" id="filters-projects">
@@ -451,21 +451,21 @@
                             @endforeach
                         </select>
                         <select name="status">
-                            <option value="">All statuses</option>
+                            <option value="">{{ __('All statuses') }}</option>
                             <option value="planned" @selected($block === 'projects' && request('status') === 'planned')>Planned</option>
-                            <option value="active" @selected($block === 'projects' && request('status') === 'active')>Active</option>
+                            <option value="active" @selected($block === 'projects' && request('status') === 'active')>{{ __('Active') }}</option>
                             <option value="completed" @selected($block === 'projects' && request('status') === 'completed')>Completed</option>
-                            <option value="archived" @selected($block === 'projects' && request('status') === 'archived')>Archived</option>
+                            <option value="archived" @selected($block === 'projects' && request('status') === 'archived')>{{ __('Archived') }}</option>
                         </select>
                         <button type="submit" class="btn btn-sm btn-primary">Apply</button>
                     </div>
 
                     <div class="export-table-wrap">
-                        @if ($projectsTable->isEmpty())
+                        @if ($projectsTable->{{ __('isEmpty())') }}
                             <div class="empty">No projects found.</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>Fund</th><th>Status</th><th>Planned</th><th>Spent</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>Fund</th><th>Status</th><th>{{ __('Planned') }}</th><th>Spent</th></tr></thead>
                                 <tbody>
                                 @foreach ($projectsTable as $row)
                                     <tr>
@@ -591,7 +591,7 @@
         data: {
             labels: @json($fundBalances->pluck('name')),
             datasets: [{
-                label: 'Balance',
+                label: '{{ __('Balance') }}',
                 data: @json($fundBalances->pluck('balance')),
                 backgroundColor: palette[1],
             }],
@@ -602,7 +602,7 @@
     new Chart(document.getElementById('chartResidents'), {
         type: 'doughnut',
         data: {
-            labels: ['Active', 'Inactive', 'Owner', 'Renter'],
+            labels: ['Active', '{{ __('Inactive') }}', 'Owner', 'Renter'],
             datasets: [{
                 data: [
                     {{ $residentBreakdown['active'] }},
@@ -622,7 +622,7 @@
             labels: @json($projectBudgets->pluck('name')),
             datasets: [
                 { label: 'Planned Budget', data: @json($projectBudgets->pluck('planned')), backgroundColor: palette[3] },
-                { label: 'Spent', data: @json($projectBudgets->pluck('spent')), backgroundColor: palette[4] },
+                { label: '{{ __('Spent') }}', data: @json($projectBudgets->pluck('spent')), backgroundColor: palette[4] },
             ],
         },
         options: { responsive: true },

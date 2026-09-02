@@ -25,7 +25,7 @@
 </head>
 <body>
     <h1>{{ $title }}</h1>
-    <div class="meta">Generated {{ $generatedAt->format('Y-m-d H:i') }}</div>
+    <div class="meta">{{ __('Generated :date', ['date' => $generatedAt->format('Y-m-d H:i')]) }}</div>
 
     @if (!empty($appliedFilters))
         <div class="filters">
@@ -38,7 +38,7 @@
     @php($rows = is_array($rows) ? $rows : iterator_to_array($rows))
 
     @if (empty($rows))
-        <div class="empty">No records match the selected filters.</div>
+        <div class="empty">{{ __('No records match the selected filters.') }}</div>
     @else
         <table>
             <thead>
@@ -58,9 +58,9 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="meta" style="margin-top:10px;">{{ count($rows) }} record{{ count($rows) === 1 ? '' : 's' }}</div>
+        <div class="meta" style="margin-top:10px;">{{ count($rows) === 1 ? __(':count record', ['count' => count($rows)]) : __(':count records', ['count' => count($rows)]) }}</div>
     @endif
 
-    <div class="footer">Oudaa Committee Panel — Report generated {{ $generatedAt->format('Y-m-d H:i') }}</div>
+    <div class="footer">{{ __('Oudaa Committee Panel — Report generated :date', ['date' => $generatedAt->format('Y-m-d H:i')]) }}</div>
 </body>
 </html>

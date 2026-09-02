@@ -4,7 +4,7 @@
 
 @section('content')
 
-<a href="{{ route('onboarding.step1') }}" class="wizard-back"><i class="bi bi-arrow-left"></i> Back</a>
+<a href="{{ route('onboarding.step1') }}" class="wizard-back"><i class="bi bi-arrow-left"></i> {{ __('Back') }}</a>
 
 <div class="wizard-steps">
     <span class="dot done"></span>
@@ -12,10 +12,10 @@
     <span class="dot"></span>
 </div>
 
-<h1>Pick your platform link &amp; type</h1>
+<h1>{{ __('Pick your platform link & type') }}</h1>
 <p class="sub">This is the web address your committee and residents will use to log in.</p>
 
-@if ($errors->any())
+@if ($errors->{{ __('any())') }}
     <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
 @endif
 
@@ -43,14 +43,14 @@
     </div>
 
     <div class="mb-4 mt-3">
-        <label class="form-label d-block">Community type<span class="req">*</span></label>
+        <label class="form-label d-block">{{ __('Community type') }}<span class="req">*</span></label>
 
         <div class="form-check mb-2">
             <input class="form-check-input" type="radio" name="community_type" id="type-normal" value="normal"
                 @checked(old('community_type', $communityType) === 'normal')>
             <label class="form-check-label" for="type-normal">
                 <strong>Normal community</strong>
-                <div class="text-slate" style="font-size:0.85rem;">Houses/villas — residents identified by unit number only.</div>
+                <div class="text-slate" style="font-size:0.85rem;">{{ __('Houses/villas — residents identified by unit number only.') }}</div>
             </label>
         </div>
 
@@ -58,13 +58,13 @@
             <input class="form-check-input" type="radio" name="community_type" id="type-condo" value="condo"
                 @checked(old('community_type', $communityType) === 'condo')>
             <label class="form-check-label" for="type-condo">
-                <strong>Condo / Apartment building</strong>
+                <strong>{{ __('Condo / Apartment building') }}</strong>
                 <div class="text-slate" style="font-size:0.85rem;">Adds a block number field when adding residents.</div>
             </label>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100" id="step2-submit">Continue <i class="bi bi-arrow-right"></i></button>
+    <button type="submit" class="btn btn-primary w-100" id="step2-submit">{{ __('Continue') }} <i class="bi bi-arrow-right"></i></button>
 </form>
 
 @endsection

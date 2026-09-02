@@ -29,7 +29,7 @@ class SettingsController extends Controller
 
         $committee->update($data);
 
-        return back()->with('status', 'Profile updated.');
+        return back()->with('status', __('Profile updated.'));
     }
 
     /**
@@ -46,7 +46,7 @@ class SettingsController extends Controller
 
         if (! Hash::check($data['current_password'], $committee->password)) {
             return back()->withErrors([
-                'current_password' => 'Your current password is incorrect.',
+                'current_password' => __('Your current password is incorrect.'),
             ])->withInput($request->only('email'));
         }
 
@@ -54,6 +54,6 @@ class SettingsController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        return back()->with('status', 'Password updated.');
+        return back()->with('status', __('Password updated.'));
     }
 }

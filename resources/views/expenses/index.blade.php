@@ -5,7 +5,7 @@
 <div class="toolbar">
     <form class="search-form" method="GET">
         <select name="fund_id" onchange="this.form.submit()">
-            <option value="">All funds</option>
+            <option value="">{{ __('All funds') }}</option>
             @foreach ($funds as $fund)
                 <option value="{{ $fund->id }}" @selected(request('fund_id') == $fund->id)>{{ $fund->name }}</option>
             @endforeach
@@ -18,17 +18,17 @@
 
 <div class="panel">
     <div class="panel-body" style="padding:0;">
-        @if ($expenses->isEmpty())
+        @if ($expenses->{{ __('isEmpty())') }}
             <div class="empty">No expenses recorded yet.</div>
         @else
             <table>
                 <thead>
-                <tr><th>Date</th><th>Category</th><th>Vendor</th><th>Fund</th><th>Project</th><th>Employee</th><th class="right">Amount</th><th>Note</th><th>Receipt</th></tr>
+                <tr><th>{{ __('Date') }}</th><th>Category</th><th>Vendor</th><th>{{ __('Fund') }}</th><th>Project</th><th>Employee</th><th class="right">{{ __('Amount') }}</th><th>Note</th><th>Receipt</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($expenses as $expense)
                     <tr>
-                        <td>{{ $expense->incurred_at->format('Y-m-d') }}</td>
+                        <td>{!! eth_date($expense->incurred_at) !!}</td>
                         <td>{{ $expense->category }}</td>
                         <td>{{ $expense->vendor ?: '—' }}</td>
                         <td>{{ $expense->fund->name ?? '—' }}</td>
@@ -37,7 +37,7 @@
                         <td class="right">{{ money($expense->amount) }}</td>
                         <td>{{ $expense->note ?: '—' }}</td>
                         <td>
-                            @if ($expense->receiptUrl())
+                            @if ($expense->{{ __('receiptUrl())') }}
                                 <a href="{{ $expense->receiptUrl() }}" target="_blank" rel="noopener">View</a>
                             @else
                                 —

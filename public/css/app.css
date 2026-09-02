@@ -233,6 +233,27 @@ h1,h2,h3{font-weight:500;letter-spacing:-.005em;color:var(--md-on-bg)}
 .lang-toggle-option:hover{color:var(--md-on-surface);}
 .lang-toggle-option.active{background:var(--md-primary);color:var(--md-on-primary);}
 
+/* Date system toggle (Gregorian / Ethiopian calendar) — a small pill
+   switch, matching the dark-mode toggle's footprint in the topbar. */
+.date-system-toggle{
+  display:flex; align-items:center; padding:3px; gap:2px;
+  border:1px solid var(--md-outline-variant); border-radius:9999px;
+  background:var(--md-surface-container); cursor:pointer; height:40px;
+  transition:background-color .2s var(--md-ease);
+}
+.date-system-toggle:hover{background:var(--md-surface-container-high, var(--md-surface-container));}
+.date-system-option{
+  padding:6px 10px; border-radius:9999px; font-size:12px; font-weight:600;
+  letter-spacing:.02em; color:var(--md-on-surface-variant);
+  transition:background-color .2s var(--md-ease), color .2s var(--md-ease);
+}
+.date-system-toggle .date-system-gc{background:var(--md-primary); color:var(--md-on-primary);}
+.date-system-toggle.is-ec .date-system-gc{background:transparent; color:var(--md-on-surface-variant);}
+.date-system-toggle.is-ec .date-system-ec{background:var(--md-primary); color:var(--md-on-primary);}
+
+/* Settings-page date system toggle (same look, sits inline with a label) */
+.date-system-toggle-settings{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+
 /* Theme toggle: show sun in light mode (click to go dark), moon in dark
    mode (click to go light) — one icon at a time, no layout shift. */
 #themeToggle{position:relative}
@@ -348,6 +369,49 @@ input:focus,select:focus,textarea:focus{
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field-error{color:var(--md-error);font-size:12px;margin-top:6px;font-weight:500}
 .req{color:var(--md-error);margin-left:3px;font-weight:600;}
+
+/* Custom Gregorian/Ethiopian date picker */
+.date-picker{ position:relative; }
+.date-picker-input{ cursor:pointer; caret-color:transparent; }
+.date-picker-popup{
+  position:absolute; z-index:40; top:calc(100% + 6px); left:0;
+  width:280px; max-width:90vw; padding:12px;
+  background:var(--md-surface); border:1px solid var(--md-outline-variant);
+  border-radius:var(--md-r-md); box-shadow:var(--md-shadow-lg, 0 4px 20px rgba(0,0,0,.15));
+}
+.date-picker-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.date-picker-label{ font-size:13px; font-weight:700; color:var(--md-on-surface); }
+.date-picker-nav{
+  width:28px; height:28px; border-radius:9999px; border:1px solid var(--md-outline-variant);
+  background:transparent; color:var(--md-on-surface-variant); font-size:16px; line-height:1;
+  cursor:pointer; transition:background-color .15s var(--md-ease);
+}
+.date-picker-nav:hover{ background:var(--md-surface-container); }
+.date-picker-weekdays, .date-picker-grid{
+  display:grid; grid-template-columns:repeat(7, 1fr); gap:2px;
+}
+.date-picker-weekday{
+  text-align:center; font-size:10.5px; font-weight:700; color:var(--md-on-surface-variant);
+  padding:4px 0; text-transform:uppercase;
+}
+.date-picker-day{
+  aspect-ratio:1; border:none; background:transparent; border-radius:8px;
+  font-size:12.5px; color:var(--md-on-surface); cursor:pointer;
+  transition:background-color .15s var(--md-ease);
+}
+.date-picker-day:hover{ background:var(--md-surface-container-high, var(--md-surface-container)); }
+.date-picker-day.is-today{ font-weight:700; color:var(--md-primary); }
+.date-picker-day.is-selected{ background:var(--md-primary); color:var(--md-on-primary); }
+.date-picker-footer{
+  display:flex; justify-content:space-between; margin-top:10px; padding-top:8px;
+  border-top:1px solid var(--md-outline-variant);
+}
+.date-picker-today-btn, .date-picker-clear-btn{
+  border:none; background:transparent; font-size:12px; font-weight:600;
+  color:var(--md-primary); cursor:pointer; padding:4px 6px; border-radius:6px;
+}
+.date-picker-today-btn:hover, .date-picker-clear-btn:hover{ background:var(--md-surface-container); }
+.date-picker-clear-btn{ color:var(--md-on-surface-variant); }
 
 /* ---- Buttons (pill-shaped, state layers) ---- */
 .btn{

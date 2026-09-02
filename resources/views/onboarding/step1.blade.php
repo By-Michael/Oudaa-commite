@@ -10,10 +10,10 @@
     <span class="dot"></span>
 </div>
 
-<h1>What's your community called?</h1>
+<h1>{{ __('What\'s your community called?') }}</h1>
 <p class="sub">This is the name your residents and committee will see.</p>
 
-@if ($errors->any())
+@if ($errors->{{ __('any())') }}
     <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
 @endif
 
@@ -26,7 +26,7 @@
             id="name"
             name="name"
             class="form-control"
-            placeholder="e.g. Green Valley Residences"
+            placeholder="{{ __('e.g. Green Valley Residences') }}"
             value="{{ old('name', $name) }}"
             data-filter="safe-text"
             autofocus

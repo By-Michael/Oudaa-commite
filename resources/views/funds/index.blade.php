@@ -5,13 +5,13 @@
 <div class="toolbar">
     <form class="search-form" method="GET">
         <select name="status" onchange="this.form.submit()">
-            <option value="">All statuses</option>
+            <option value="">{{ __('All statuses') }}</option>
             <option value="active" @selected(request('status') == 'active')>Active</option>
-            <option value="archived" @selected(request('status') == 'archived')>Archived</option>
+            <option value="archived" @selected(request('status') == 'archived')>{{ __('Archived') }}</option>
         </select>
         @if ($categories->isNotEmpty())
             <select name="category" onchange="this.form.submit()">
-                <option value="">All categories</option>
+                <option value="">{{ __('All categories') }}</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category }}" @selected(request('category') == $category)>{{ $category }}</option>
                 @endforeach
@@ -25,12 +25,12 @@
 
 <div class="panel">
     <div class="panel-body" style="padding:0;">
-        @if ($funds->isEmpty())
+        @if ($funds->{{ __('isEmpty())') }}
             <div class="empty">No funds created yet.</div>
         @else
             <table>
                 <thead>
-                <tr><th>Name</th><th>Category</th><th>Description</th><th class="right">Balance</th><th>Status</th><th class="right">Actions</th></tr>
+                <tr><th>{{ __('Name') }}</th><th>Category</th><th>Description</th><th class="right">{{ __('Balance') }}</th><th>Status</th><th class="right">Actions</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($funds as $fund)
@@ -39,14 +39,14 @@
                         <td>{{ $fund->category ?: '—' }}</td>
                         <td>{{ \Illuminate\Support\Str::limit($fund->description, 50) ?: '—' }}</td>
                         <td class="right">{{ money($fund->balance()) }}</td>
-                        <td><span class="badge badge-{{ $fund->status === 'active' ? 'active' : 'archived' }}">{{ ucfirst($fund->status) }}</span></td>
+                        <td><span class="badge badge-{{ $fund->status === 'active' ? 'active' : 'archived' }}">{{ __(ucfirst($fund->status)) }}</span></td>
                         <td class="right actions-cell">
-                            <a href="{{ route('funds.edit', $fund) }}" class="js-modal-link btn btn-sm">Edit</a>
+                            <a href="{{ route('funds.edit', $fund) }}" class="js-modal-link btn btn-sm">{{ __('Edit') }}</a>
                             <form method="POST" action="{{ route('funds.toggle', $fund) }}" style="display:inline"
-                                  data-confirm="{{ $fund->status === 'active' ? 'Archive' : 'Restore' }} {{ addslashes($fund->name) }}?">
+                                  data-confirm="{{ $fund->status === 'active' ? __('Archive') : __('Restore') }} {{ addslashes($fund->name) }}?">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="btn btn-sm {{ $fund->status === 'active' ? 'btn-danger' : '' }}">
-                                    {{ $fund->status === 'active' ? 'Archive' : 'Restore' }}
+                                    {{ $fund->status === 'active' ? __('Archive') : __('Restore') }}
                                 </button>
                             </form>
                         </td>

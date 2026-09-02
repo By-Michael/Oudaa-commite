@@ -106,7 +106,7 @@ class ResidentController extends Controller
         $data['status'] = 'active'; // new residents always start active — status is only ever changed later, via edit.
         Resident::create($data);
 
-        return redirect()->route('residents.index')->with('status', 'Resident added.');
+        return redirect()->route('residents.index')->with('status', __('Resident added.'));
     }
 
     public function bulkImportForm()
@@ -199,7 +199,7 @@ class ResidentController extends Controller
         try {
             $spreadsheet = IOFactory::load($request->file('file')->getRealPath());
         } catch (\Throwable $e) {
-            return back()->withErrors(['file' => 'Could not read that file. Please use the downloaded template and try again.']);
+            return back()->withErrors(['file' => __('Could not read that file. Please use the downloaded template and try again.')]);
         }
 
         $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, false);
@@ -269,7 +269,7 @@ class ResidentController extends Controller
         }
 
         if (empty($rows)) {
-            return back()->withErrors(['file' => 'That file has no resident rows below the header. Nothing was imported.']);
+            return back()->withErrors(['file' => __('That file has no resident rows below the header. Nothing was imported.')]);
         }
 
         if (! empty($rowErrors)) {
@@ -303,7 +303,7 @@ class ResidentController extends Controller
         $data['status'] = $request->input('status', $resident->status); // status only settable here, on edit
         $resident->update($data);
 
-        return redirect()->route('residents.index')->with('status', 'Resident updated.');
+        return redirect()->route('residents.index')->with('status', __('Resident updated.'));
     }
 
     /**
@@ -325,7 +325,7 @@ class ResidentController extends Controller
         $resident = Resident::findOrFail($request->route('resident'));
         $resident->update(['status' => $resident->status === 'active' ? 'inactive' : 'active']);
 
-        return back()->with('status', 'Resident status updated.');
+        return back()->with('status', __('Resident status updated.'));
     }
 
     private function validated(Request $request, ?Resident $resident = null): array

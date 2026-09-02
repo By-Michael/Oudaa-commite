@@ -86,7 +86,7 @@ class FundController extends Controller
     {
         Fund::create($this->validated($request));
 
-        return redirect()->route('funds.index')->with('status', 'Fund created.');
+        return redirect()->route('funds.index')->with('status', __('Fund created.'));
     }
 
     public function edit(Request $request)
@@ -101,7 +101,7 @@ class FundController extends Controller
         $fund = Fund::findOrFail($request->route('fund'));
         $fund->update($this->validated($request));
 
-        return redirect()->route('funds.index')->with('status', 'Fund updated.');
+        return redirect()->route('funds.index')->with('status', __('Fund updated.'));
     }
 
     /**
@@ -112,7 +112,7 @@ class FundController extends Controller
         $fund = Fund::findOrFail($request->route('fund'));
         $fund->update(['status' => $fund->status === 'active' ? 'archived' : 'active']);
 
-        return back()->with('status', 'Fund status updated.');
+        return back()->with('status', __('Fund status updated.'));
     }
 
     private function validated(Request $request): array

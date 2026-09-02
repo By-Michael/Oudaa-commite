@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Record Payment')
+@section('title', __('Record Payment'))
 @section('content')
 
 @php
@@ -17,7 +17,7 @@
                     type="text"
                     id="resident-search"
                     autocomplete="off"
-                    placeholder="Type a name, unit, or ID number to search…"
+                    placeholder="{{ __('Type a name, unit, or ID number to search…') }}"
                     value="{{ old('resident_search') }}"
                 >
                 <input type="hidden" name="resident_id" id="resident_id" value="{{ old('resident_id') }}">
@@ -27,7 +27,7 @@
 
             <div class="form-grid">
                 <div class="form-row lock-hover-wrap" id="fee-wrap">
-                    <label>Fee</label>
+                    <label>{{ __('Fee') }}</label>
                     <select name="fee_id" id="fee_id">
                         <option value="">No fee — pay into a fund directly</option>
                         @foreach ($fees as $fee)
@@ -36,33 +36,33 @@
                             </option>
                         @endforeach
                     </select>
-                    <span class="hover-hint">Only one of Fee or Fund can be chosen.</span>
+                    <span class="hover-hint">{{ __('Only one of Fee or Fund can be chosen.') }}</span>
                 </div>
                 <div class="form-row lock-hover-wrap" id="fund-wrap">
-                    <label>Fund</label>
+                    <label>{{ __('Fund') }}</label>
                     <select name="fund_id" id="fund_id">
                         <option value="">Select a fund…</option>
                         @foreach ($funds as $fund)
                             <option value="{{ $fund->id }}" @selected(old('fund_id') == $fund->id)>{{ $fund->name }}</option>
                         @endforeach
                     </select>
-                    <span class="hover-hint">Only one of Fee or Fund can be chosen.</span>
+                    <span class="hover-hint">{{ __('Only one of Fee or Fund can be chosen.') }}</span>
                 </div>
             </div>
             <p class="muted" style="font-size:12px;margin:-10px 0 18px;">
-                Choose a fee, or a fund directly — at least one is required. Selecting one locks the other.
+                {{ __('Choose a fee, or a fund directly — at least one is required. Selecting one locks the other.') }}
             </p>
             @error('fee_id') <div class="field-error" style="margin-top:-10px;">{{ $message }}</div> @enderror
 
             <div class="form-grid">
                 <div class="form-row lock-hover-wrap" id="amount-wrap">
-                    <label>Amount (ETB)<span class="req">*</span></label>
+                    <label>{{ __('Amount (ETB)') }}<span class="req">*</span></label>
                     <input type="number" step="0.01" min="0.01" name="amount" id="amount" value="{{ old('amount') }}" required data-filter="decimal">
                     <span class="hover-hint">The amount will be the fee amount set in the selected fee.</span>
                 </div>
                 <div class="form-row">
-                    <label>Date Paid<span class="req">*</span></label>
-                    <input type="date" name="paid_at" value="{{ old('paid_at', now()->toDateString()) }}" required>
+                    <label>{{ __('Date Paid') }}<span class="req">*</span></label>
+                    {!! eth_date_input('paid_at', old('paid_at', now()->toDateString())) !!}
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
             </div>
 
             <div class="form-row">
-                <label>Note</label>
+                <label>{{ __('Note') }}</label>
                 <input type="text" name="note" value="{{ old('note') }}" data-filter="safe-text">
             </div>
 
@@ -84,7 +84,7 @@
                 New payments are recorded as Paid. To mark something Pending or Void, record it here first, then edit it from the payments list.
             </p>
 
-            <button type="submit" class="btn btn-primary">Record Payment</button>
+            <button type="submit" class="btn btn-primary">{{ __('Record Payment') }}</button>
             <a href="{{ route('payments.index') }}" class="btn">Cancel</a>
         </form>
     </div>
@@ -131,7 +131,7 @@
 <script>
 (function () {
   try {
-    // ---- Resident search-select ----
+    // ---- {{ __('Resident') }} search-select ----
     const residents = [
         @foreach ($residents as $resident)
         {
@@ -266,7 +266,7 @@
 <script>
 (function () {
   try {
-    // ---- Fee <-> Fund are mutually exclusive; Fee locks the Amount ----
+    // ---- {{ __('Fee') }} <-> Fund are mutually exclusive; Fee locks the Amount ----
     // Kept in its own <script>/IIFE, isolated from the resident-search
     // block above: if that block ever throws, JS execution stops right
     // there and nothing after it in the same script would run — which
@@ -296,7 +296,7 @@
             amountWrap.classList.remove('is-locked');
         }
 
-        // Fee and Fund can't both be chosen — picking one locks the other.
+        // {{ __('Fee') }} and Fund can't both be chosen — picking one locks the other.
         if (feeChosen) {
             if (feeFundId) fundSelect.value = feeFundId;
             fundSelect.disabled = true;
@@ -327,7 +327,7 @@
 
     applyLocks(); // handle old() redisplay after a validation error
   } catch (err) {
-    console.error('Fee/Fund locking failed to initialize:', err);
+    console.error('Fee/{{ __('Fund') }} locking failed to initialize:', err);
   }
 })();
 </script>

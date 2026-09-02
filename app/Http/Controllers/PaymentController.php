@@ -122,7 +122,7 @@ class PaymentController extends Controller
 
         if (empty($data['fee_id']) && empty($data['fund_id'])) {
             return back()->withErrors([
-                'fee_id' => 'Select a fee or a fund — a payment has to be attributed to one of them.',
+                'fee_id' => __('Select a fee or a fund — a payment has to be attributed to one of them.'),
             ])->withInput();
         }
 
@@ -142,7 +142,7 @@ class PaymentController extends Controller
 
         Payment::create($data);
 
-        return redirect()->route('payments.index')->with('status', 'Payment recorded.');
+        return redirect()->route('payments.index')->with('status', __('Payment recorded.'));
     }
 
     public function edit(Request $request)
@@ -173,6 +173,6 @@ class PaymentController extends Controller
 
         $payment->update($data);
 
-        return redirect()->route('payments.index')->with('status', 'Payment status updated.');
+        return redirect()->route('payments.index')->with('status', __('Payment status updated.'));
     }
 }

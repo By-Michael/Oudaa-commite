@@ -26,7 +26,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Those credentials do not match a committee account.',
+            'email' => __('Those credentials do not match a committee account.'),
         ])->onlyInput('email');
     }
 

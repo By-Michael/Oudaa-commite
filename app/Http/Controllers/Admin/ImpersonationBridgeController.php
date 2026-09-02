@@ -31,6 +31,6 @@ class ImpersonationBridgeController extends Controller
         Auth::login($user);
         session(['impersonated_by_god_admin' => true]);
 
-        return redirect('/')->with('status', 'Signed in.');
+        return redirect('/')->with('status', __('Signed in.'));
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Dashboard') — Oudaa</title>
+    <title>@yield('title', __('Dashboard')) — Oudaa</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32.png') }}">
@@ -60,6 +60,10 @@
                     <a href="{{ route('tenant.lang.switch', ['tenant' => request()->route('tenant'), 'locale' => 'en']) }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'en' ? 'active' : '' }}">EN</a>
                     <a href="{{ route('tenant.lang.switch', ['tenant' => request()->route('tenant'), 'locale' => 'am']) }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'am' ? 'active' : '' }}">አማ</a>
                 </div>
+                <button type="button" class="date-system-toggle" data-date-toggle aria-pressed="false" title="{{ __('Switch between Gregorian and Ethiopian calendar dates') }}">
+                    <span class="date-system-option date-system-gc">GC</span>
+                    <span class="date-system-option date-system-ec">EC</span>
+                </button>
                 <button type="button" class="icon-btn" id="themeToggle" aria-label="{{ __('Toggle dark mode') }}">
                     <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
                     <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
@@ -99,16 +103,16 @@
                 @if ($pendingAdminConsent)
                     <div class="alert" style="border:1px solid #B99FE0;background:#F4EEFB;padding:14px 16px;border-radius:10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
                         <div>
-                            <strong>Platform support is requesting access to your account.</strong>
+                            <strong>{{ __('Platform support is requesting access to your account.') }}</strong>
                             <div class="muted" style="font-size:13px;margin-top:2px">
-                                Reason given: "{{ $pendingAdminConsent->reason }}". They will not be able to act on your behalf unless you approve this.
+                                {{ __('Reason given: \':reason\'. They will not be able to act on your behalf unless you approve this.', ['reason' => $pendingAdminConsent->reason]) }}
                             </div>
                         </div>
                         <div style="display:flex;gap:8px;flex-shrink:0">
                             <form method="POST" action="{{ route('admin-consent.respond', ['tenant' => request()->route('tenant'), 'token' => $pendingAdminConsent->token]) }}">
                                 @csrf
                                 <input type="hidden" name="decision" value="denied">
-                                <button type="submit" class="btn btn-sm">Deny</button>
+                                <button type="submit" class="btn btn-sm">{{ __('Deny') }}</button>
                             </form>
                             <form method="POST" action="{{ route('admin-consent.respond', ['tenant' => request()->route('tenant'), 'token' => $pendingAdminConsent->token]) }}">
                                 @csrf
@@ -175,6 +179,16 @@
         });
     })();
 </script>
+<script>
+    // Strings app.js needs but can't run through Blade's __() directly.
+    window.i18n = {
+        savingLabel: @json(__('Saving…')),
+        saveErrorMessage: @json(__('Could not save — check your connection and try again.')),
+        confirmFallback: @json(__('Are you sure?')),
+    };
+</script>
+<script src="{{ asset('js/ethiopian-date.js') }}?v={{ @filemtime(public_path('js/ethiopian-date.js')) }}"></script>
+<script src="{{ asset('js/date-picker.js') }}?v={{ @filemtime(public_path('js/date-picker.js')) }}"></script>
 <script src="{{ asset('js/app.js') }}?v={{ @filemtime(public_path('js/app.js')) }}"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 
 <div class="stats-grid">
     <div class="stat {{ $totalFundsBalance >= 0 ? 'pos' : 'neg' }}">
-        <div class="label">Total Funds Balance</div>
+        <div class="label">{{ __('Total Funds Balance') }}</div>
         <div class="value">{{ money($totalFundsBalance) }}</div>
     </div>
     <div class="stat pos">
@@ -12,7 +12,7 @@
         <div class="value">{{ money($totalCollected) }}</div>
     </div>
     <div class="stat neg">
-        <div class="label">Total Spent</div>
+        <div class="label">{{ __('Total Spent') }}</div>
         <div class="value">{{ money($totalSpent) }}</div>
     </div>
     <div class="stat">
@@ -22,13 +22,13 @@
 </div>
 
 <div class="panel">
-    <div class="panel-head"><h2>Fund Balances</h2><a href="{{ route('funds.index') }}" class="btn btn-sm">Manage Funds</a></div>
+    <div class="panel-head"><h2>{{ __('Fund Balances') }}</h2><a href="{{ route('funds.index') }}" class="btn btn-sm">Manage Funds</a></div>
     <div class="panel-body" style="padding:0;">
-        @if ($funds->isEmpty())
+        @if ($funds->{{ __('isEmpty())') }}
             <div class="empty">No active funds yet.</div>
         @else
             <table>
-                <thead><tr><th>Fund</th><th>Category</th><th class="right">Balance</th></tr></thead>
+                <thead><tr><th>{{ __('Fund') }}</th><th>Category</th><th class="right">Balance</th></tr></thead>
                 <tbody>
                 @foreach ($funds as $fund)
                     <tr>
@@ -45,20 +45,20 @@
 
 <div class="form-grid">
     <div class="panel">
-        <div class="panel-head"><h2>Recent Payments</h2><a href="{{ route('payments.index') }}" class="btn btn-sm">View all</a></div>
+        <div class="panel-head"><h2>{{ __('Recent Payments') }}</h2><a href="{{ route('payments.index') }}" class="btn btn-sm">View all</a></div>
         <div class="panel-body" style="padding:0;">
-            @if ($recentPayments->isEmpty())
+            @if ($recentPayments->{{ __('isEmpty())') }}
                 <div class="empty">No payments recorded yet.</div>
             @else
                 <table>
-                    <thead><tr><th>Resident</th><th>Fee</th><th class="right">Amount</th><th>Date</th><th>Status</th></tr></thead>
+                    <thead><tr><th>{{ __('Resident') }}</th><th>Fee</th><th class="right">Amount</th><th>{{ __('Date') }}</th><th>Status</th></tr></thead>
                     <tbody>
                     @foreach ($recentPayments as $payment)
                         <tr>
                             <td>{{ $payment->resident->name }}</td>
                             <td>{{ $payment->fee->name ?? '—' }}</td>
                             <td class="right">{{ money($payment->amount) }}</td>
-                            <td>{{ $payment->paid_at->format('Y-m-d') }}</td>
+                            <td>{!! eth_date($payment->paid_at) !!}</td>
                             <td><span class="badge badge-{{ strtolower($payment->status) }}">{{ $payment->status }}</span></td>
                         </tr>
                     @endforeach
@@ -69,20 +69,20 @@
     </div>
 
     <div class="panel">
-        <div class="panel-head"><h2>Recent Expenses</h2><a href="{{ route('expenses.index') }}" class="btn btn-sm">View all</a></div>
+        <div class="panel-head"><h2>Recent Expenses</h2><a href="{{ route('expenses.index') }}" class="btn btn-sm">{{ __('View all') }}</a></div>
         <div class="panel-body" style="padding:0;">
             @if ($recentExpenses->isEmpty())
-                <div class="empty">No expenses recorded yet.</div>
+                <div class="empty">{{ __('No expenses recorded yet.') }}</div>
             @else
                 <table>
-                    <thead><tr><th>Category</th><th>Fund</th><th class="right">Amount</th><th>Date</th></tr></thead>
+                    <thead><tr><th>Category</th><th>{{ __('Fund') }}</th><th class="right">Amount</th><th>{{ __('Date') }}</th></tr></thead>
                     <tbody>
                     @foreach ($recentExpenses as $expense)
                         <tr>
                             <td>{{ $expense->category }}</td>
                             <td>{{ $expense->fund->name ?? '—' }}</td>
                             <td class="right">{{ money($expense->amount) }}</td>
-                            <td>{{ $expense->incurred_at->format('Y-m-d') }}</td>
+                            <td>{!! eth_date($expense->incurred_at) !!}</td>
                         </tr>
                     @endforeach
                     </tbody>

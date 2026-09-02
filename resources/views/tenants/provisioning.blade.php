@@ -9,13 +9,12 @@
         <i class="bi bi-hourglass-split" style="font-size:1.5rem;color:var(--n-primary);"></i>
     </div>
 
-    <h1>{{ $tenant->name }} is still being set up</h1>
+    <h1>{{ __(':name is still being set up', ['name' => $tenant->name]) }}</h1>
     <p class="sub">
-        This usually takes less than a minute. Refresh this page in a moment,
-        or check <strong>{{ $tenant->owner_email }}</strong> for a confirmation email.
+        {{ __('This usually takes less than a minute.') }} {{ __('Refresh') }} {{ __('this page in a moment, or check') }} <strong>{{ $tenant->owner_email }}</strong> {{ __('for a confirmation email.') }}
     </p>
 
-    <button onclick="location.reload()" class="btn btn-primary w-100 mt-2">Refresh</button>
+    <button onclick="location.reload()" class="btn btn-primary w-100 mt-2">{{ __('Refresh') }}</button>
 </div>
 
 @endsection

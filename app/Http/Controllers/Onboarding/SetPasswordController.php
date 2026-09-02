@@ -78,7 +78,7 @@ class SetPasswordController extends Controller
         ]);
 
         return redirect()->route('login', ['tenant' => $tenantModel->slug])
-            ->with('status', 'Password set — you can log in now.');
+            ->with('status', __('Password set — you can log in now.'));
     }
 
     protected function validTenantOrAbort(string $slug, string $rawToken): Tenant

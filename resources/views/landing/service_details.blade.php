@@ -8,7 +8,7 @@
     <div class="container">
       <h1 class="mb-3">{{ $feature['title'] }}</h1>
       <div class="breadcrumb-custom">
-        <a href="{{ route('landing.index') }}">Home</a> <span>/</span> <a href="{{ route('landing.services') }}">Features</a> <span>/</span> <span class="active">{{ $feature['title'] }}</span>
+        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <a href="{{ route('landing.services') }}">Features</a> <span>/</span> <span class="active">{{ $feature['title'] }}</span>
       </div>
     </div>
   </header>
@@ -19,7 +19,7 @@
         <!-- MAIN CONTENT -->
         <div class="col-lg-8 reveal">
           <div class="icon-box icon-box-lg icon-box-primary mb-4"><i class="bi {{ $feature['icon'] }}"></i></div>
-          <span class="eyebrow">Feature overview</span>
+          <span class="eyebrow">{{ __('Feature overview') }}</span>
           <h2 class="mb-3">{{ $feature['intro'] }}</h2>
           <p class="mb-4">{{ $feature['body'] }}</p>
 
@@ -39,7 +39,7 @@
         <!-- SIDEBAR -->
         <div class="col-lg-4 reveal">
           <div class="widget">
-            <h5>All Features</h5>
+            <h5>{{ __('All Features') }}</h5>
             <ul class="widget-link-list">
               @foreach ($allFeatures as $slug => $item)
                 <li>
@@ -55,13 +55,13 @@
           <div class="widget bg-gradient-dark text-white border-0">
             <div class="icon-box icon-box-white mb-3"><i class="bi bi-lightning-charge-fill"></i></div>
             <h5 class="text-white">Ready to try it?</h5>
-            <p class="text-white-50 small mb-3">Free to get started — no credit card, no sales call.</p>
-            <a href="{{ route('onboarding.step1') }}" class="btn btn-primary w-100">Create Your Platform</a>
+            <p class="text-white-50 small mb-3">{{ __('Free to get started — no credit card, no sales call.') }}</p>
+            <a href="{{ route('onboarding.step1') }}" class="btn btn-primary w-100">{{ __('Create Your Platform') }}</a>
           </div>
           <div class="widget">
             <h5>Questions?</h5>
-            <p class="small text-slate mb-3">Reach out and we'll help you get set up.</p>
-            <a href="{{ route('landing.contact') }}" class="card-link-arrow d-inline-flex">Contact us <i class="bi bi-arrow-right"></i></a>
+            <p class="small text-slate mb-3">{{ __('Reach out and we\'ll help you get set up.') }}</p>
+            <a href="{{ route('landing.contact') }}" class="card-link-arrow d-inline-flex">{{ __('Contact us') }} <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
       </div>

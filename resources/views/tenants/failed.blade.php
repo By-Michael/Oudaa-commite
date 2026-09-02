@@ -9,14 +9,13 @@
         <i class="bi bi-exclamation-triangle" style="font-size:1.5rem;color:#D92D20;"></i>
     </div>
 
-    <h1>Something went wrong setting up {{ $tenant->name }}</h1>
+    <h1>{{ __('Something went wrong setting up :name', ['name' => $tenant->name]) }}</h1>
     <p class="sub">
-        Our team has been notified. Please contact
-        <a href="mailto:m7020322@gmail.com">m7020322@gmail.com</a> and mention your community name
-        so we can fix this for you.
+        {{ __('Our team has been notified. Please contact') }}
+        <a href="mailto:m7020322@gmail.com">m7020322@gmail.com</a> {{ __('and mention your community name so we can fix this for you.') }}
     </p>
 
-    <a href="{{ route('landing.index') }}" class="btn btn-primary w-100 mt-2">Back to Home</a>
+    <a href="{{ route('landing.index') }}" class="btn btn-primary w-100 mt-2">{{ __('Back to Home') }}</a>
 </div>
 
 @endsection

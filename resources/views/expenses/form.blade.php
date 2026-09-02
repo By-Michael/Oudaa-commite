@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Record Expense')
+@section('title', __('Record Expense'))
 @section('content')
 
 <div class="panel" style="max-width:560px;">
@@ -10,7 +10,7 @@
             <div class="form-row">
                 <label>Category<span class="req">*</span></label>
                 <select name="category" id="category" required>
-                    <option value="">Select category…</option>
+                    <option value="">{{ __('Select category…') }}</option>
                     @foreach (['Repairs', 'Utilities', 'Salary', 'Cleaning', 'Security', 'Landscaping', 'Insurance', 'Supplies', 'Other'] as $cat)
                         <option value="{{ $cat }}" @selected(old('category') === $cat)>{{ $cat }}</option>
                     @endforeach
@@ -18,7 +18,7 @@
             </div>
             <div class="form-row" id="category-other-row" style="display:none;">
                 <label>Specify Category<span class="req" id="category-other-required-mark" style="display:none;">*</span></label>
-                <input type="text" name="category_other" id="category_other" value="{{ old('category_other') }}" placeholder="Enter the category name" data-filter="letters">
+                <input type="text" name="category_other" id="category_other" value="{{ old('category_other') }}" placeholder="{{ __('Enter the category name') }}" data-filter="letters">
             </div>
 
             <div class="form-grid">
@@ -27,8 +27,8 @@
                     <input type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required data-filter="decimal">
                 </div>
                 <div class="form-row">
-                    <label>Date<span class="req">*</span></label>
-                    <input type="date" name="incurred_at" value="{{ old('incurred_at', now()->toDateString()) }}" required>
+                    <label>{{ __('Date') }}<span class="req">*</span></label>
+                    {!! eth_date_input('incurred_at', old('incurred_at', now()->toDateString())) !!}
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
                     <input type="text" name="vendor" value="{{ old('vendor') }}" data-filter="safe-text">
                 </div>
                 <div class="form-row">
-                    <label>Fund<span class="req">*</span></label>
+                    <label>{{ __('Fund') }}<span class="req">*</span></label>
                     <select name="fund_id" id="fund_id" required>
                         <option value="">Select fund...</option>
                         @foreach ($funds as $fund)
@@ -49,7 +49,7 @@
             </div>
 
             <div class="form-row" id="employee-row" style="display:none;">
-                <label>Employee</label>
+                <label>{{ __('Employee') }}</label>
                 <select name="employee_id" id="employee_id">
                     <option value="">Select employee…</option>
                     @foreach ($employees as $employee)
@@ -60,7 +60,7 @@
             </div>
 
             <div class="form-row">
-                <label>Project (optional)</label>
+                <label>{{ __('Project (optional)') }}</label>
                 <select name="project_id" id="project_id">
                     <option value="">No linked project</option>
                     @foreach ($projects as $project)
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-row">
-                <label>Note<span class="req" id="note-required-mark" style="display:none;">*</span></label>
+                <label>{{ __('Note') }}<span class="req" id="note-required-mark" style="display:none;">*</span></label>
                 <input type="text" name="note" id="note" value="{{ old('note') }}" data-filter="safe-text">
                 <p class="muted" id="note-hint" style="font-size:12px;margin-top:6px;"></p>
             </div>
@@ -79,12 +79,12 @@
             <div class="form-row">
                 <label>Receipt (optional)</label>
                 <input type="file" name="receipt" accept=".jpg,.jpeg,.png,.pdf">
-                <p class="muted" style="font-size:12px;margin-top:6px;">JPG, PNG, or PDF, up to 5 MB.</p>
+                <p class="muted" style="font-size:12px;margin-top:6px;">{{ __('JPG, PNG, or PDF, up to 5 MB.') }}</p>
                 @error('receipt') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
             <button type="submit" class="btn btn-primary">Record Expense</button>
-            <a href="{{ route('expenses.index') }}" class="btn">Cancel</a>
+            <a href="{{ route('expenses.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>
@@ -109,7 +109,7 @@ function syncCategoryOther() {
 categorySelect.addEventListener('change', syncCategoryOther);
 syncCategoryOther();
 
-// Category "Salary" reveals the Employee picker and offers to prefill the amount.
+// {{ __('Category') }} "Salary" reveals the Employee picker and offers to prefill the amount.
 var employeeRow = document.getElementById('employee-row');
 var employeeSelect = document.getElementById('employee_id');
 var employeeSalaryHint = document.getElementById('employee-salary-hint');
@@ -137,7 +137,7 @@ employeeSelect.addEventListener('change', function () {
     }
 });
 
-// Note becomes required whenever no project is linked.
+// {{ __('Note') }} becomes required whenever no project is linked.
 var noteInput = document.getElementById('note');
 var noteMark = document.getElementById('note-required-mark');
 var noteHint = document.getElementById('note-hint');

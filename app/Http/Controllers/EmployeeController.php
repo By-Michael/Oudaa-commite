@@ -83,7 +83,7 @@ class EmployeeController extends Controller
         $data['status'] = 'active'; // new employees always start active — status only changes later, via edit.
         Employee::create($data);
 
-        return redirect()->route('employees.index')->with('status', 'Employee added.');
+        return redirect()->route('employees.index')->with('status', __('Employee added.'));
     }
 
     public function edit(Request $request)
@@ -100,7 +100,7 @@ class EmployeeController extends Controller
         $data['status'] = $request->input('status', $employee->status); // status only settable here, on edit
         $employee->update($data);
 
-        return redirect()->route('employees.index')->with('status', 'Employee updated.');
+        return redirect()->route('employees.index')->with('status', __('Employee updated.'));
     }
 
     /**
@@ -111,7 +111,7 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($request->route('employee'));
         $employee->update(['status' => $employee->status === 'active' ? 'terminated' : 'active']);
 
-        return back()->with('status', 'Employee status updated.');
+        return back()->with('status', __('Employee status updated.'));
     }
 
     /**

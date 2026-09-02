@@ -9,7 +9,7 @@
             @if ($project->exists) @method('PUT') @endif
 
             <div class="form-row">
-                <label>Name<span class="req">*</span></label>
+                <label>{{ __('Name') }}<span class="req">*</span></label>
                 <input type="text" name="name" value="{{ old('name', $project->name) }}" required data-filter="safe-text">
             </div>
             <div class="form-row">
@@ -18,7 +18,7 @@
             </div>
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Linked Fund<span class="req">*</span></label>
+                    <label>{{ __('Linked Fund') }}<span class="req">*</span></label>
                     <select name="fund_id" required>
                         <option value="">Select a fund…</option>
                         @foreach ($funds as $fund)
@@ -27,18 +27,18 @@
                     </select>
                 </div>
                 <div class="form-row">
-                    <label>Planned Budget (ETB)<span class="req">*</span></label>
+                    <label>{{ __('Planned Budget (ETB)') }}<span class="req">*</span></label>
                     <input type="number" step="0.01" min="0" name="planned_budget" value="{{ old('planned_budget', $project->planned_budget) }}" required data-filter="decimal">
                 </div>
             </div>
             <div class="form-grid">
                 <div class="form-row">
                     <label>Start Date (optional)</label>
-                    <input type="date" name="start_date" value="{{ old('start_date', optional($project->start_date)->format('Y-m-d')) }}">
+                    {!! eth_date_input('start_date', old('start_date', optional($project->start_date)->toDateString())) !!}
                 </div>
                 <div class="form-row">
-                    <label>End Date (optional)</label>
-                    <input type="date" name="end_date" value="{{ old('end_date', optional($project->end_date)->format('Y-m-d')) }}">
+                    <label>{{ __('End Date (optional)') }}</label>
+                    {!! eth_date_input('end_date', old('end_date', optional($project->end_date)->toDateString())) !!}
                 </div>
             </div>
             <div class="form-row">
@@ -50,7 +50,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
             <a href="{{ route('projects.index') }}" class="btn">Cancel</a>
         </form>
     </div>

@@ -110,7 +110,7 @@ class ExpenseController extends Controller
 
         if (empty($data['project_id']) && empty($data['note'])) {
             return back()->withErrors([
-                'note' => 'A note is required when no project is linked, so there\'s a record of what this expense was for.',
+                'note' => __('A note is required when no project is linked, so there\'s a record of what this expense was for.'),
             ])->withInput();
         }
 
@@ -139,6 +139,6 @@ class ExpenseController extends Controller
 
         Expense::create($data);
 
-        return redirect()->route('expenses.index')->with('status', 'Expense recorded.');
+        return redirect()->route('expenses.index')->with('status', __('Expense recorded.'));
     }
 }

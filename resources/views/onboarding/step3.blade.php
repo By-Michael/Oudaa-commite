@@ -1,6 +1,6 @@
 @extends('layouts.wizard')
 
-@section('title', 'Your email — Oudaa')
+@section('title', __('Your email') . ' — Oudaa')
 
 @section('content')
 
@@ -12,13 +12,13 @@
     <span class="dot active"></span>
 </div>
 
-<h1>Where should we send your login link?</h1>
+<h1>{{ __('Where should we send your login link?') }}</h1>
 <p class="sub">
-    We'll set up <strong>{{ $name }}</strong> at
-    <strong>{{ rtrim(url('/'), '/') }}/{{ $slug }}</strong> and email you a link to set your admin password.
+    {{ __('We\'ll set up') }} <strong>{{ $name }}</strong> at
+    <strong>{{ rtrim(url('/'), '/') }}/{{ $slug }}</strong> {{ __('and email you a link to set your admin password.') }}
 </p>
 
-@if ($errors->any())
+@if ($errors->{{ __('any())') }}
     <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
 @endif
 
@@ -31,7 +31,7 @@
             id="email"
             name="email"
             class="form-control"
-            placeholder="you@example.com"
+            placeholder="{{ __('you@example.com') }}"
             value="{{ old('email') }}"
             autofocus
             required
@@ -49,8 +49,8 @@
             required
         >
         <label for="accept_terms" class="form-check-label">
-            I agree to the <a href="{{ route('landing.privacy') }}" target="_blank" rel="noopener">Privacy Policy</a>
-            and <a href="{{ route('landing.terms') }}" target="_blank" rel="noopener">Terms of Service</a>.
+            I agree to the <a href="{{ route('landing.privacy') }}" target="_blank" rel="noopener">{{ __('Privacy Policy') }}</a>
+            and <a href="{{ route('landing.terms') }}" target="_blank" rel="noopener">{{ __('Terms of Service') }}</a>.
         </label>
     </div>
 

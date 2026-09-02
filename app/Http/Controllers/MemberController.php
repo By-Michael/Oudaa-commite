@@ -55,7 +55,7 @@ class MemberController extends Controller
 
         $this->sendSetPasswordEmail($request, $committee);
 
-        return redirect()->route('members.index')->with('status', 'Committee member added. We\'ve emailed them a link to set their password.');
+        return redirect()->route('members.index')->with('status', __('Committee member added. We\'ve emailed them a link to set their password.'));
     }
 
     private function sendSetPasswordEmail(Request $request, Committee $committee): void

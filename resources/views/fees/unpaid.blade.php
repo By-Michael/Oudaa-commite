@@ -4,15 +4,15 @@
 
 <div class="panel">
     <div class="panel-head">
-        <h2>{{ $fee->name }} — Current period: {{ $periodKey }}</h2>
-        <a href="{{ route('fees.index') }}" class="btn btn-sm">Back to Fees</a>
+        <h2>{{ __(':fee — Current period: :period', ['fee' => $fee->name, 'period' => $periodKey]) }}</h2>
+        <a href="{{ route('fees.index') }}" class="btn btn-sm">{{ __('Back to Fees') }}</a>
     </div>
     <div class="panel-body" style="padding:0;">
         @if ($unpaidResidents->isEmpty())
-            <div class="empty">Every active resident has a PAID payment for this fee this period.</div>
+            <div class="empty">{{ __('Every active resident has a PAID payment for this fee this period.') }}</div>
         @else
             <table>
-                <thead><tr><th>Unit</th><th>Name</th><th>ID Number</th><th>Phone</th></tr></thead>
+                <thead><tr><th>{{ __('Unit') }}</th><th>Name</th><th>ID Number</th><th>{{ __('Phone') }}</th></tr></thead>
                 <tbody>
                 @foreach ($unpaidResidents as $resident)
                     <tr>
@@ -28,6 +28,6 @@
     </div>
 </div>
 
-<p class="muted">{{ $unpaidResidents->count() }} active resident(s) have not paid this fee for the current period.</p>
+<p class="muted">{{ __(':count active resident(s) have not paid this fee for the current period.', ['count' => $unpaidResidents->count()]) }}</p>
 
 @endsection

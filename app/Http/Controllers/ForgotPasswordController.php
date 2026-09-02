@@ -55,7 +55,7 @@ class ForgotPasswordController extends Controller
             Mail::to($committee->email)->send(new ResetPasswordMail($resetUrl, $committee->name));
         }
 
-        return back()->with('status', 'If that email is registered, a password reset link is on its way to it.');
+        return back()->with('status', __('If that email is registered, a password reset link is on its way to it.'));
     }
 
     public function showResetForm(Request $request, string $tenant, string $token)
@@ -77,19 +77,19 @@ class ForgotPasswordController extends Controller
         $row = DB::table('password_reset_tokens')->where('email', $data['email'])->first();
 
         if (! $row || ! Hash::check($token, $row->token)) {
-            return back()->withErrors(['email' => 'This password reset link is invalid.'])->onlyInput('email');
+            return back()->withErrors(['email' => __('This password reset link is invalid.')])->onlyInput('email');
         }
 
         if (now()->diffInMinutes($row->created_at) > self::TOKEN_TTL_MINUTES) {
             DB::table('password_reset_tokens')->where('email', $data['email'])->delete();
 
-            return back()->withErrors(['email' => 'This password reset link has expired. Please request a new one.'])->onlyInput('email');
+            return back()->withErrors(['email' => __('This password reset link has expired. Please request a new one.')])->onlyInput('email');
         }
 
         $committee = Committee::where('email', $data['email'])->first();
 
         if (! $committee) {
-            return back()->withErrors(['email' => 'This password reset link is invalid.'])->onlyInput('email');
+            return back()->withErrors(['email' => __('This password reset link is invalid.')])->onlyInput('email');
         }
 
         $committee->update(['password' => Hash::make($data['password'])]);
@@ -97,6 +97,6 @@ class ForgotPasswordController extends Controller
         DB::table('password_reset_tokens')->where('email', $data['email'])->delete();
 
         return redirect()->route('login', ['tenant' => $tenant])
-            ->with('status', 'Your password has been reset. You can log in now.');
+            ->with('status', __('Your password has been reset. You can log in now.'));
     }
 }

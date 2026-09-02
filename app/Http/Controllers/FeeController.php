@@ -93,7 +93,7 @@ class FeeController extends Controller
 
         Fee::create($data);
 
-        return redirect()->route('fees.index')->with('status', 'Fee created.');
+        return redirect()->route('fees.index')->with('status', __('Fee created.'));
     }
 
     public function edit(Request $request)
@@ -116,7 +116,7 @@ class FeeController extends Controller
 
         $fee->update($data);
 
-        return redirect()->route('fees.index')->with('status', 'Fee updated.');
+        return redirect()->route('fees.index')->with('status', __('Fee updated.'));
     }
 
     public function deactivate(Request $request)
@@ -124,7 +124,7 @@ class FeeController extends Controller
         $fee = Fee::findOrFail($request->route('fee'));
         $fee->update(['status' => $fee->status === 'active' ? 'inactive' : 'active']);
 
-        return back()->with('status', 'Fee status updated.');
+        return back()->with('status', __('Fee status updated.'));
     }
 
     /**

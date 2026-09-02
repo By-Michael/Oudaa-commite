@@ -1,135 +1,121 @@
 @extends('layouts.app')
-@section('title', 'Help and Support')
+@section('title', 'Help ' . __('and') . ' Support')
 @section('content')
 
 <div class="panel">
-    <div class="panel-head"><h2>Frequently Asked Questions</h2></div>
+    <div class="panel-head"><h2>{{ __('Frequently Asked Questions') }}</h2></div>
     <div class="panel-body">
         <div class="faq-search-wrap">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" id="faq-search" placeholder="Search — e.g. &quot;payment&quot;, &quot;fund&quot;, &quot;employee&quot;…" autocomplete="off">
+            <input type="text" id="faq-search" placeholder="{{ __('Search — e.g. "payment", "fund", "employee"…') }}" autocomplete="off">
         </div>
-        <p id="faq-no-results" class="muted" style="display:none;">No matching questions — try different words, or message us on Telegram below.</p>
+        <p id="faq-no-results" class="muted" style="display:none;">{{ __('No matching questions — try different words, or message us on Telegram below.') }}</p>
     </div>
     <div class="faq-list" id="faq-list">
 
         <details class="faq-item" open>
-            <summary>How is the app organized?</summary>
+            <summary>{{ __('How is the app organized?') }}</summary>
             <div class="faq-answer">
-                Everything lives behind the sidebar on the left: <strong>Dashboard</strong> (a quick
-                overview of funds, recent payments and expenses), <strong>Residents</strong>,
-                <strong>Fees</strong>, <strong>Payments</strong>, <strong>Funds</strong>,
-                <strong>Projects</strong>, <strong>Expenses</strong>, <strong>Employees</strong>, and the
-                <strong>Audit Log</strong> (a read-only history of who changed what). Your account settings
-                are under the avatar menu in the top-right corner.
+                {!! __('Everything lives behind the sidebar on the left: <strong>:dashboard</strong> (a quick overview of funds, recent payments and expenses), <strong>:residents</strong>, <strong>:fees</strong>, <strong>:payments</strong>, <strong>:funds</strong>, <strong>:projects</strong>, <strong>:expenses</strong>, <strong>:employees</strong>, and the <strong>:audit</strong> (a read-only history of who changed what). Your account settings are under the avatar menu in the top-right corner.', [
+                    'dashboard' => __('Dashboard'), 'residents' => __('Residents'), 'fees' => __('Fees'),
+                    'payments' => __('Payments'), 'funds' => __('Funds'), 'projects' => __('Projects'),
+                    'expenses' => __('Expenses'), 'employees' => __('Employees'), 'audit' => __('Audit Log'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>How do I add a resident?</summary>
+            <summary>{{ __('How do I add a resident?') }}</summary>
             <div class="faq-answer">
-                Go to <strong>Residents</strong> and click <strong>+ Add Resident</strong>. Fill in their
-                name, unit number, ID number, and whether they're an <strong>Owner</strong> or
-                <strong>Tenant</strong>, then save. New residents start as Active. To edit someone or change
-                their status later, use the <strong>Edit</strong> and <strong>Deactivate / Activate</strong>
-                buttons on their row — residents are never deleted, only deactivated, so their payment
-                history is never lost.
+                {!! __("Go to <strong>:residents</strong> and click <strong>+ Add Resident</strong>. Fill in their name, unit number, ID number, and whether they're an <strong>Owner</strong> or <strong>Tenant</strong>, then save. New residents start as Active. To edit someone or change their status later, use the <strong>Edit</strong> and <strong>Deactivate / Activate</strong> buttons on their row — residents are never deleted, only deactivated, so their payment history is never lost.", [
+                    'residents' => __('Residents'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>How do I set up a fee?</summary>
+            <summary>{{ __('How do I set up a fee?') }}</summary>
             <div class="faq-answer">
-                Go to <strong>Fees</strong> and click <strong>+ Add Fee</strong>. Give it a name, an amount
-                (in ETB), and link it to a <strong>Fund</strong> — that's the fund payments against this
-                fee will land in. Use the <strong>Unpaid</strong> link on any fee to see which residents
-                still owe it.
+                {!! __("Go to <strong>:fees</strong> and click <strong>+ Add Fee</strong>. Give it a name, an amount (in ETB), and link it to a <strong>Fund</strong> — that's the fund payments against this fee will land in. Use the <strong>Unpaid</strong> link on any fee to see which residents still owe it.", [
+                    'fees' => __('Fees'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>How do I record a payment?</summary>
+            <summary>{{ __('How do I record a payment?') }}</summary>
             <div class="faq-answer">
-                Go to <strong>Payments</strong> and click <strong>+ Record Payment</strong>. Start typing
-                the resident's name, unit, or ID number in the search box and pick them from the list that
-                appears. Then choose either a <strong>Fee</strong> (the amount fills in automatically) or a
-                <strong>Fund</strong> to pay into directly — you can only choose one, picking one locks the
-                other. New payments are recorded as Paid; to correct the status afterwards, open it from the
-                list and use <strong>Edit Status</strong>.
+                {!! __("Go to <strong>:payments</strong> and click <strong>+ Record Payment</strong>. Start typing the resident's name, unit, or ID number in the search box and pick them from the list that appears. Then choose either a <strong>:fee</strong> (the amount fills in automatically) or a <strong>:fund</strong> to pay into directly — you can only choose one, picking one locks the other. New payments are recorded as Paid; to correct the status afterwards, open it from the list and use <strong>:editstatus</strong>.", [
+                    'payments' => __('Payments'), 'fee' => __('Fee'), 'fund' => __('Fund'), 'editstatus' => __('Edit Status'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>What's the difference between a Fund and a Project?</summary>
+            <summary>{{ __("What's the difference between a Fund and a Project?") }}</summary>
             <div class="faq-answer">
-                A <strong>Fund</strong> is a running pool of money (e.g. "Maintenance", "Reserve") that
-                payments and expenses move in and out of — its balance is always the sum of what's come in
-                minus what's gone out. A <strong>Project</strong> is a specific initiative with its own
-                planned budget, linked to a fund, that you track spending against over time (e.g. "Roof
-                repair 2026").
+                {!! __('A <strong>:fund</strong> is a running pool of money (e.g. "Maintenance", "Reserve") that payments and expenses move in and out of — its balance is always the sum of what\'s come in minus what\'s gone out. A <strong>:project</strong> is a specific initiative with its own planned budget, linked to a fund, that you track spending against over time (e.g. "Roof repair 2026").', [
+                    'fund' => __('Fund'), 'project' => __('Project'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>How do I log an expense?</summary>
+            <summary>{{ __('How do I log an expense?') }}</summary>
             <div class="faq-answer">
-                Go to <strong>Expenses</strong> and click <strong>+ Record Expense</strong>. Pick the fund
-                (and, if relevant, the project or employee it relates to) and enter the amount in ETB.
-                Expenses reduce the balance of the fund they're recorded against.
+                {!! __("Go to <strong>:expenses</strong> and click <strong>+ Record Expense</strong>. Pick the fund (and, if relevant, the project or employee it relates to) and enter the amount in ETB. Expenses reduce the balance of the fund they're recorded against.", [
+                    'expenses' => __('Expenses'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>How do I manage employees and their pay?</summary>
+            <summary>{{ __('How do I manage employees and their pay?') }}</summary>
             <div class="faq-answer">
-                Go to <strong>Employees</strong> to add staff, set their salary and payment date, or
-                terminate/reactivate them. Opening an employee shows their full salary payment history, and
-                you can log a new salary payment straight from there.
+                {!! __('Go to <strong>:employees</strong> to add staff, set their salary and payment date, or terminate/reactivate them. Opening an employee shows their full salary payment history, and you can log a new salary payment straight from there.', [
+                    'employees' => __('Employees'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>What is the Audit Log for?</summary>
+            <summary>{{ __('What is the Audit Log for?') }}</summary>
             <div class="faq-answer">
-                It's a read-only record of every meaningful change made in the panel — who added, edited, or
-                deactivated what, and when. Nothing can be edited or deleted from it; it's there so the
-                committee always has a clear trail of accountability.
+                {{ __("It's a read-only record of every meaningful change made in the panel — who added, edited, or deactivated what, and when. Nothing can be edited or deleted from it; it's there so the committee always has a clear trail of accountability.") }}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>How do I invite another committee member?</summary>
+            <summary>{{ __('How do I invite another committee member?') }}</summary>
             <div class="faq-answer">
-                Go to <strong>Members</strong> (in the account menu) and click <strong>+ Add Committee
-                Member</strong> to create a login for them. Each member has their own account, so audit log
-                entries are always attributed to the person who actually made the change.
+                {!! __('Go to <strong>:members</strong> (in the account menu) and click <strong>+ Add Committee Member</strong> to create a login for them. Each member has their own account, so audit log entries are always attributed to the person who actually made the change.', [
+                    'members' => __('Members'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>I forgot my password — what do I do?</summary>
+            <summary>{{ __('I forgot my password — what do I do?') }}</summary>
             <div class="faq-answer">
-                On the sign-in page, click <strong>Forgot password?</strong> and enter your email. If it's
-                registered, you'll get an emailed link to set a new password. The link expires after 60
-                minutes for security.
+                {!! __("On the sign-in page, click <strong>:forgot</strong> and enter your email. If it's registered, you'll get an emailed link to set a new password. The link expires after 60 minutes for security.", [
+                    'forgot' => __('Forgot password?'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>Will I get logged out while I'm working?</summary>
+            <summary>{{ __("Will I get logged out while I'm working?") }}</summary>
             <div class="faq-answer">
-                No — as long as this tab stays open, the app quietly keeps your session alive in the
-                background. You'll only be signed out when you deliberately click <strong>Log out</strong>,
-                or if the tab has been closed and left inactive for a long stretch.
+                {!! __("No — as long as this tab stays open, the app quietly keeps your session alive in the background. You'll only be signed out when you deliberately click <strong>:logout</strong>, or if the tab has been closed and left inactive for a long stretch.", [
+                    'logout' => __('Log out'),
+                ]) !!}
             </div>
         </details>
 
         <details class="faq-item">
-            <summary>Why does something ask me to confirm before I can do it?</summary>
+            <summary>{{ __('Why does something ask me to confirm before I can do it?') }}</summary>
             <div class="faq-answer">
-                Actions like deactivating a resident, archiving a fund, or terminating an employee show a
-                small confirmation popup first, since they change something's status. Just confirm or
-                cancel in that popup — nothing happens until you do.
+                {{ __("Actions like deactivating a resident, archiving a fund, or terminating an employee show a small confirmation popup first, since they change something's status. Just confirm or cancel in that popup — nothing happens until you do.") }}
             </div>
         </details>
 
@@ -137,13 +123,13 @@
 </div>
 
 <div class="panel">
-    <div class="panel-head"><h2>Need more help or info?</h2></div>
+    <div class="panel-head"><h2>{{ __('Need more help or info?') }}</h2></div>
     <div class="panel-body">
         <p class="muted" style="margin-top:0;">
-            Didn't find what you needed above? Reach out directly on Telegram and we'll help you out.
+            {{ __("Didn't find what you needed above? Reach out directly on Telegram and we'll help you out.") }}
         </p>
         <a href="https://t.me/mikoz_124" target="_blank" rel="noopener" class="btn btn-primary">
-            Message us on Telegram — @mikoz_124
+            {{ __('Message us on Telegram — @mikoz_124') }}
         </a>
     </div>
 </div>

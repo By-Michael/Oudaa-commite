@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Bulk Import Residents')
+@section('title', 'Bulk ' . __('Import') . ' Residents')
 @section('content')
 
 <div class="panel" style="max-width:560px;">
@@ -7,7 +7,7 @@
 
         @if ($errors->has('bulk_import'))
             <div class="alert alert-error" style="margin-bottom:16px;">
-                <strong>{{ count($errors->get('bulk_import')) }} row{{ count($errors->get('bulk_import')) === 1 ? '' : 's' }} couldn't be imported. Nothing was added yet — fix these and re-upload:</strong>
+                <strong>{{ count($errors->get('bulk_import')) === 1 ? __(":count row couldn't be imported. Nothing was added yet — fix these and re-upload:", ['count' => count($errors->get('bulk_import'))]) : __(":count rows couldn't be imported. Nothing was added yet — fix these and re-upload:", ['count' => count($errors->get('bulk_import'))]) }}</strong>
                 <ul style="margin:8px 0 0; padding-left:18px;">
                     @foreach ($errors->get('bulk_import') as $error)
                         <li>{{ $error }}</li>
@@ -22,7 +22,7 @@
         </p>
 
         <a href="{{ route('residents.bulk-import.template') }}" class="btn" style="margin-bottom:20px;">
-            ⬇ Download Import Template
+            {{ __('⬇ Download Import Template') }}
         </a>
 
         <form method="POST" action="{{ route('residents.bulk-import') }}" enctype="multipart/form-data">
@@ -34,7 +34,7 @@
                 @error('file') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary" data-loading-label="Importing…">Import</button>
+            <button type="submit" class="btn btn-primary" data-loading-label="{{ __('Importing…') }}">Import</button>
             <a href="{{ route('residents.index') }}" class="btn">Cancel</a>
         </form>
     </div>

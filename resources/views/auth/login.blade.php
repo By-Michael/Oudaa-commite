@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Oudaa Login</title>
+    <title>{{ __('Oudaa Login') }}</title>
     <script>
         // Applied before first paint (and before app.css loads) so there's
         // no flash of the wrong theme on load. Reads the same key set on
@@ -23,9 +23,9 @@
 <div class="auth-wrap">
     <div class="auth-box">
         <img src="{{ asset('images/logo-transparent.png') }}" alt="Oudaa" class="auth-logo">
-        <p class="sub">Committee members only. Sign in to manage the panel.</p>
+        <p class="sub">{{ __('Committee members only. Sign in to manage the panel.') }}</p>
 
-        @if ($errors->any())
+        @if ($errors->{{ __('any())') }}
             <div class="alert alert-error">{{ $errors->first() }}</div>
         @endif
 
@@ -36,14 +36,14 @@
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
             </div>
             <div class="form-row">
-                <label for="password">Password<span class="req">*</span></label>
+                <label for="password">{{ __('Password') }}<span class="req">*</span></label>
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-row" style="display:flex;align-items:center;justify-content:space-between;">
                 <label style="display:inline-flex;align-items:center;gap:6px;text-transform:none;font-weight:400;">
                     <input type="checkbox" id="remember" name="remember" style="width:auto;" value="1" @checked(old('remember'))> Remember me
                 </label>
-                <a href="{{ route('password.request', ['tenant' => request()->route('tenant')]) }}" style="font-size:13px;">Forgot password?</a>
+                <a href="{{ route('password.request', ['tenant' => request()->route('tenant')]) }}" style="font-size:13px;">{{ __('Forgot password?') }}</a>
             </div>
             <button type="submit" class="btn btn-primary" id="login-submit" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
                 <span class="spinner" id="login-spinner" style="display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;"></span>

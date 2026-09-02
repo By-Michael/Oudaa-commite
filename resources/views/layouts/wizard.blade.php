@@ -105,7 +105,7 @@
   <div class="wizard-wrap">
     <div class="wizard-card">
       <a href="{{ route('landing.index') }}" class="wizard-brand">
-        <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="Oudaa" style="height:36px;width:auto;">
+        <img src="{{ asset('nexora-assets/img/oudaa-logo.png') }}" alt="{{ __('Oudaa') }}" style="height:36px;width:auto;">
       </a>
       @yield('content')
     </div>

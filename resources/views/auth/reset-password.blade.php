@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Reset Password — Oudaa</title>
+    <title>{{ __('Reset Password — Oudaa') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,9 +13,9 @@
 <div class="auth-wrap">
     <div class="auth-box">
         <img src="{{ asset('images/logo-transparent.png') }}" alt="Oudaa" class="auth-logo">
-        <p class="sub">Choose a new password for your committee account.</p>
+        <p class="sub">{{ __('Choose a new password for your committee account.') }}</p>
 
-        @if ($errors->any())
+        @if ($errors->{{ __('any())') }}
             <div class="alert alert-error">{{ $errors->first() }}</div>
         @endif
 
@@ -26,14 +26,14 @@
                 <input type="email" id="email" name="email" value="{{ old('email', $email) }}" required autofocus>
             </div>
             <div class="form-row">
-                <label for="password">New password<span class="req">*</span></label>
+                <label for="password">{{ __('New password') }}<span class="req">*</span></label>
                 <input type="password" id="password" name="password" required minlength="8">
             </div>
             <div class="form-row">
                 <label for="password_confirmation">Confirm new password<span class="req">*</span></label>
                 <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8">
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Reset password</button>
+            <button type="submit" class="btn btn-primary" style="width:100%;">{{ __('Reset password') }}</button>
         </form>
 
         <p class="sub" style="margin-top:16px;">

@@ -118,7 +118,7 @@
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.textContent = submitBtn.getAttribute('data-loading-label') || 'Saving…';
+            submitBtn.textContent = submitBtn.getAttribute('data-loading-label') || (window.i18n && window.i18n.savingLabel) || 'Saving…';
         }
 
         fetch(form.getAttribute('action') || currentUrl, {
@@ -153,7 +153,7 @@
                     submitBtn.disabled = false;
                     submitBtn.textContent = originalLabel;
                 }
-                alert('Could not save — check your connection and try again.');
+                alert((window.i18n && window.i18n.saveErrorMessage) || 'Could not save — check your connection and try again.');
             });
     }
 
@@ -196,7 +196,7 @@
         if (form.dataset.confirmed === '1') return; // already approved, let it through
 
         e.preventDefault();
-        var message = form.getAttribute('data-confirm') || 'Are you sure?';
+        var message = form.getAttribute('data-confirm') || (window.i18n && window.i18n.confirmFallback) || 'Are you sure?';
         showConfirm(message, function () {
             form.dataset.confirmed = '1';
             if (typeof form.requestSubmit === 'function') {

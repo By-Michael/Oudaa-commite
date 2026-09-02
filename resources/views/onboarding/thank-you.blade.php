@@ -20,7 +20,7 @@
         <strong>{{ rtrim(url('/'), '/') }}/{{ $tenant->slug }}</strong>
     </p>
 
-    <a href="{{ route('landing.index') }}" class="btn btn-primary w-100 mt-3">Back to Home</a>
+    <a href="{{ route('landing.index') }}" class="btn btn-primary w-100 mt-3">{{ __('Back to Home') }}</a>
 </div>
 
 @endsection

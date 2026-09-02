@@ -13,7 +13,7 @@
                 <input type="text" name="name" value="{{ old('name', $project->name) }}" required data-filter="safe-text">
             </div>
             <div class="form-row">
-                <label>Description</label>
+                <label>{{ __('Description') }}</label>
                 <textarea name="description" rows="3" data-filter="safe-text">{{ old('description', $project->description) }}</textarea>
             </div>
             <div class="form-grid">
@@ -33,7 +33,7 @@
             </div>
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Start Date (optional)</label>
+                    <label>{{ __('Start Date (optional)') }}</label>
                     {!! eth_date_input('start_date', old('start_date', optional($project->start_date)->toDateString())) !!}
                 </div>
                 <div class="form-row">
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <label>Status</label>
+                <label>{{ __('Status') }}</label>
                 <select name="status">
                     @foreach (['planned' => 'Planned', 'active' => 'Active', 'completed' => 'Completed', 'archived' => 'Archived'] as $val => $label)
                         <option value="{{ $val }}" @selected(old('status', $project->status ?? 'planned') === $val)>{{ $label }}</option>
@@ -51,7 +51,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-            <a href="{{ route('projects.index') }}" class="btn">Cancel</a>
+            <a href="{{ route('projects.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

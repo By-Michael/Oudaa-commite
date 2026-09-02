@@ -18,21 +18,21 @@
         @if (session('status'))
             <div class="alert alert-success">{{ session('status') }}</div>
         @endif
-        @if ($errors->{{ __('any())') }}
+        @if ($errors->any())
             <div class="alert alert-error">{{ $errors->first() }}</div>
         @endif
 
         <form method="POST" action="{{ route('password.email', ['tenant' => $tenant]) }}">
             @csrf
             <div class="form-row">
-                <label for="email">Email<span class="req">*</span></label>
+                <label for="email">{{ __('Email') }}<span class="req">*</span></label>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;">{{ __('Send reset link') }}</button>
         </form>
 
         <p class="sub" style="margin-top:16px;">
-            <a href="{{ route('login', ['tenant' => $tenant]) }}">Back to sign in</a>
+            <a href="{{ route('login', ['tenant' => $tenant]) }}">{{ __('Back to sign in') }}</a>
         </p>
     </div>
 </div>

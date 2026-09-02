@@ -11,9 +11,9 @@
             @endforeach
         </select>
         <select name="status" onchange="this.form.submit()">
-            <option value="">All statuses</option>
+            <option value="">{{ __('All statuses') }}</option>
             <option value="active" @selected(request('status') == 'active')>{{ __('Active') }}</option>
-            <option value="inactive" @selected(request('status') == 'inactive')>Inactive</option>
+            <option value="inactive" @selected(request('status') == 'inactive')>{{ __('Inactive') }}</option>
         </select>
     </form>
     <div class="toolbar-actions">
@@ -28,7 +28,7 @@
         @else
             <table>
                 <thead>
-                <tr><th>Name</th><th>{{ __('Fund') }}</th><th>Amount</th><th>Frequency</th><th>{{ __('Status') }}</th><th class="right">Actions</th></tr>
+                <tr><th>{{ __('Name') }}</th><th>{{ __('Fund') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Frequency') }}</th><th>{{ __('Status') }}</th><th class="right">{{ __('Actions') }}</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($fees as $fee)
@@ -40,7 +40,7 @@
                         <td><span class="badge badge-{{ $fee->status }}">{{ __(ucfirst($fee->status)) }}</span></td>
                         <td class="right actions-cell">
                             <a href="{{ route('fees.unpaid', $fee) }}" class="btn btn-sm">{{ __('Unpaid') }}</a>
-                            <a href="{{ route('fees.edit', $fee) }}" class="js-modal-link btn btn-sm">Edit</a>
+                            <a href="{{ route('fees.edit', $fee) }}" class="js-modal-link btn btn-sm">{{ __('Edit') }}</a>
                             <form method="POST" action="{{ route('fees.toggle', $fee) }}" style="display:inline"
                                   data-confirm="{{ $fee->status === 'active' ? __('Deactivate') : __('Activate') }} {{ addslashes($fee->name) }}?">
                                 @csrf @method('PATCH')

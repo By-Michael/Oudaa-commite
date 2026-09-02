@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h1>Set your password</h1>
+<h1>{{ __('Set your password') }}</h1>
 <p class="sub">
     {{ __('Welcome to') }} <strong>{{ $tenant->name }}</strong>. Choose a password for your admin account
     (<strong>{{ $tenant->owner_email }}</strong>) to finish setting up your platform.

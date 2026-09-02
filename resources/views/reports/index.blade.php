@@ -14,7 +14,7 @@
 
 <div class="form-grid">
     <div class="panel">
-        <div class="panel-head"><h2>Payments Collected Over Time</h2></div>
+        <div class="panel-head"><h2>{{ __('Payments Collected Over Time') }}</h2></div>
         <div class="panel-body"><canvas id="chartPayments" height="220"></canvas></div>
     </div>
     <div class="panel">
@@ -25,7 +25,7 @@
 
 <div class="form-grid">
     <div class="panel">
-        <div class="panel-head"><h2>Fund Balances</h2></div>
+        <div class="panel-head"><h2>{{ __('Fund Balances') }}</h2></div>
         <div class="panel-body"><canvas id="chartFunds" height="220"></canvas></div>
     </div>
     <div class="panel">
@@ -35,7 +35,7 @@
 </div>
 
 <div class="panel">
-    <div class="panel-head"><h2>Project Budget vs Spent</h2></div>
+    <div class="panel-head"><h2>{{ __('Project Budget vs Spent') }}</h2></div>
     <div class="panel-body"><canvas id="chartProjects" height="200"></canvas></div>
 </div>
 
@@ -64,7 +64,7 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Residents</h3>
+                                <h3>{{ __('Residents') }}</h3>
                                 <div class="export-sub muted">{{ __(':shown of :total members match the current filters', ['shown' => $residentsTable->total(), 'total' => \App\Models\Resident::count()]) }}</div>
                             </div>
                         </div>
@@ -80,26 +80,26 @@
 
                     <div class="export-filters" id="filters-residents">
                         <select name="status">
-                            <option value="">All statuses</option>
+                            <option value="">{{ __('All statuses') }}</option>
                             <option value="active" @selected($block === 'residents' && request('status') === 'active')>{{ __('Active') }}</option>
-                            <option value="inactive" @selected($block === 'residents' && request('status') === 'inactive')>Inactive</option>
+                            <option value="inactive" @selected($block === 'residents' && request('status') === 'inactive')>{{ __('Inactive') }}</option>
                         </select>
                         <select name="occupancy">
                             <option value="">{{ __('All occupancy') }}</option>
-                            <option value="owner" @selected($block === 'residents' && request('occupancy') === 'owner')>Owner</option>
+                            <option value="owner" @selected($block === 'residents' && request('occupancy') === 'owner')>{{ __('Owner') }}</option>
                             <option value="renter" @selected($block === 'residents' && request('occupancy') === 'renter')>{{ __('Renter') }}</option>
                         </select>
                         {!! eth_date_input('date_from', $block === 'residents' ? request('date_from') : null, ['placeholder' => __('From')]) !!}
                         {!! eth_date_input('date_to', $block === 'residents' ? request('date_to') : null, ['placeholder' => __('To')]) !!}
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
-                        @if ($residentsTable->{{ __('isEmpty())') }}
+                        @if ($residentsTable->isEmpty())
                             <div class="empty">No residents found.</div>
                         @else
                             <table>
-                                <thead><tr><th>{{ __('Name') }}</th><th>Unit</th><th>Email</th><th>Status</th><th>{{ __('Joined') }}</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Unit') }}</th><th>{{ __('Email') }}</th><th>{{ __('Status') }}</th><th>{{ __('Joined') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($residentsTable as $row)
                                     <tr>
@@ -148,9 +148,9 @@
                             @endforeach
                         </select>
                         <select name="status">
-                            <option value="">All statuses</option>
+                            <option value="">{{ __('All statuses') }}</option>
                             <option value="active" @selected($block === 'fees' && request('status') === 'active')>{{ __('Active') }}</option>
-                            <option value="inactive" @selected($block === 'fees' && request('status') === 'inactive')>Inactive</option>
+                            <option value="inactive" @selected($block === 'fees' && request('status') === 'inactive')>{{ __('Inactive') }}</option>
                         </select>
                         <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
@@ -160,7 +160,7 @@
                             <div class="empty">{{ __('No fees found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>{{ __('Fund') }}</th><th>Amount</th><th>Frequency</th><th>{{ __('Status') }}</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Fund') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Frequency') }}</th><th>{{ __('Status') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($feesTable as $row)
                                     <tr>
@@ -203,16 +203,16 @@
 
                     <div class="export-filters" id="filters-payments">
                         <select name="resident_id">
-                            <option value="">All residents</option>
+                            <option value="">{{ __('All residents') }}</option>
                             @foreach ($residents as $resident)
                                 <option value="{{ $resident->id }}" @selected($block === 'payments' && (string) request('resident_id') === (string) $resident->id)>{{ $resident->unit_number }} — {{ $resident->name }}</option>
                             @endforeach
                         </select>
                         <select name="status">
                             <option value="">{{ __('All statuses') }}</option>
-                            <option value="PAID" @selected($block === 'payments' && request('status') === 'PAID')>Paid</option>
+                            <option value="PAID" @selected($block === 'payments' && request('status') === 'PAID')>{{ __('Paid') }}</option>
                             <option value="PENDING" @selected($block === 'payments' && request('status') === 'PENDING')>{{ __('Pending') }}</option>
-                            <option value="VOID" @selected($block === 'payments' && request('status') === 'VOID')>Void</option>
+                            <option value="VOID" @selected($block === 'payments' && request('status') === 'VOID')>{{ __('Void') }}</option>
                         </select>
                         {!! eth_date_input('date_from', $block === 'payments' ? request('date_from') : null, ['placeholder' => __('From')]) !!}
                         {!! eth_date_input('date_to', $block === 'payments' ? request('date_to') : null, ['placeholder' => __('To')]) !!}
@@ -224,7 +224,7 @@
                             <div class="empty">{{ __('No payments found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Resident</th><th>{{ __('Fee') }}</th><th>Amount</th><th>Status</th><th>{{ __('Paid At') }}</th></tr></thead>
+                                <thead><tr><th>{{ __('Resident') }}</th><th>{{ __('Fee') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Status') }}</th><th>{{ __('Paid At') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($paymentsTable as $row)
                                     <tr>
@@ -268,18 +268,18 @@
                     <div class="export-filters" id="filters-funds">
                         <select name="status">
                             <option value="">{{ __('All statuses') }}</option>
-                            <option value="active" @selected($block === 'funds' && request('status') === 'active')>Active</option>
+                            <option value="active" @selected($block === 'funds' && request('status') === 'active')>{{ __('Active') }}</option>
                             <option value="archived" @selected($block === 'funds' && request('status') === 'archived')>{{ __('Archived') }}</option>
                         </select>
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
-                        @if ($fundsTable->{{ __('isEmpty())') }}
+                        @if ($fundsTable->isEmpty())
                             <div class="empty">No funds found.</div>
                         @else
                             <table>
-                                <thead><tr><th>{{ __('Name') }}</th><th>Category</th><th>Status</th><th>{{ __('Balance') }}</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Category') }}</th><th>{{ __('Status') }}</th><th>{{ __('Balance') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($fundsTable as $row)
                                     <tr>
@@ -321,7 +321,7 @@
 
                     <div class="export-filters" id="filters-expenses">
                         <select name="fund_id">
-                            <option value="">All funds</option>
+                            <option value="">{{ __('All funds') }}</option>
                             @foreach ($funds as $fund)
                                 <option value="{{ $fund->id }}" @selected($block === 'expenses' && (string) request('fund_id') === (string) $fund->id)>{{ $fund->name }}</option>
                             @endforeach
@@ -333,7 +333,7 @@
                             @endforeach
                         </select>
                         <select name="employee_id">
-                            <option value="">All employees</option>
+                            <option value="">{{ __('All employees') }}</option>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}" @selected($block === 'expenses' && (string) request('employee_id') === (string) $employee->id)>{{ $employee->name }}</option>
                             @endforeach
@@ -348,7 +348,7 @@
                             <div class="empty">{{ __('No expenses found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Category</th><th>{{ __('Fund') }}</th><th>Project</th><th>Amount</th><th>{{ __('Date') }}</th></tr></thead>
+                                <thead><tr><th>{{ __('Category') }}</th><th>{{ __('Fund') }}</th><th>{{ __('Project') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Date') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($expensesTable as $row)
                                     <tr>
@@ -391,9 +391,9 @@
 
                     <div class="export-filters" id="filters-employees">
                         <select name="status">
-                            <option value="">All statuses</option>
+                            <option value="">{{ __('All statuses') }}</option>
                             <option value="active" @selected($block === 'employees' && request('status') === 'active')>{{ __('Active') }}</option>
-                            <option value="terminated" @selected($block === 'employees' && request('status') === 'terminated')>Terminated</option>
+                            <option value="terminated" @selected($block === 'employees' && request('status') === 'terminated')>{{ __('Terminated') }}</option>
                         </select>
                         <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
@@ -403,7 +403,7 @@
                             <div class="empty">{{ __('No employees found.') }}</div>
                         @else
                             <table>
-                                <thead><tr><th>Name</th><th>{{ __('Role') }}</th><th>Phone</th><th>Status</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Role') }}</th><th>{{ __('Phone') }}</th><th>{{ __('Status') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($employeesTable as $row)
                                     <tr>
@@ -429,7 +429,7 @@
                         <div class="export-card-title">
                             <span class="export-icon">{!! $groupIcon !!}</span>
                             <div>
-                                <h3>Projects</h3>
+                                <h3>{{ __('Projects') }}</h3>
                                 <div class="export-sub muted">{{ __(':shown of :total projects match the current filters', ['shown' => $projectsTable->total(), 'total' => \App\Models\Project::count()]) }}</div>
                             </div>
                         </div>
@@ -445,27 +445,27 @@
 
                     <div class="export-filters" id="filters-projects">
                         <select name="fund_id">
-                            <option value="">All funds</option>
+                            <option value="">{{ __('All funds') }}</option>
                             @foreach ($funds as $fund)
                                 <option value="{{ $fund->id }}" @selected($block === 'projects' && (string) request('fund_id') === (string) $fund->id)>{{ $fund->name }}</option>
                             @endforeach
                         </select>
                         <select name="status">
                             <option value="">{{ __('All statuses') }}</option>
-                            <option value="planned" @selected($block === 'projects' && request('status') === 'planned')>Planned</option>
+                            <option value="planned" @selected($block === 'projects' && request('status') === 'planned')>{{ __('Planned') }}</option>
                             <option value="active" @selected($block === 'projects' && request('status') === 'active')>{{ __('Active') }}</option>
-                            <option value="completed" @selected($block === 'projects' && request('status') === 'completed')>Completed</option>
+                            <option value="completed" @selected($block === 'projects' && request('status') === 'completed')>{{ __('Completed') }}</option>
                             <option value="archived" @selected($block === 'projects' && request('status') === 'archived')>{{ __('Archived') }}</option>
                         </select>
-                        <button type="submit" class="btn btn-sm btn-primary">Apply</button>
+                        <button type="submit" class="btn btn-sm btn-primary">{{ __('Apply') }}</button>
                     </div>
 
                     <div class="export-table-wrap">
-                        @if ($projectsTable->{{ __('isEmpty())') }}
+                        @if ($projectsTable->isEmpty())
                             <div class="empty">No projects found.</div>
                         @else
                             <table>
-                                <thead><tr><th>{{ __('Name') }}</th><th>Fund</th><th>Status</th><th>{{ __('Planned') }}</th><th>Spent</th></tr></thead>
+                                <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Fund') }}</th><th>{{ __('Status') }}</th><th>{{ __('Planned') }}</th><th>{{ __('Spent') }}</th></tr></thead>
                                 <tbody>
                                 @foreach ($projectsTable as $row)
                                     <tr>

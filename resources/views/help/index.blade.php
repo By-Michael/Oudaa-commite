@@ -27,7 +27,7 @@
         <details class="faq-item">
             <summary>{{ __('How do I add a resident?') }}</summary>
             <div class="faq-answer">
-                {!! __("Go to <strong>:residents</strong> and click <strong>+ Add Resident</strong>. Fill in their name, unit number, ID number, and whether they're an <strong>Owner</strong> or <strong>Tenant</strong>, then save. New residents start as Active. To edit someone or change their status later, use the <strong>Edit</strong> and <strong>Deactivate / Activate</strong> buttons on their row — residents are never deleted, only deactivated, so their payment history is never lost.", [
+                {!! __("Go to <strong>:residents</strong> and click <strong>+ Add Resident</strong>. Fill in their name, unit number, ID number, and whether they're an <strong>{{ __('Owner') }}</strong> or <strong>{{ __('Tenant') }}</strong>, then save. New residents start as Active. To edit someone or change their status later, use the <strong>{{ __('Edit') }}</strong> and <strong>{{ __('Deactivate / Activate') }}</strong> buttons on their row — residents are never deleted, only deactivated, so their payment history is never lost.", [
                     'residents' => __('Residents'),
                 ]) !!}
             </div>
@@ -36,7 +36,7 @@
         <details class="faq-item">
             <summary>{{ __('How do I set up a fee?') }}</summary>
             <div class="faq-answer">
-                {!! __("Go to <strong>:fees</strong> and click <strong>+ Add Fee</strong>. Give it a name, an amount (in ETB), and link it to a <strong>Fund</strong> — that's the fund payments against this fee will land in. Use the <strong>Unpaid</strong> link on any fee to see which residents still owe it.", [
+                {!! __("Go to <strong>:fees</strong> and click <strong>+ Add Fee</strong>. Give it a name, an amount (in ETB), and link it to a <strong>{{ __('Fund') }}</strong> — that's the fund payments against this fee will land in. Use the <strong>{{ __('Unpaid') }}</strong> link on any fee to see which residents still owe it.", [
                     'fees' => __('Fees'),
                 ]) !!}
             </div>

@@ -8,7 +8,7 @@
         <div class="value">{{ money($project->planned_budget) }}</div>
     </div>
     <div class="stat neg">
-        <div class="label">Spent</div>
+        <div class="label">{{ __('Spent') }}</div>
         <div class="value">{{ money($project->spent()) }}</div>
     </div>
     <div class="stat {{ $project->remaining() >= 0 ? 'pos' : 'neg' }}">
@@ -18,13 +18,13 @@
 </div>
 
 <div class="panel">
-    <div class="panel-head"><h2>Details</h2><a href="{{ route('projects.edit', $project) }}" class="js-modal-link btn btn-sm">{{ __('Edit') }}</a></div>
+    <div class="panel-head"><h2>{{ __('Details') }}</h2><a href="{{ route('projects.edit', $project) }}" class="js-modal-link btn btn-sm">{{ __('Edit') }}</a></div>
     <div class="panel-body">
         <p>{{ $project->description ?: 'No description.' }}</p>
         <p class="muted">
             Linked fund:
             @if ($project->fund)
-                <a href="{{ route('funds.edit', $project->{{ __('fund)') }} }}">{{ $project->fund->name }}</a>
+                <a href="{{ route('funds.edit', $project->fund) }}">{{ $project->fund->name }}</a>
                 (fund balance: {{ money($project->fund->balance()) }})
             @else
                 none
@@ -38,13 +38,13 @@
 </div>
 
 <div class="panel">
-    <div class="panel-head"><h2>Expenses on this project</h2><a href="{{ route('expenses.create') }}" class="js-modal-link btn btn-sm">{{ __('+ Record Expense') }}</a></div>
+    <div class="panel-head"><h2>{{ __('Expenses on this project') }}</h2><a href="{{ route('expenses.create') }}" class="js-modal-link btn btn-sm">{{ __('+ Record Expense') }}</a></div>
     <div class="panel-body" style="padding:0;">
         @if ($project->expenses->isEmpty())
             <div class="empty">{{ __('No expenses recorded against this project yet.') }}</div>
         @else
             <table>
-                <thead><tr><th>{{ __('Date') }}</th><th>Category</th><th>Vendor</th><th class="right">{{ __('Amount') }}</th><th>Note</th></tr></thead>
+                <thead><tr><th>{{ __('Date') }}</th><th>{{ __('Category') }}</th><th>{{ __('Vendor') }}</th><th class="right">{{ __('Amount') }}</th><th>{{ __('Note') }}</th></tr></thead>
                 <tbody>
                 @foreach ($project->expenses as $expense)
                     <tr>
@@ -61,6 +61,6 @@
     </div>
 </div>
 
-<a href="{{ route('projects.index') }}" class="btn">Back to Projects</a>
+<a href="{{ route('projects.index') }}" class="btn">{{ __('Back to Projects') }}</a>
 
 @endsection

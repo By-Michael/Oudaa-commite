@@ -13,7 +13,7 @@
                 <input type="text" name="name" value="{{ old('name', $fund->name) }}" required data-filter="safe-text">
             </div>
             <div class="form-row">
-                <label>Category</label>
+                <label>{{ __('Category') }}</label>
                 <input type="text" name="category" value="{{ old('category', $fund->category) }}" placeholder="{{ __('e.g. Maintenance, Reserve, Security') }}" data-filter="safe-text">
             </div>
             <div class="form-row">
@@ -21,15 +21,15 @@
                 <textarea name="description" rows="3" data-filter="safe-text">{{ old('description', $fund->description) }}</textarea>
             </div>
             <div class="form-row">
-                <label>Status</label>
+                <label>{{ __('Status') }}</label>
                 <select name="status">
                     <option value="active" @selected(old('status', $fund->status ?? 'active') === 'active')>{{ __('Active') }}</option>
-                    <option value="archived" @selected(old('status', $fund->status) === 'archived')>Archived</option>
+                    <option value="archived" @selected(old('status', $fund->status) === 'archived')>{{ __('Archived') }}</option>
                 </select>
             </div>
 
             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-            <a href="{{ route('funds.index') }}" class="btn">Cancel</a>
+            <a href="{{ route('funds.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

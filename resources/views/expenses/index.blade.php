@@ -18,12 +18,12 @@
 
 <div class="panel">
     <div class="panel-body" style="padding:0;">
-        @if ($expenses->{{ __('isEmpty())') }}
+        @if ($expenses->isEmpty())
             <div class="empty">No expenses recorded yet.</div>
         @else
             <table>
                 <thead>
-                <tr><th>{{ __('Date') }}</th><th>Category</th><th>Vendor</th><th>{{ __('Fund') }}</th><th>Project</th><th>Employee</th><th class="right">{{ __('Amount') }}</th><th>Note</th><th>Receipt</th></tr>
+                <tr><th>{{ __('Date') }}</th><th>{{ __('Category') }}</th><th>{{ __('Vendor') }}</th><th>{{ __('Fund') }}</th><th>{{ __('Project') }}</th><th>{{ __('Employee') }}</th><th class="right">{{ __('Amount') }}</th><th>{{ __('Note') }}</th><th>{{ __('Receipt') }}</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($expenses as $expense)
@@ -37,8 +37,8 @@
                         <td class="right">{{ money($expense->amount) }}</td>
                         <td>{{ $expense->note ?: '—' }}</td>
                         <td>
-                            @if ($expense->{{ __('receiptUrl())') }}
-                                <a href="{{ $expense->receiptUrl() }}" target="_blank" rel="noopener">View</a>
+                            @if ($expense->receiptUrl())
+                                <a href="{{ $expense->receiptUrl() }}" target="_blank" rel="noopener">{{ __('View') }}</a>
                             @else
                                 —
                             @endif

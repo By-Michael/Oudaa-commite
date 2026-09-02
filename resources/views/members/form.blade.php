@@ -12,7 +12,7 @@
                 <input type="text" name="name" value="{{ old('name') }}" required data-filter="letters">
             </div>
             <div class="form-row">
-                <label>Email<span class="req">*</span></label>
+                <label>{{ __('Email') }}<span class="req">*</span></label>
                 <input type="email" name="email" value="{{ old('email') }}" required>
             </div>
             <div class="form-row">
@@ -25,7 +25,7 @@
             </p>
 
             <button type="submit" class="btn btn-primary">{{ __('Add Member') }}</button>
-            <a href="{{ route('members.index') }}" class="btn">Cancel</a>
+            <a href="{{ route('members.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

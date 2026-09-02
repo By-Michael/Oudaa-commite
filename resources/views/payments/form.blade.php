@@ -12,7 +12,7 @@
             @csrf
 
             <div class="form-row" style="position:relative;">
-                <label>Resident<span class="req">*</span></label>
+                <label>{{ __('Resident') }}<span class="req">*</span></label>
                 <input
                     type="text"
                     id="resident-search"
@@ -67,7 +67,7 @@
             </div>
 
             <div class="form-row">
-                <label>Method</label>
+                <label>{{ __('Method') }}</label>
                 <select name="method">
                     @foreach (['cash' => 'Cash', 'bank_transfer' => 'Bank Transfer', 'cheque' => 'Cheque', 'mobile_money' => 'Mobile Money', 'other' => 'Other'] as $val => $label)
                         <option value="{{ $val }}" @selected(old('method') === $val)>{{ $label }}</option>
@@ -85,7 +85,7 @@
             </p>
 
             <button type="submit" class="btn btn-primary">{{ __('Record Payment') }}</button>
-            <a href="{{ route('payments.index') }}" class="btn">Cancel</a>
+            <a href="{{ route('payments.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

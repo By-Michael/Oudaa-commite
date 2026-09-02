@@ -11,11 +11,11 @@
             @endforeach
         </select>
         <select name="status" onchange="this.form.submit()">
-            <option value="">All statuses</option>
+            <option value="">{{ __('All statuses') }}</option>
             <option value="planned" @selected(request('status') == 'planned')>{{ __('Planned') }}</option>
-            <option value="active" @selected(request('status') == 'active')>Active</option>
+            <option value="active" @selected(request('status') == 'active')>{{ __('Active') }}</option>
             <option value="completed" @selected(request('status') == 'completed')>{{ __('Completed') }}</option>
-            <option value="archived" @selected(request('status') == 'archived')>Archived</option>
+            <option value="archived" @selected(request('status') == 'archived')>{{ __('Archived') }}</option>
         </select>
     </form>
     <div class="toolbar-actions">
@@ -30,7 +30,7 @@
         @else
             <table>
                 <thead>
-                <tr><th>Name</th><th>{{ __('Fund') }}</th><th class="right">Planned Budget</th><th class="right">{{ __('Spent') }}</th><th class="right">Remaining</th><th>{{ __('Status') }}</th><th class="right">Actions</th></tr>
+                <tr><th>{{ __('Name') }}</th><th>{{ __('Fund') }}</th><th class="right">{{ __('Planned Budget') }}</th><th class="right">{{ __('Spent') }}</th><th class="right">{{ __('Remaining') }}</th><th>{{ __('Status') }}</th><th class="right">{{ __('Actions') }}</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($projects as $project)

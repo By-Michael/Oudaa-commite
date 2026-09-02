@@ -6,9 +6,9 @@
 @section('content')
 <header class="page-header">
     <div class="container">
-      <h1 class="mb-3">Privacy Policy</h1>
+      <h1 class="mb-3">{{ __('Privacy Policy') }}</h1>
       <div class="breadcrumb-custom">
-        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">Privacy Policy</span>
+        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">{{ __('Privacy Policy') }}</span>
       </div>
     </div>
   </header>

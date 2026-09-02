@@ -20,16 +20,16 @@
             <div class="form-row">
                 <label>{{ __('Status') }}</label>
                 <select name="status">
-                    <option value="PAID" @selected(old('status', $payment->status) === 'PAID')>Paid</option>
+                    <option value="PAID" @selected(old('status', $payment->status) === 'PAID')>{{ __('Paid') }}</option>
                     <option value="PENDING" @selected(old('status', $payment->status) === 'PENDING')>{{ __('Pending') }}</option>
-                    <option value="VOID" @selected(old('status', $payment->status) === 'VOID')>Void</option>
+                    <option value="VOID" @selected(old('status', $payment->status) === 'VOID')>{{ __('Void') }}</option>
                 </select>
             </div>
 
             <div class="form-row">
                 <label>{{ __('Fund (required if Paid)') }}</label>
                 <select name="fund_id">
-                    <option value="">No linked fund</option>
+                    <option value="">{{ __('No linked fund') }}</option>
                     @foreach ($funds as $fund)
                         <option value="{{ $fund->id }}" @selected(old('fund_id', $payment->fund_id) == $fund->id)>{{ $fund->name }}</option>
                     @endforeach
@@ -41,7 +41,7 @@
                 <input type="text" name="note" value="{{ old('note', $payment->note) }}" data-filter="safe-text">
             </div>
 
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
             <a href="{{ route('payments.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>

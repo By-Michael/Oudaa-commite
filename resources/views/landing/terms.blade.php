@@ -6,9 +6,9 @@
 @section('content')
 <header class="page-header">
     <div class="container">
-      <h1 class="mb-3">Terms of Service</h1>
+      <h1 class="mb-3">{{ __('Terms of Service') }}</h1>
       <div class="breadcrumb-custom">
-        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">Terms of Service</span>
+        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">{{ __('Terms of Service') }}</span>
       </div>
     </div>
   </header>

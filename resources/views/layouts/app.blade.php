@@ -117,7 +117,7 @@
                             <form method="POST" action="{{ route('admin-consent.respond', ['tenant' => request()->route('tenant'), 'token' => $pendingAdminConsent->token]) }}">
                                 @csrf
                                 <input type="hidden" name="decision" value="approved">
-                                <button type="submit" class="btn btn-sm btn-primary">Approve</button>
+                                <button type="submit" class="btn btn-sm btn-primary">{{ __('Approve') }}</button>
                             </form>
                         </div>
                     </div>

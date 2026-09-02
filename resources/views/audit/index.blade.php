@@ -11,7 +11,7 @@
             @endforeach
         </select>
         <select name="action" onchange="this.form.submit()">
-            <option value="">All actions</option>
+            <option value="">{{ __('All actions') }}</option>
             @foreach ($actions as $action)
                 <option value="{{ $action }}" @selected(request('action') === $action)>{{ ucfirst($action) }}</option>
             @endforeach
@@ -22,11 +22,11 @@
 
 <div class="panel">
     <div class="panel-body" style="padding:0;">
-        @if ($logs->{{ __('isEmpty())') }}
+        @if ($logs->isEmpty())
             <div class="empty">No activity recorded yet.</div>
         @else
             <table>
-                <thead><tr><th>{{ __('When') }}</th><th>Committee Member</th><th>Action</th><th>{{ __('Type') }}</th><th>Details</th></tr></thead>
+                <thead><tr><th>{{ __('When') }}</th><th>{{ __('Committee Member') }}</th><th>{{ __('Action') }}</th><th>{{ __('Type') }}</th><th>{{ __('Details') }}</th></tr></thead>
                 <tbody>
                 @foreach ($logs as $log)
                     <tr>

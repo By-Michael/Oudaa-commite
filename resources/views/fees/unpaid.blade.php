@@ -12,7 +12,7 @@
             <div class="empty">{{ __('Every active resident has a PAID payment for this fee this period.') }}</div>
         @else
             <table>
-                <thead><tr><th>{{ __('Unit') }}</th><th>Name</th><th>ID Number</th><th>{{ __('Phone') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Unit') }}</th><th>{{ __('Name') }}</th><th>{{ __('ID Number') }}</th><th>{{ __('Phone') }}</th></tr></thead>
                 <tbody>
                 @foreach ($unpaidResidents as $resident)
                     <tr>

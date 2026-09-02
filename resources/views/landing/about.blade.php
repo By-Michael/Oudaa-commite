@@ -7,9 +7,9 @@
 <!-- PAGE HEADER -->
   <header class="page-header">
     <div class="container">
-      <h1 class="mb-3">About Oudaa</h1>
+      <h1 class="mb-3">{{ __('About Oudaa') }}</h1>
       <div class="breadcrumb-custom">
-        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">About</span>
+        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">{{ __('About') }}</span>
       </div>
     </div>
   </header>
@@ -23,20 +23,20 @@
         </div>
         <div class="col-lg-6 reveal">
           <span class="eyebrow">{{ __('Our mission') }}</span>
-          <h2 class="section-title">Community management, without the chaos</h2>
+          <h2 class="section-title">{{ __('Community management, without the chaos') }}</h2>
           <p class="section-subtitle mb-3">{{ __('Most residential communities — whether it\'s a small group of houses or a full apartment building — are still run on a patchwork of spreadsheets, paper receipts and group chats. It works, until a fund balance doesn\'t add up or nobody remembers who paid last month\'s fee.') }}</p>
           <p class="mb-4">{{ __('Oudaa exists to fix that: one platform where a committee can manage residents, fees, payments, funds, projects and expenses, with every number in one place that the whole committee can trust.') }}</p>
           <div class="row g-3">
             <div class="col-6">
               <div class="d-flex align-items-center gap-3">
                 <div class="icon-box icon-box-primary"><i class="bi bi-shield-lock"></i></div>
-                <div><strong class="text-navy d-block">{{ __('Private by design') }}</strong><small class="text-slate">Your data, isolated per community</small></div>
+                <div><strong class="text-navy d-block">{{ __('Private by design') }}</strong><small class="text-slate">{{ __('Your data, isolated per community') }}</small></div>
               </div>
             </div>
             <div class="col-6">
               <div class="d-flex align-items-center gap-3">
                 <div class="icon-box icon-box-success"><i class="bi bi-lightning-charge"></i></div>
-                <div><strong class="text-navy d-block">{{ __('Ready in minutes') }}</strong><small class="text-slate">No setup calls required</small></div>
+                <div><strong class="text-navy d-block">{{ __('Ready in minutes') }}</strong><small class="text-slate">{{ __('No setup calls required') }}</small></div>
               </div>
             </div>
           </div>
@@ -51,7 +51,7 @@
       <div class="row section-header justify-content-center text-center">
         <div class="col-lg-7 reveal">
           <span class="eyebrow">{{ __('What drives us') }}</span>
-          <h2 class="section-title">The principles behind Oudaa</h2>
+          <h2 class="section-title">{{ __('The principles behind Oudaa') }}</h2>
         </div>
       </div>
       <div class="row g-4">

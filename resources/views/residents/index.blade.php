@@ -21,7 +21,7 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Name</th><th>{{ __('Unit') }}</th><th>Block</th><th>ID Number</th><th>{{ __('Phone') }}</th><th>Email</th><th>Occupancy</th><th>{{ __('Status') }}</th><th class="right">Actions</th>
+                    <th>{{ __('Name') }}</th><th>{{ __('Unit') }}</th><th>{{ __('Block') }}</th><th>{{ __('ID Number') }}</th><th>{{ __('Phone') }}</th><th>{{ __('Email') }}</th><th>{{ __('Occupancy') }}</th><th>{{ __('Status') }}</th><th class="right">{{ __('Actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>

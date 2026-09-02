@@ -18,14 +18,14 @@
     <strong>{{ rtrim(url('/'), '/') }}/{{ $slug }}</strong> {{ __('and email you a link to set your admin password.') }}
 </p>
 
-@if ($errors->{{ __('any())') }}
+@if ($errors->any())
     <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
 @endif
 
 <form method="POST" action="{{ route('onboarding.step3.store') }}">
     @csrf
     <div class="mb-3">
-        <label for="email" class="form-label">Your email<span class="req">*</span></label>
+        <label for="email" class="form-label">{{ __('Your email') }}<span class="req">*</span></label>
         <input
             type="email"
             id="email"

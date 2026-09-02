@@ -5,7 +5,7 @@
 <div class="panel">
     <div class="panel-head">
         <h2>{{ __('Committee Members') }}</h2>
-        <a href="{{ route('members.index') }}" class="btn btn-sm">Manage Committee Members</a>
+        <a href="{{ route('members.index') }}" class="btn btn-sm">{{ __('Manage Committee Members') }}</a>
     </div>
 </div>
 
@@ -18,7 +18,7 @@
                 @method('PUT')
 
                 <div class="form-row">
-                    <label>Name<span class="req">*</span></label>
+                    <label>{{ __('Name') }}<span class="req">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $committee->name) }}" required data-filter="letters">
                 </div>
                 <div class="form-row">
@@ -26,11 +26,11 @@
                     <input type="email" name="email" value="{{ old('email', $committee->email) }}" required>
                 </div>
                 <div class="form-row">
-                    <label>Phone</label>
+                    <label>{{ __('Phone') }}</label>
                     <input type="tel" name="phone" value="{{ old('phone', $committee->phone) }}" placeholder="{{ __('e.g. +251 9xx xxx xxx') }}" data-filter="phone">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Save Profile</button>
+                <button type="submit" class="btn btn-primary">{{ __('Save Profile') }}</button>
             </form>
         </div>
     </div>
@@ -56,7 +56,7 @@
                 @method('PUT')
 
                 <div class="form-row">
-                    <label>Current Password<span class="req">*</span></label>
+                    <label>{{ __('Current Password') }}<span class="req">*</span></label>
                     <input type="password" name="current_password" required>
                 </div>
                 <div class="form-row">
@@ -64,7 +64,7 @@
                     <input type="password" name="password" required minlength="8">
                 </div>
                 <div class="form-row">
-                    <label>Confirm New Password<span class="req">*</span></label>
+                    <label>{{ __('Confirm New Password') }}<span class="req">*</span></label>
                     <input type="password" name="password_confirmation" required minlength="8">
                 </div>
 

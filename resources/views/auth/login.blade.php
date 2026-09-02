@@ -25,14 +25,14 @@
         <img src="{{ asset('images/logo-transparent.png') }}" alt="Oudaa" class="auth-logo">
         <p class="sub">{{ __('Committee members only. Sign in to manage the panel.') }}</p>
 
-        @if ($errors->{{ __('any())') }}
+        @if ($errors->any())
             <div class="alert alert-error">{{ $errors->first() }}</div>
         @endif
 
         <form method="POST" action="{{ route('login.attempt') }}" id="login-form">
             @csrf
             <div class="form-row">
-                <label for="email">Email<span class="req">*</span></label>
+                <label for="email">{{ __('Email') }}<span class="req">*</span></label>
                 <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
             </div>
             <div class="form-row">
@@ -41,13 +41,13 @@
             </div>
             <div class="form-row" style="display:flex;align-items:center;justify-content:space-between;">
                 <label style="display:inline-flex;align-items:center;gap:6px;text-transform:none;font-weight:400;">
-                    <input type="checkbox" id="remember" name="remember" style="width:auto;" value="1" @checked(old('remember'))> Remember me
+                    <input type="checkbox" id="remember" name="remember" style="width:auto;" value="1" @checked(old('remember'))> {{ __('Remember me') }}
                 </label>
                 <a href="{{ route('password.request', ['tenant' => request()->route('tenant')]) }}" style="font-size:13px;">{{ __('Forgot password?') }}</a>
             </div>
-            <button type="submit" class="btn btn-primary" id="login-submit" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <button type="submit" class="btn btn-primary" id="login-submit" data-signing-in-label="{{ __('Signing in…') }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
                 <span class="spinner" id="login-spinner" style="display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;"></span>
-                <span id="login-submit-label">Sign in</span>
+                <span id="login-submit-label">{{ __('Sign in') }}</span>
             </button>
         </form>
     </div>
@@ -64,7 +64,7 @@
         btn.dataset.submitting = '1';
         btn.disabled = true;
         spinner.style.display = 'inline-block';
-        label.textContent = 'Signing in…';
+        label.textContent = btn.dataset.signingInLabel || 'Signing in…';
     });
 </script>
 </body>

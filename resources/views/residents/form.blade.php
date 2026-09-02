@@ -6,11 +6,11 @@
     <div class="panel-body">
         <form method="POST" action="{{ $resident->exists ? route('residents.update', $resident) : route('residents.store') }}">
             @csrf
-            @if ($resident->{{ __('exists)') }} @method('PUT') @endif
+            @if ($resident->exists) @method('PUT') @endif
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Name<span class="req">*</span></label>
+                    <label>{{ __('Name') }}<span class="req">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $resident->name) }}" required data-filter="letters">
                 </div>
                 <div class="form-row">
@@ -21,7 +21,7 @@
             <div class="form-grid">
                 @if ($isCondo)
                 <div class="form-row">
-                    <label>Block Number (optional)</label>
+                    <label>{{ __('Block Number (optional)') }}</label>
                     <input type="text" name="block_number" value="{{ old('block_number', $resident->block_number) }}" data-filter="alnum">
                 </div>
                 @endif
@@ -32,7 +32,7 @@
             </div>
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Phone</label>
+                    <label>{{ __('Phone') }}</label>
                     <input type="text" name="phone" value="{{ old('phone', $resident->phone) }}" data-filter="phone">
                 </div>
                 <div class="form-row">
@@ -42,25 +42,25 @@
             </div>
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Occupancy</label>
+                    <label>{{ __('Occupancy') }}</label>
                     <select name="occupancy">
                         <option value="owner" @selected(old('occupancy', $resident->occupancy) === 'owner')>{{ __('Owner') }}</option>
-                        <option value="renter" @selected(old('occupancy', $resident->occupancy) === 'renter')>Tenant</option>
+                        <option value="renter" @selected(old('occupancy', $resident->occupancy) === 'renter')>{{ __('Tenant') }}</option>
                     </select>
                 </div>
-                @if ($resident->{{ __('exists)') }}
+                @if ($resident->exists)
                 <div class="form-row">
-                    <label>Status</label>
+                    <label>{{ __('Status') }}</label>
                     <select name="status">
                         <option value="active" @selected(old('status', $resident->status) === 'active')>{{ __('Active') }}</option>
-                        <option value="inactive" @selected(old('status', $resident->status) === 'inactive')>Inactive</option>
+                        <option value="inactive" @selected(old('status', $resident->status) === 'inactive')>{{ __('Inactive') }}</option>
                     </select>
                 </div>
                 @endif
             </div>
 
             <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-            <a href="{{ route('residents.index') }}" class="btn">Cancel</a>
+            <a href="{{ route('residents.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

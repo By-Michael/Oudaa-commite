@@ -13,14 +13,14 @@
 <h1>{{ __('What\'s your community called?') }}</h1>
 <p class="sub">This is the name your residents and committee will see.</p>
 
-@if ($errors->{{ __('any())') }}
+@if ($errors->any())
     <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
 @endif
 
 <form method="POST" action="{{ route('onboarding.step1.store') }}">
     @csrf
     <div class="mb-3">
-        <label for="name" class="form-label">Community name<span class="req">*</span></label>
+        <label for="name" class="form-label">{{ __('Community name') }}<span class="req">*</span></label>
         <input
             type="text"
             id="name"

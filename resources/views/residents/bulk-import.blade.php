@@ -34,8 +34,8 @@
                 @error('file') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary" data-loading-label="{{ __('Importing…') }}">Import</button>
-            <a href="{{ route('residents.index') }}" class="btn">Cancel</a>
+            <button type="submit" class="btn btn-primary" data-loading-label="{{ __('Importing…') }}">{{ __('Import') }}</button>
+            <a href="{{ route('residents.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

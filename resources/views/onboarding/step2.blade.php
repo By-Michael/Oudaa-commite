@@ -15,7 +15,7 @@
 <h1>{{ __('Pick your platform link & type') }}</h1>
 <p class="sub">This is the web address your committee and residents will use to log in.</p>
 
-@if ($errors->{{ __('any())') }}
+@if ($errors->any())
     <div class="alert alert-danger py-2">{{ $errors->first() }}</div>
 @endif
 
@@ -23,7 +23,7 @@
     @csrf
 
     <div class="mb-2">
-        <label for="slug" class="form-label">Your platform link<span class="req">*</span></label>
+        <label for="slug" class="form-label">{{ __('Your platform link') }}<span class="req">*</span></label>
         <div class="input-group">
             <span class="input-group-text" style="background:var(--n-bg-alt); color:var(--n-slate); border-radius: var(--n-radius-sm) 0 0 var(--n-radius-sm); font-size:0.85rem;">
                 {{ rtrim(url('/'), '/') }}/
@@ -49,7 +49,7 @@
             <input class="form-check-input" type="radio" name="community_type" id="type-normal" value="normal"
                 @checked(old('community_type', $communityType) === 'normal')>
             <label class="form-check-label" for="type-normal">
-                <strong>Normal community</strong>
+                <strong>{{ __('Normal community') }}</strong>
                 <div class="text-slate" style="font-size:0.85rem;">{{ __('Houses/villas — residents identified by unit number only.') }}</div>
             </label>
         </div>

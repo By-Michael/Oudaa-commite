@@ -10,7 +10,7 @@
 <div class="panel">
     <div class="panel-body" style="padding:0;">
         <table>
-            <thead><tr><th>{{ __('Name') }}</th><th>Email</th><th>Phone</th><th>{{ __('Joined') }}</th></tr></thead>
+            <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Email') }}</th><th>{{ __('Phone') }}</th><th>{{ __('Joined') }}</th></tr></thead>
             <tbody>
             @foreach ($members as $member)
                 <tr>

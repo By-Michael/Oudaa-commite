@@ -6,9 +6,9 @@
 @section('content')
 <header class="page-header">
     <div class="container">
-      <h1 class="mb-3">Get In Touch</h1>
+      <h1 class="mb-3">{{ __('Get In Touch') }}</h1>
       <div class="breadcrumb-custom">
-        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">Contact</span>
+        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <span class="active">{{ __('Contact') }}</span>
       </div>
     </div>
   </header>
@@ -27,7 +27,7 @@
         <div class="col-md-5 reveal">
           <div class="card-premium text-center">
             <div class="icon-box icon-box-success mx-auto mb-3"><i class="bi bi-telephone"></i></div>
-            <h3 class="card-title">Call Us</h3>
+            <h3 class="card-title">{{ __('Call Us') }}</h3>
             <p class="mb-0">{{ __('Every day, during working hours') }}<br><a href="tel:+251973069687" class="text-primary-custom fw-semibold text-decoration-none">+251 973 069 687</a></p>
           </div>
         </div>
@@ -40,7 +40,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-7 reveal">
-          <span class="eyebrow">Send a message</span>
+          <span class="eyebrow">{{ __('Send a message') }}</span>
           <h2 class="section-title mb-4">{{ __('How can we help?') }}</h2>
 
           @if (session('status'))
@@ -77,7 +77,7 @@
                 <input type="text" class="form-control" id="communityName" name="community_name" value="{{ old('community_name') }}" placeholder="{{ __('Optional') }}" data-filter="safe-text">
               </div>
               <div class="col-12">
-                <label class="form-label" for="message">Message<span class="req">*</span></label>
+                <label class="form-label" for="message">{{ __('Message') }}<span class="req">*</span></label>
                 <textarea class="form-control" id="message" name="message" rows="5" placeholder="{{ __('Tell us what you need help with.') }}" required data-filter="safe-text">{{ old('message') }}</textarea>
                 <div class="invalid-feedback">{{ __('Please share a few details.') }}</div>
               </div>
@@ -97,7 +97,7 @@
       <div class="row section-header justify-content-center text-center">
         <div class="col-lg-7 reveal">
           <span class="eyebrow">{{ __('Before you reach out') }}</span>
-          <h2 class="section-title">Quick answers</h2>
+          <h2 class="section-title">{{ __('Quick answers') }}</h2>
         </div>
       </div>
       <div class="row justify-content-center">

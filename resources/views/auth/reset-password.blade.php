@@ -15,14 +15,14 @@
         <img src="{{ asset('images/logo-transparent.png') }}" alt="Oudaa" class="auth-logo">
         <p class="sub">{{ __('Choose a new password for your committee account.') }}</p>
 
-        @if ($errors->{{ __('any())') }}
+        @if ($errors->any())
             <div class="alert alert-error">{{ $errors->first() }}</div>
         @endif
 
         <form method="POST" action="{{ route('password.update', ['tenant' => $tenant, 'token' => $token]) }}">
             @csrf
             <div class="form-row">
-                <label for="email">Email<span class="req">*</span></label>
+                <label for="email">{{ __('Email') }}<span class="req">*</span></label>
                 <input type="email" id="email" name="email" value="{{ old('email', $email) }}" required autofocus>
             </div>
             <div class="form-row">
@@ -30,14 +30,14 @@
                 <input type="password" id="password" name="password" required minlength="8">
             </div>
             <div class="form-row">
-                <label for="password_confirmation">Confirm new password<span class="req">*</span></label>
+                <label for="password_confirmation">{{ __('Confirm new password') }}<span class="req">*</span></label>
                 <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8">
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;">{{ __('Reset password') }}</button>
         </form>
 
         <p class="sub" style="margin-top:16px;">
-            <a href="{{ route('login', ['tenant' => $tenant]) }}">Back to sign in</a>
+            <a href="{{ route('login', ['tenant' => $tenant]) }}">{{ __('Back to sign in') }}</a>
         </p>
     </div>
 </div>

@@ -14,13 +14,13 @@
 
 <div class="panel">
     <div class="panel-body" style="padding:0;">
-        @if ($employees->{{ __('isEmpty())') }}
+        @if ($employees->isEmpty())
             <div class="empty">No employees found.</div>
         @else
             <table>
                 <thead>
                 <tr>
-                    <th>{{ __('Name') }}</th><th>ID Number</th><th>Role</th><th>{{ __('Salary') }}</th><th>Payment Date</th><th>Status</th><th class="right">{{ __('Actions') }}</th>
+                    <th>{{ __('Name') }}</th><th>{{ __('ID Number') }}</th><th>{{ __('Role') }}</th><th>{{ __('Salary') }}</th><th>{{ __('Payment Date') }}</th><th>{{ __('Status') }}</th><th class="right">{{ __('Actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                         <td>{{ $employee->payment_date ? $employee->payment_date->format('jS \o\f each month') : '—' }}</td>
                         <td><span class="badge badge-{{ $employee->status === 'active' ? 'active' : 'inactive' }}">{{ __(ucfirst($employee->status)) }}</span></td>
                         <td class="right actions-cell">
-                            <a href="{{ route('employees.edit', $employee) }}" class="js-modal-link btn btn-sm">Edit</a>
+                            <a href="{{ route('employees.edit', $employee) }}" class="js-modal-link btn btn-sm">{{ __('Edit') }}</a>
                             <form method="POST" action="{{ route('employees.toggle', $employee) }}" style="display:inline"
                                   data-confirm="{{ $employee->status === 'active' ? __('Terminate') : __('Reactivate') }} {{ addslashes($employee->name) }}?">
                                 @csrf @method('PATCH')

@@ -8,7 +8,7 @@
             @csrf
 
             <div class="form-row">
-                <label>Category<span class="req">*</span></label>
+                <label>{{ __('Category') }}<span class="req">*</span></label>
                 <select name="category" id="category" required>
                     <option value="">{{ __('Select category…') }}</option>
                     @foreach (['Repairs', 'Utilities', 'Salary', 'Cleaning', 'Security', 'Landscaping', 'Insurance', 'Supplies', 'Other'] as $cat)
@@ -17,13 +17,13 @@
                 </select>
             </div>
             <div class="form-row" id="category-other-row" style="display:none;">
-                <label>Specify Category<span class="req" id="category-other-required-mark" style="display:none;">*</span></label>
+                <label>{{ __('Specify Category') }}<span class="req" id="category-other-required-mark" style="display:none;">*</span></label>
                 <input type="text" name="category_other" id="category_other" value="{{ old('category_other') }}" placeholder="{{ __('Enter the category name') }}" data-filter="letters">
             </div>
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Amount (ETB)<span class="req">*</span></label>
+                    <label>{{ __('Amount (ETB)') }}<span class="req">*</span></label>
                     <input type="number" step="0.01" min="0.01" name="amount" value="{{ old('amount') }}" required data-filter="decimal">
                 </div>
                 <div class="form-row">
@@ -34,7 +34,7 @@
 
             <div class="form-grid">
                 <div class="form-row">
-                    <label>Vendor</label>
+                    <label>{{ __('Vendor') }}</label>
                     <input type="text" name="vendor" value="{{ old('vendor') }}" data-filter="safe-text">
                 </div>
                 <div class="form-row">
@@ -62,7 +62,7 @@
             <div class="form-row">
                 <label>{{ __('Project (optional)') }}</label>
                 <select name="project_id" id="project_id">
-                    <option value="">No linked project</option>
+                    <option value="">{{ __('No linked project') }}</option>
                     @foreach ($projects as $project)
                         <option value="{{ $project->id }}" data-fund-id="{{ $project->fund_id }}" @selected(old('project_id') == $project->id)>{{ $project->name }}</option>
                     @endforeach
@@ -77,13 +77,13 @@
             </div>
 
             <div class="form-row">
-                <label>Receipt (optional)</label>
+                <label>{{ __('Receipt (optional)') }}</label>
                 <input type="file" name="receipt" accept=".jpg,.jpeg,.png,.pdf">
                 <p class="muted" style="font-size:12px;margin-top:6px;">{{ __('JPG, PNG, or PDF, up to 5 MB.') }}</p>
                 @error('receipt') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary">Record Expense</button>
+            <button type="submit" class="btn btn-primary">{{ __('Record Expense') }}</button>
             <a href="{{ route('expenses.index') }}" class="btn">{{ __('Cancel') }}</a>
         </form>
     </div>

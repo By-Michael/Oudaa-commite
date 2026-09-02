@@ -10,11 +10,11 @@
       <div class="row align-items-center gy-5">
         <div class="col-lg-6 hero-content">
           <span class="eyebrow">{{ __('Free to get started') }}</span>
-          <h1 class="mb-4">Run your community without the <span class="text-primary-custom">{{ __('spreadsheets and paperwork') }}</span>.</h1>
+          <h1 class="mb-4">{{ __('Run your community without the') }} <span class="text-primary-custom">{{ __('spreadsheets and paperwork') }}</span>.</h1>
           <p class="fs-5 mb-4" style="max-width: 540px;">Oudaa gives your committee one simple platform to manage residents, collect fees, track funds, and record every payment and expense — replacing the scattered spreadsheets and paper files most communities still run on.</p>
           <div class="d-flex flex-wrap gap-3 mb-4 justify-content-lg-start justify-content-center">
             <a href="{{ route('onboarding.step1') }}" class="btn btn-primary btn-lg-custom">{{ __('Create Your Platform') }} <i class="bi bi-arrow-right ms-1"></i></a>
-            <a href="{{ route('landing.services') }}" class="btn btn-light-custom btn-lg-custom">See What It Does</a>
+            <a href="{{ route('landing.services') }}" class="btn btn-light-custom btn-lg-custom">{{ __('See What It Does') }}</a>
           </div>
           <p class="text-slate mb-0" style="font-size:0.9rem;"><i class="bi bi-check-circle-fill text-success me-1"></i>No credit card required &nbsp; · &nbsp; Ready in a couple of minutes</p>
         </div>
@@ -36,14 +36,14 @@
                   <div class="p-3 rounded-3" style="background: var(--n-bg-alt);">
                     <i class="bi bi-people text-primary-custom fs-4"></i>
                     <div class="fw-bold text-navy mt-2 font-display">128</div>
-                    <small class="text-slate">Residents</small>
+                    <small class="text-slate">{{ __('Residents') }}</small>
                   </div>
                 </div>
                 <div class="col-6">
                   <div class="p-3 rounded-3" style="background: #EAF1FB;">
                     <i class="bi bi-piggy-bank text-primary-custom fs-4" style="color:var(--n-secondary) !important;"></i>
                     <div class="fw-bold text-navy mt-2 font-display">{{ __('4 Funds') }}</div>
-                    <small class="text-slate">Tracked live</small>
+                    <small class="text-slate">{{ __('Tracked live') }}</small>
                   </div>
                 </div>
               </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="hero-float-badge badge-1 d-none d-sm-flex">
               <div class="icon-box icon-box-success" style="width:36px;height:36px;border-radius:10px;font-size:1.1rem;"><i class="bi bi-check-lg"></i></div>
-              <div>{{ __('Payment Recorded') }}<br><small class="text-slate fw-normal">Auto-linked to resident</small></div>
+              <div>{{ __('Payment Recorded') }}<br><small class="text-slate fw-normal">{{ __('Auto-linked to resident') }}</small></div>
             </div>
             <div class="hero-float-badge badge-2 d-none d-sm-flex">
               <div class="icon-box icon-box-primary" style="width:36px;height:36px;border-radius:10px;font-size:1.1rem;"><i class="bi bi-envelope-check"></i></div>
@@ -69,7 +69,7 @@
       <div class="row section-header align-items-end">
         <div class="col-lg-7 reveal">
           <span class="eyebrow">{{ __('What\'s inside') }}</span>
-          <h2 class="section-title">Everything a committee needs, in one place</h2>
+          <h2 class="section-title">{{ __('Everything a committee needs, in one place') }}</h2>
           <p class="section-subtitle">{{ __('No more chasing spreadsheets across three people\'s laptops — one dashboard for the whole committee.') }}</p>
         </div>
         <div class="col-lg-5 text-lg-end mt-3 mt-lg-0 reveal">
@@ -80,7 +80,7 @@
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium">
             <div class="icon-box icon-box-primary mb-4"><i class="bi bi-people"></i></div>
-            <h3 class="card-title">Residents</h3>
+            <h3 class="card-title">{{ __('Residents') }}</h3>
             <p class="mb-3">{{ __('Keep a single, always up-to-date record of every household, unit and ID — searchable in seconds.') }}</p>
             <a href="{{ route('landing.service-details', 'residents') }}" class="card-link-arrow">{{ __('Learn more') }} <i class="bi bi-arrow-right"></i></a>
           </div>
@@ -96,7 +96,7 @@
         <div class="col-md-6 col-lg-3 reveal">
           <div class="card-premium">
             <div class="icon-box icon-box-success mb-4"><i class="bi bi-piggy-bank"></i></div>
-            <h3 class="card-title">Funds</h3>
+            <h3 class="card-title">{{ __('Funds') }}</h3>
             <p class="mb-3">{{ __('Organize money into separate funds — maintenance, reserve, events — so balances never get mixed up.') }}</p>
             <a href="{{ route('landing.service-details', 'funds') }}" class="card-link-arrow">{{ __('Learn more') }} <i class="bi bi-arrow-right"></i></a>
           </div>
@@ -122,13 +122,13 @@
             <img src="{{ asset('nexora-assets/img/villa-community.jpg') }}" class="rounded-img w-100" alt="Villa community in Addis Ababa, Ethiopia" style="aspect-ratio: 5/4; object-fit:cover;">
             <div class="hero-float-badge badge-2 d-none d-sm-flex" style="position:absolute; bottom:-1.5rem; left:-1.5rem; right:auto;">
               <div class="icon-box icon-box-primary" style="width:36px;height:36px;border-radius:10px;font-size:1.1rem;"><i class="bi bi-lightning-charge-fill"></i></div>
-              <div>{{ __('Ready in minutes') }}<br><small class="text-slate fw-normal">No setup calls needed</small></div>
+              <div>{{ __('Ready in minutes') }}<br><small class="text-slate fw-normal">{{ __('No setup calls needed') }}</small></div>
             </div>
           </div>
         </div>
         <div class="col-lg-6 reveal">
           <span class="eyebrow">{{ __('Why Oudaa') }}</span>
-          <h2 class="section-title">Built for how committees actually work</h2>
+          <h2 class="section-title">{{ __('Built for how committees actually work') }}</h2>
           <p class="section-subtitle mb-4">{{ __('Most communities run on a mix of spreadsheets, WhatsApp messages and paper receipts — which works, until someone forgets who paid, or a fund balance doesn\'t add up. Oudaa replaces that with one shared source of truth every committee member can trust.') }}</p>
           <ul class="list-check mb-4">
             <li><i class="bi bi-check"></i><div><strong class="text-navy">{{ __('Works for any community') }}</strong> — houses/villas or condo/apartment buildings with block numbers.</div></li>
@@ -146,7 +146,7 @@
     <div class="container">
       <div class="row section-header justify-content-center text-center">
         <div class="col-lg-7 reveal">
-          <span class="eyebrow">How it works</span>
+          <span class="eyebrow">{{ __('How it works') }}</span>
           <h2 class="section-title">{{ __('From signup to your first login, in four steps') }}</h2>
           <p class="section-subtitle mx-auto">{{ __('No installs, no sales calls — just a short form and an email.') }}</p>
         </div>

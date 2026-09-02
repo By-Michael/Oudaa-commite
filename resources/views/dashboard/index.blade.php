@@ -8,7 +8,7 @@
         <div class="value">{{ money($totalFundsBalance) }}</div>
     </div>
     <div class="stat pos">
-        <div class="label">Total Collected</div>
+        <div class="label">{{ __('Total Collected') }}</div>
         <div class="value">{{ money($totalCollected) }}</div>
     </div>
     <div class="stat neg">
@@ -16,19 +16,19 @@
         <div class="value">{{ money($totalSpent) }}</div>
     </div>
     <div class="stat">
-        <div class="label">Active Funds</div>
+        <div class="label">{{ __('Active Funds') }}</div>
         <div class="value">{{ $funds->count() }}</div>
     </div>
 </div>
 
 <div class="panel">
-    <div class="panel-head"><h2>{{ __('Fund Balances') }}</h2><a href="{{ route('funds.index') }}" class="btn btn-sm">Manage Funds</a></div>
+    <div class="panel-head"><h2>{{ __('Fund Balances') }}</h2><a href="{{ route('funds.index') }}" class="btn btn-sm">{{ __('Manage Funds') }}</a></div>
     <div class="panel-body" style="padding:0;">
-        @if ($funds->{{ __('isEmpty())') }}
+        @if ($funds->isEmpty())
             <div class="empty">No active funds yet.</div>
         @else
             <table>
-                <thead><tr><th>{{ __('Fund') }}</th><th>Category</th><th class="right">Balance</th></tr></thead>
+                <thead><tr><th>{{ __('Fund') }}</th><th>{{ __('Category') }}</th><th class="right">{{ __('Balance') }}</th></tr></thead>
                 <tbody>
                 @foreach ($funds as $fund)
                     <tr>
@@ -45,13 +45,13 @@
 
 <div class="form-grid">
     <div class="panel">
-        <div class="panel-head"><h2>{{ __('Recent Payments') }}</h2><a href="{{ route('payments.index') }}" class="btn btn-sm">View all</a></div>
+        <div class="panel-head"><h2>{{ __('Recent Payments') }}</h2><a href="{{ route('payments.index') }}" class="btn btn-sm">{{ __('View all') }}</a></div>
         <div class="panel-body" style="padding:0;">
-            @if ($recentPayments->{{ __('isEmpty())') }}
+            @if ($recentPayments->isEmpty())
                 <div class="empty">No payments recorded yet.</div>
             @else
                 <table>
-                    <thead><tr><th>{{ __('Resident') }}</th><th>Fee</th><th class="right">Amount</th><th>{{ __('Date') }}</th><th>Status</th></tr></thead>
+                    <thead><tr><th>{{ __('Resident') }}</th><th>{{ __('Fee') }}</th><th class="right">{{ __('Amount') }}</th><th>{{ __('Date') }}</th><th>{{ __('Status') }}</th></tr></thead>
                     <tbody>
                     @foreach ($recentPayments as $payment)
                         <tr>
@@ -69,13 +69,13 @@
     </div>
 
     <div class="panel">
-        <div class="panel-head"><h2>Recent Expenses</h2><a href="{{ route('expenses.index') }}" class="btn btn-sm">{{ __('View all') }}</a></div>
+        <div class="panel-head"><h2>{{ __('Recent Expenses') }}</h2><a href="{{ route('expenses.index') }}" class="btn btn-sm">{{ __('View all') }}</a></div>
         <div class="panel-body" style="padding:0;">
             @if ($recentExpenses->isEmpty())
                 <div class="empty">{{ __('No expenses recorded yet.') }}</div>
             @else
                 <table>
-                    <thead><tr><th>Category</th><th>{{ __('Fund') }}</th><th class="right">Amount</th><th>{{ __('Date') }}</th></tr></thead>
+                    <thead><tr><th>{{ __('Category') }}</th><th>{{ __('Fund') }}</th><th class="right">{{ __('Amount') }}</th><th>{{ __('Date') }}</th></tr></thead>
                     <tbody>
                     @foreach ($recentExpenses as $expense)
                         <tr>

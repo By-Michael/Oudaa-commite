@@ -11,7 +11,7 @@
             @endforeach
         </select>
         <select name="resident_id" onchange="this.form.submit()">
-            <option value="">All residents</option>
+            <option value="">{{ __('All residents') }}</option>
             @foreach ($residents as $resident)
                 <option value="{{ $resident->id }}" @selected(request('resident_id') == $resident->id)>{{ $resident->unit_number }} — {{ $resident->name }}</option>
             @endforeach
@@ -29,7 +29,7 @@
         @else
             <table>
                 <thead>
-                <tr><th>Date</th><th>{{ __('Resident') }}</th><th>Fee</th><th>Fund</th><th class="right">{{ __('Amount') }}</th><th>Method</th><th>Status</th><th>{{ __('Note') }}</th><th class="right">Actions</th></tr>
+                <tr><th>{{ __('Date') }}</th><th>{{ __('Resident') }}</th><th>{{ __('Fee') }}</th><th>{{ __('Fund') }}</th><th class="right">{{ __('Amount') }}</th><th>{{ __('Method') }}</th><th>{{ __('Status') }}</th><th>{{ __('Note') }}</th><th class="right">{{ __('Actions') }}</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($payments as $payment)

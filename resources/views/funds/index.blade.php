@@ -6,7 +6,7 @@
     <form class="search-form" method="GET">
         <select name="status" onchange="this.form.submit()">
             <option value="">{{ __('All statuses') }}</option>
-            <option value="active" @selected(request('status') == 'active')>Active</option>
+            <option value="active" @selected(request('status') == 'active')>{{ __('Active') }}</option>
             <option value="archived" @selected(request('status') == 'archived')>{{ __('Archived') }}</option>
         </select>
         @if ($categories->isNotEmpty())
@@ -25,12 +25,12 @@
 
 <div class="panel">
     <div class="panel-body" style="padding:0;">
-        @if ($funds->{{ __('isEmpty())') }}
+        @if ($funds->isEmpty())
             <div class="empty">No funds created yet.</div>
         @else
             <table>
                 <thead>
-                <tr><th>{{ __('Name') }}</th><th>Category</th><th>Description</th><th class="right">{{ __('Balance') }}</th><th>Status</th><th class="right">Actions</th></tr>
+                <tr><th>{{ __('Name') }}</th><th>{{ __('Category') }}</th><th>{{ __('Description') }}</th><th class="right">{{ __('Balance') }}</th><th>{{ __('Status') }}</th><th class="right">{{ __('Actions') }}</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($funds as $fund)

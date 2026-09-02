@@ -8,7 +8,7 @@
     <div class="container">
       <h1 class="mb-3">{{ $feature['title'] }}</h1>
       <div class="breadcrumb-custom">
-        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <a href="{{ route('landing.services') }}">Features</a> <span>/</span> <span class="active">{{ $feature['title'] }}</span>
+        <a href="{{ route('landing.index') }}">{{ __('Home') }}</a> <span>/</span> <a href="{{ route('landing.services') }}">{{ __('Features') }}</a> <span>/</span> <span class="active">{{ $feature['title'] }}</span>
       </div>
     </div>
   </header>
@@ -23,7 +23,7 @@
           <h2 class="mb-3">{{ $feature['intro'] }}</h2>
           <p class="mb-4">{{ $feature['body'] }}</p>
 
-          <h3 class="mb-3 mt-5">What's included</h3>
+          <h3 class="mb-3 mt-5">{{ __('What\'s included') }}</h3>
           <div class="row g-3 mb-4">
             @foreach ($feature['points'] as $point)
               <div class="col-md-6">

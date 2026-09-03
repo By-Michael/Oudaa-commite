@@ -52,5 +52,6 @@ class Kernel extends HttpKernel
         'tenant' => \App\Http\Middleware\ResolveTenant::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'force.locale.en' => \App\Http\Middleware\ForceLandingLocale::class,
     ];
 }

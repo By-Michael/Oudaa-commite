@@ -45,12 +45,6 @@
           <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.services') }}">{{ __('Features') }}</a></li>
           <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.contact') }}">{{ __('Contact') }}</a></li>
           <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-            <div class="lang-toggle" role="group" aria-label="{{ __('Choose language') }}">
-              <a href="{{ route('lang.switch', 'en') }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'en' ? 'active' : '' }}">EN</a>
-              <a href="{{ route('lang.switch', 'am') }}" class="lang-toggle-option {{ ($currentLocale ?? 'en') === 'am' ? 'active' : '' }}">አማ</a>
-            </div>
-          </li>
-          <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
             <button type="button" class="theme-toggle" id="themeToggle" aria-label="{{ __('Toggle dark mode') }}">
               <i class="bi bi-sun-fill"></i>
               <i class="bi bi-moon-stars-fill"></i>

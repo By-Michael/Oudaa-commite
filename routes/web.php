@@ -32,22 +32,20 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [LandingController::class, 'index'])->name('landing.index');
-Route::get('/about', [LandingController::class, 'about'])->name('landing.about');
-Route::get('/services', [LandingController::class, 'services'])->name('landing.services');
-Route::get('/services/{service}', [LandingController::class, 'serviceDetails'])->name('landing.service-details');
-Route::get('/contact', [LandingController::class, 'contact'])->name('landing.contact');
-Route::get('/privacy-policy', [LandingController::class, 'privacy'])->name('landing.privacy');
-Route::get('/terms-of-service', [LandingController::class, 'terms'])->name('landing.terms');
+Route::middleware('force.locale.en')->group(function () {
+    Route::get('/', [LandingController::class, 'index'])->name('landing.index');
+    Route::get('/about', [LandingController::class, 'about'])->name('landing.about');
+    Route::get('/services', [LandingController::class, 'services'])->name('landing.services');
+    Route::get('/services/{service}', [LandingController::class, 'serviceDetails'])->name('landing.service-details');
+    Route::get('/contact', [LandingController::class, 'contact'])->name('landing.contact');
+    Route::get('/privacy-policy', [LandingController::class, 'privacy'])->name('landing.privacy');
+    Route::get('/terms-of-service', [LandingController::class, 'terms'])->name('landing.terms');
+});
 
-// Language toggle (English / Amharic) for the public landing site.
-// Stores the choice in the session so it persists across pages; the
-// same session key is reused by the tenant-side toggle below.
+// The public landing site is English-only, so this no longer accepts a
+// locale — it's kept only so any old bookmarked/shared /lang/{locale}
+// links from the public site don't 404, and just bounces back.
 Route::get('/lang/{locale}', function (string $locale) {
-    if (in_array($locale, \App\Http\Middleware\SetLocale::SUPPORTED, true)) {
-        session(['locale' => $locale]);
-    }
-
     return redirect()->to(url()->previous() ?: route('landing.index'));
 })->name('lang.switch');
 

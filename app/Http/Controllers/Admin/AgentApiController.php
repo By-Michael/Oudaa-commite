@@ -380,7 +380,7 @@ class AgentApiController extends Controller
         ]);
 
         return response()->json([
-            'bridge_url' => url("/admin-bridge/{$token}"),
+            'bridge_url' => url("/{$tenant->slug}/admin-bridge/{$token}"),
         ]);
     }
 }

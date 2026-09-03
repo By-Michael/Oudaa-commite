@@ -73,7 +73,6 @@ Route::middleware(\App\Http\Middleware\VerifyAdminAgentSignature::class)
         Route::post('/impersonate/issue', [\App\Http\Controllers\Admin\AgentApiController::class, 'issueImpersonation']);
     });
 
-Route::middleware('web')->get('/admin-bridge/{token}', [\App\Http\Controllers\Admin\ImpersonationBridgeController::class, 'redeem']);
 Route::post('/contact', [ContactController::class, 'store'])
     ->name('landing.contact.store')
     ->middleware('throttle:5,1'); // 5 submissions per minute per IP — cheap spam guard on a public, unauthenticated form.
@@ -120,6 +119,15 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
 
         return redirect()->to(url()->previous() ?: route('dashboard', ['tenant' => $tenant]));
     })->name('tenant.lang.switch');
+
+    // God Admin impersonation bridge. Must live inside the tenant group
+    // (not as a bare top-level route) so ResolveTenant sets the
+    // per-tenant session cookie *before* Auth::login() runs — otherwise
+    // the login lands in the wrong (default) session and the dashboard
+    // never sees it. No 'auth'/'guest' middleware: this route performs
+    // its own one-time-token authentication instead.
+    Route::get('/admin-bridge/{token}', [\App\Http\Controllers\Admin\ImpersonationBridgeController::class, 'redeem'])
+        ->name('admin-bridge');
 
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

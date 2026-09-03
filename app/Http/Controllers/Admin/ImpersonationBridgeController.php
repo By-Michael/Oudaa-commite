@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ImpersonationBridgeController extends Controller
 {
-    public function redeem(Request $request, string $token)
+    public function redeem(Request $request, string $tenant, string $token)
     {
         $record = DB::table('admin_impersonation_tokens')->where('token', $token)->first();
 
@@ -31,6 +31,6 @@ class ImpersonationBridgeController extends Controller
         Auth::login($user);
         session(['impersonated_by_god_admin' => true]);
 
-        return redirect('/')->with('status', __('Signed in.'));
+        return redirect()->route('dashboard', ['tenant' => $tenant])->with('status', __('Signed in.'));
     }
 }

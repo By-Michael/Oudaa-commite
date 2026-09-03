@@ -14,26 +14,9 @@ class AdminConsentController extends Controller
      * link an admin sent them. We only ever act on the record if it
      * belongs to the currently authenticated user.
      */
-    public function respond(Request $request, string $token)
+    public function respond(Request $request, string $tenant, string $token)
     {
-        $consent = AdminConsentRequest::where('token', $token)->first();
-
-        if (! $consent) {
-            // TEMPORARY DEBUG — remove once the 404 is diagnosed. Logs
-            // what we actually got vs what's in the table, so we can see
-            // whether it's a genuine miss or a mismatch (stale token,
-            // wrong tenant, expired-and-cleared row, etc).
-            \Log::warning('[ADMIN-CONSENT] No row found for token.', [
-                'attempted_token' => $token,
-                'attempted_token_length' => strlen($token),
-                'auth_id' => auth()->id(),
-                'route_tenant' => $request->route('tenant'),
-                'recent_rows' => AdminConsentRequest::latest()->limit(5)
-                    ->get(['token', 'committee_id', 'tenant_slug', 'status', 'expires_at', 'created_at']),
-            ]);
-
-            abort(404);
-        }
+        $consent = AdminConsentRequest::where('token', $token)->firstOrFail();
 
         abort_unless($consent->committee_id === auth()->id(), 403);
 

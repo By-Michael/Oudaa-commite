@@ -64,7 +64,11 @@ Route::middleware(\App\Http\Middleware\VerifyAdminAgentSignature::class)
         Route::get('/health', [\App\Http\Controllers\Admin\AgentApiController::class, 'health']);
         Route::get('/logs/errors', [\App\Http\Controllers\Admin\AgentApiController::class, 'recentErrors']);
         Route::get('/logs/recent', [\App\Http\Controllers\Admin\AgentApiController::class, 'recentLogs']);
+        Route::get('/logs/slow-queries', [\App\Http\Controllers\Admin\AgentApiController::class, 'slowQueries']);
         Route::get('/metrics/performance', [\App\Http\Controllers\Admin\AgentApiController::class, 'performanceSeries']);
+        Route::get('/metrics/active-users', [\App\Http\Controllers\Admin\AgentApiController::class, 'activeUsers']);
+        Route::get('/metrics/top-endpoints', [\App\Http\Controllers\Admin\AgentApiController::class, 'topEndpoints']);
+        Route::get('/metrics/status-breakdown', [\App\Http\Controllers\Admin\AgentApiController::class, 'statusBreakdown']);
         Route::post('/consent/request', [\App\Http\Controllers\Admin\AgentApiController::class, 'requestConsent']);
         Route::post('/impersonate/issue', [\App\Http\Controllers\Admin\AgentApiController::class, 'issueImpersonation']);
     });

@@ -41,6 +41,17 @@ class AgentApiController extends Controller
         $diskTotal = @disk_total_space(base_path());
         $diskUsedPct = ($diskFree && $diskTotal) ? round((1 - $diskFree / $diskTotal) * 100) : null;
 
+        // Total on-disk size of the database itself (MySQL-specific;
+        // swallow silently on any other driver so health() still works).
+        $dbSizeMb = null;
+        try {
+            $bytes = DB::table('information_schema.tables')
+                ->whereRaw('table_schema = database()')
+                ->sum(DB::raw('data_length + index_length'));
+            $dbSizeMb = $bytes ? round($bytes / 1024 / 1024, 1) : null;
+        } catch (\Throwable $e) {
+        }
+
         $queuePending = null;
         try {
             $queuePending = DB::table('jobs')->count();
@@ -56,9 +67,115 @@ class AgentApiController extends Controller
             'requests_per_min' => $requestCount > 0 ? (int) round($requestCount / 5) : 0,
             'error_rate' => $errorRate,
             'db_ping_ms' => $dbPing,
+            'db_size_mb' => $dbSizeMb,
             'queue_pending' => $queuePending,
             'disk_used_pct' => $diskUsedPct,
         ]);
+    }
+
+    /**
+     * Committee members with an active session right now — the closest
+     * thing this app has to "concurrent users", since residents don't
+     * log in (only committees do). Session `last_activity` is a unix
+     * timestamp updated on every authenticated request, so "active in
+     * the last N minutes" is just filtering that column.
+     */
+    public function activeUsers()
+    {
+        $now = now()->timestamp;
+
+        $active5m = DB::table('sessions')->whereNotNull('user_id')
+            ->where('last_activity', '>=', $now - 300)
+            ->distinct('user_id')->count('user_id');
+
+        $active30m = DB::table('sessions')->whereNotNull('user_id')
+            ->where('last_activity', '>=', $now - 1800)
+            ->distinct('user_id')->count('user_id');
+
+        // Same 30-minute window, broken down by community — "which
+        // tenants are actually busy right now" instead of one blended
+        // instance-wide number.
+        $byTenant = DB::table('sessions')
+            ->join('committees', 'committees.id', '=', 'sessions.user_id')
+            ->join('tenants', 'tenants.id', '=', 'committees.community_id')
+            ->whereNotNull('sessions.user_id')
+            ->where('sessions.last_activity', '>=', $now - 1800)
+            ->groupBy('tenants.id', 'tenants.name')
+            ->orderByDesc(DB::raw('COUNT(DISTINCT sessions.user_id)'))
+            ->limit(20)
+            ->get([
+                'tenants.id as tenant_id',
+                'tenants.name as tenant_name',
+                DB::raw('COUNT(DISTINCT sessions.user_id) as active_users'),
+            ]);
+
+        // Who, specifically — small enough list to just return, useful
+        // for a "who's online right now" panel rather than only a count.
+        $onlineNow = DB::table('sessions')
+            ->join('committees', 'committees.id', '=', 'sessions.user_id')
+            ->join('tenants', 'tenants.id', '=', 'committees.community_id')
+            ->whereNotNull('sessions.user_id')
+            ->where('sessions.last_activity', '>=', $now - 300)
+            ->orderByDesc('sessions.last_activity')
+            ->limit(25)
+            ->get([
+                'committees.name as user_name',
+                'tenants.name as tenant_name',
+                'sessions.last_activity',
+                'sessions.ip_address',
+            ])
+            ->map(fn ($row) => [
+                'user_name' => $row->user_name,
+                'tenant_name' => $row->tenant_name,
+                'last_active_seconds_ago' => $now - $row->last_activity,
+                'ip_address' => $row->ip_address,
+            ]);
+
+        return response()->json([
+            'active_5m' => $active5m,
+            'active_30m' => $active30m,
+            'by_tenant' => $byTenant,
+            'online_now' => $onlineNow,
+        ]);
+    }
+
+    /**
+     * Which routes are actually being hit, and how slow each one is —
+     * a real diagnostic signal rather than a single blended average,
+     * since one slow report endpoint can hide inside a fast overall avg.
+     */
+    public function topEndpoints(Request $request)
+    {
+        $minutes = min((int) $request->query('minutes', 15), 180);
+        $since = now()->subMinutes($minutes);
+
+        $rows = SystemMetric::where('created_at', '>=', $since)
+            ->selectRaw('path, method, COUNT(*) as request_count, AVG(duration_ms) as avg_ms, MAX(duration_ms) as max_ms, SUM(status_code >= 500) as error_count')
+            ->groupBy('path', 'method')
+            ->orderByDesc('request_count')
+            ->limit(15)
+            ->get();
+
+        return response()->json(['endpoints' => $rows, 'window_minutes' => $minutes]);
+    }
+
+    /**
+     * Response status-code mix over a recent window — a genuine ops
+     * signal (a rising 4xx rate often means a broken client/integration
+     * before it ever shows up as a 5xx error rate).
+     */
+    public function statusBreakdown(Request $request)
+    {
+        $minutes = min((int) $request->query('minutes', 15), 180);
+        $since = now()->subMinutes($minutes);
+
+        $rows = SystemMetric::where('created_at', '>=', $since)
+            ->selectRaw('FLOOR(status_code / 100) as status_class, COUNT(*) as request_count')
+            ->groupBy('status_class')
+            ->get()
+            ->mapWithKeys(fn ($r) => [((int) $r->status_class).'xx' => $r->request_count]);
+
+        return response()->json(['breakdown' => $rows, 'window_minutes' => $minutes]);
     }
 
     /**
@@ -118,6 +235,29 @@ class AgentApiController extends Controller
             'message' => $entry->message,
             'context' => $entry->context,
         ];
+    }
+
+    /**
+     * Recent queries that crossed the slow-query threshold (see
+     * AppServiceProvider::recordSlowQueries), newest first.
+     */
+    public function slowQueries(Request $request)
+    {
+        $limit = min((int) $request->query('limit', 50), 200);
+
+        $entries = \App\Models\SlowQuery::orderByDesc('time_ms')
+            ->orderByDesc('created_at')
+            ->limit($limit)
+            ->get(['sql', 'bindings', 'time_ms', 'path', 'created_at'])
+            ->map(fn ($q) => [
+                'sql' => $q->sql,
+                'bindings' => $q->bindings,
+                'time_ms' => $q->time_ms,
+                'path' => $q->path,
+                'created_at' => $q->created_at->format('Y-m-d H:i:s'),
+            ]);
+
+        return response()->json(['entries' => $entries]);
     }
 
     public function performanceSeries(Request $request)

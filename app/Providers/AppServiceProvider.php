@@ -2,13 +2,19 @@
 
 namespace App\Providers;
 
+use App\Models\SlowQuery;
 use App\Support\CurrentCommunity;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /** Anything slower than this gets persisted for the admin dashboard. */
+    private const SLOW_QUERY_THRESHOLD_MS = 200;
+
     public function register()
     {
         $this->app->singleton(CurrentCommunity::class);
@@ -33,5 +39,39 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        $this->recordSlowQueries();
+    }
+
+    /**
+     * Feeds the God Admin dashboard's "slow queries" panel. Fires on
+     * every query, so this has to be cheap and can never itself throw —
+     * a broken listener would break every DB call in the app.
+     */
+    private function recordSlowQueries(): void
+    {
+        DB::listen(function (QueryExecuted $query) {
+            if ($query->time < self::SLOW_QUERY_THRESHOLD_MS) {
+                return;
+            }
+
+            // Guard against logging the INSERT below as its own slow
+            // query and recursing forever.
+            if (str_contains($query->sql, 'slow_queries')) {
+                return;
+            }
+
+            try {
+                SlowQuery::create([
+                    'sql' => $query->sql,
+                    'bindings' => array_map(fn ($b) => is_scalar($b) || $b === null ? $b : (string) $b, $query->bindings),
+                    'time_ms' => (int) round($query->time),
+                    'path' => request()?->path(),
+                ]);
+            } catch (\Throwable $e) {
+                // best-effort — never let logging break the request
+            }
+        });
     }
 }
+

@@ -79,7 +79,13 @@ Route::post('/contact', [ContactController::class, 'store'])
     ->name('landing.contact.store')
     ->middleware('throttle:5,1'); // 5 submissions per minute per IP — cheap spam guard on a public, unauthenticated form.
 
-Route::prefix('create')->name('onboarding.')->group(function () {
+// The onboarding wizard (like the rest of the public landing site) is
+// English-only. Language choice only becomes available once a committee
+// member is inside their tenant panel (see the tenant /lang/{locale}
+// route below), so we force English here too — otherwise an Amharic
+// preference picked up from a *previous* tenant-panel visit would leak
+// into this shared-session wizard.
+Route::middleware('force.locale.en')->prefix('create')->name('onboarding.')->group(function () {
     Route::get('/', [CreatePlatformController::class, 'step1'])->name('step1');
     Route::post('/', [CreatePlatformController::class, 'step1Store'])->name('step1.store');
 

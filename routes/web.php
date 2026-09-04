@@ -71,6 +71,8 @@ Route::middleware(\App\Http\Middleware\VerifyAdminAgentSignature::class)
         Route::get('/metrics/status-breakdown', [\App\Http\Controllers\Admin\AgentApiController::class, 'statusBreakdown']);
         Route::post('/consent/request', [\App\Http\Controllers\Admin\AgentApiController::class, 'requestConsent']);
         Route::post('/impersonate/issue', [\App\Http\Controllers\Admin\AgentApiController::class, 'issueImpersonation']);
+        Route::post('/announcements', [\App\Http\Controllers\Admin\AgentApiController::class, 'pushAnnouncement']);
+        Route::delete('/announcements/{id}', [\App\Http\Controllers\Admin\AgentApiController::class, 'dismissAnnouncement']);
     });
 
 Route::post('/contact', [ContactController::class, 'store'])
@@ -154,6 +156,13 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         // is never reachable via a link an admin can hand someone.
         Route::post('/admin-consent/{token}', [\App\Http\Controllers\AdminConsentController::class, 'respond'])
             ->name('admin-consent.respond');
+
+        // The committee member dismissing a system announcement banner
+        // for themselves ("Ignore"). Doesn't touch the announcement
+        // record itself — see SystemAnnouncementDismissal — so it stays
+        // visible to everyone else it was pushed to.
+        Route::post('/announcements/{announcement}/dismiss', [\App\Http\Controllers\SystemAnnouncementController::class, 'dismiss'])
+            ->name('announcements.dismiss');
 
         Route::get('/residents', [ResidentController::class, 'index'])->name('residents.index');
         Route::get('/residents/create', [ResidentController::class, 'create'])->name('residents.create');

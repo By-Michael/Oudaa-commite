@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminConsentRequest;
 use App\Models\Committee;
 use App\Models\LogEntry;
+use App\Models\SystemAnnouncement;
 use App\Models\SystemMetric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,59 @@ use Illuminate\Support\Str;
 
 class AgentApiController extends Controller
 {
+    /**
+     * Receive a system announcement pushed from the God Admin dashboard
+     * and make it visible to committee members (see the banner in
+     * layouts/app.blade.php) with a dismiss/"Ignore" control. `id` is
+     * the admin app's own announcement id — updateOrCreate so a second
+     * push for the same announcement (e.g. after editing) updates it in
+     * place instead of creating a duplicate banner.
+     */
+    public function pushAnnouncement(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|integer',
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'level' => 'required|in:info,warning,critical',
+            'starts_at' => 'nullable|date',
+            'ends_at' => 'nullable|date',
+            'dismissible' => 'boolean',
+        ]);
+
+        $announcement = SystemAnnouncement::updateOrCreate(
+            ['id' => $data['id']],
+            [
+                'title' => $data['title'],
+                'body' => $data['body'],
+                'level' => $data['level'],
+                'starts_at' => $data['starts_at'] ?? null,
+                'ends_at' => $data['ends_at'] ?? null,
+                'dismissible' => $data['dismissible'] ?? true,
+            ]
+        );
+
+        \Log::info('[GOD-ADMIN] Announcement received', ['id' => $announcement->id, 'level' => $announcement->level]);
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
+     * The admin dashboard calls this when an announcement is disabled
+     * or deleted, so it stops showing here too instead of lingering in
+     * dashboards it already reached.
+     */
+    public function dismissAnnouncement(int $id)
+    {
+        $announcement = SystemAnnouncement::find($id);
+
+        if ($announcement) {
+            $announcement->delete(); // cascades to system_announcement_dismissals
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
     public function health()
     {
         $dbStart = microtime(true);

@@ -122,6 +122,36 @@
                         </div>
                     </div>
                 @endif
+
+                @php
+                    $liveAnnouncements = \App\Models\SystemAnnouncement::query()
+                        ->where(fn ($q) => $q->whereNull('starts_at')->orWhere('starts_at', '<=', now()))
+                        ->where(fn ($q) => $q->whereNull('ends_at')->orWhere('ends_at', '>=', now()))
+                        ->whereDoesntHave('dismissals', fn ($q) => $q->where('committee_id', auth()->id()))
+                        ->latest()
+                        ->get();
+                @endphp
+                @foreach ($liveAnnouncements as $announcement)
+                    @php
+                        $levelStyle = match ($announcement->level) {
+                            'critical' => ['border' => '#E88', 'bg' => '#3A1F22'],
+                            'warning' => ['border' => '#E0B24E', 'bg' => '#3A331F'],
+                            default => ['border' => '#B99FE0', 'bg' => '#F4EEFB'],
+                        };
+                    @endphp
+                    <div class="alert" style="border:1px solid {{ $levelStyle['border'] }};background:{{ $levelStyle['bg'] }};padding:14px 16px;border-radius:10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+                        <div>
+                            <strong>{{ $announcement->title }}</strong>
+                            <div class="muted" style="font-size:13px;margin-top:2px">{{ $announcement->body }}</div>
+                        </div>
+                        @if ($announcement->dismissible)
+                            <form method="POST" action="{{ route('announcements.dismiss', ['tenant' => request()->route('tenant'), 'announcement' => $announcement->id]) }}" style="flex-shrink:0">
+                                @csrf
+                                <button type="submit" class="btn btn-sm">{{ __('Ignore') }}</button>
+                            </form>
+                        @endif
+                    </div>
+                @endforeach
             @endauth
 
             @yield('content')

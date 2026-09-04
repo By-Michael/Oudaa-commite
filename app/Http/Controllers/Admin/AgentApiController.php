@@ -392,6 +392,8 @@ class AgentApiController extends Controller
             'tenant_slug' => 'required|string',
             'user_id' => 'required|integer',
             'reason' => 'required|string',
+            'admin_name' => 'required|string',
+            'admin_email' => 'required|email',
         ]);
 
         $tenant = DB::table('tenants')->where('slug', $request->input('tenant_slug'))->first();
@@ -416,6 +418,13 @@ class AgentApiController extends Controller
         DB::table('admin_impersonation_tokens')->insert([
             'token' => $token,
             'committee_id' => $user->id,
+            // Carried through to the tenant session on redeem, and from
+            // there onto every audit log row written while impersonating
+            // — see ImpersonationBridgeController::redeem and
+            // AuditLog::record().
+            'admin_name' => $request->input('admin_name'),
+            'admin_email' => $request->input('admin_email'),
+            'reason' => $request->input('reason'),
             'expires_at' => now()->addSeconds(60),
             'created_at' => now(),
             'updated_at' => now(),

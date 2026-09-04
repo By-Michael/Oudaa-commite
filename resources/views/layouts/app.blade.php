@@ -93,6 +93,7 @@
             @endif
 
             @auth
+                <div id="systemBanners">
                 @php
                     $pendingAdminConsent = \App\Models\AdminConsentRequest::where('committee_id', auth()->id())
                         ->where('status', 'pending')
@@ -152,6 +153,7 @@
                         @endif
                     </div>
                 @endforeach
+                </div>
             @endauth
 
             @yield('content')
@@ -220,5 +222,14 @@
 <script src="{{ asset('js/ethiopian-date.js') }}?v={{ @filemtime(public_path('js/ethiopian-date.js')) }}"></script>
 <script src="{{ asset('js/date-picker.js') }}?v={{ @filemtime(public_path('js/date-picker.js')) }}"></script>
 <script src="{{ asset('js/app.js') }}?v={{ @filemtime(public_path('js/app.js')) }}"></script>
+<script src="{{ asset('js/live-poll.js') }}?v={{ @filemtime(public_path('js/live-poll.js')) }}"></script>
+@auth
+<script>
+  // A new admin access request or announcement shows up here on its
+  // own — no more needing to reload the page to see it arrive.
+  initLivePoll('systemBanners', { interval: 5000 });
+</script>
+@endauth
+@stack('scripts')
 </body>
 </html>

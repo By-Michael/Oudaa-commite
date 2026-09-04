@@ -101,10 +101,10 @@
                         ->first();
                 @endphp
                 @if ($pendingAdminConsent)
-                    <div class="alert" style="border:1px solid #B99FE0;background:#F4EEFB;padding:14px 16px;border-radius:10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+                    <div class="alert alert-info" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
                         <div>
                             <strong>{{ __('Platform support is requesting access to your account.') }}</strong>
-                            <div class="muted" style="font-size:13px;margin-top:2px">
+                            <div style="font-size:13px;margin-top:2px;opacity:.8">
                                 {{ __('Reason given: \':reason\'. They will not be able to act on your behalf unless you approve this.', ['reason' => $pendingAdminConsent->reason]) }}
                             </div>
                         </div>
@@ -133,16 +133,16 @@
                 @endphp
                 @foreach ($liveAnnouncements as $announcement)
                     @php
-                        $levelStyle = match ($announcement->level) {
-                            'critical' => ['border' => '#E88', 'bg' => '#3A1F22'],
-                            'warning' => ['border' => '#E0B24E', 'bg' => '#3A331F'],
-                            default => ['border' => '#B99FE0', 'bg' => '#F4EEFB'],
+                        $levelClass = match ($announcement->level) {
+                            'critical' => 'alert-error',
+                            'warning' => 'alert-warning',
+                            default => 'alert-info',
                         };
                     @endphp
-                    <div class="alert" style="border:1px solid {{ $levelStyle['border'] }};background:{{ $levelStyle['bg'] }};padding:14px 16px;border-radius:10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+                    <div class="alert {{ $levelClass }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
                         <div>
                             <strong>{{ $announcement->title }}</strong>
-                            <div class="muted" style="font-size:13px;margin-top:2px">{{ $announcement->body }}</div>
+                            <div style="font-size:13px;margin-top:2px;opacity:.8">{{ $announcement->body }}</div>
                         </div>
                         @if ($announcement->dismissible)
                             <form method="POST" action="{{ route('announcements.dismiss', ['tenant' => request()->route('tenant'), 'announcement' => $announcement->id]) }}" style="flex-shrink:0">

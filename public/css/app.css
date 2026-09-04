@@ -467,6 +467,8 @@ input:focus,select:focus,textarea:focus{
 }
 .alert-success{background:var(--md-success-container);color:var(--md-success)}
 .alert-error{background:var(--md-error-container);color:var(--md-error)}
+.alert-warning{background:var(--md-warning-container);color:var(--md-warning)}
+.alert-info{background:var(--md-surface-container-high);color:var(--md-on-surface);border-color:var(--md-outline-variant)}
 
 .pagination{margin-top:18px;font-size:13px}
 .pagination-nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center}

@@ -40,10 +40,10 @@
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-1 mt-3 mt-lg-0">
-          <li class="nav-item"><a class="nav-link nav2 active"  href="{{ route('landing.index') }}">{{ __('Home') }}</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.about') }}">{{ __('About') }}</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.services') }}">{{ __('Features') }}</a></li>
-          <li class="nav-item"><a class="nav-link nav2" href="{{ route('landing.contact') }}">{{ __('Contact') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2 {{ request()->routeIs('landing.index') ? 'active' : '' }}" href="{{ route('landing.index') }}">{{ __('Home') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2 {{ request()->routeIs('landing.about') ? 'active' : '' }}" href="{{ route('landing.about') }}">{{ __('About') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2 {{ request()->routeIs('landing.services') || request()->routeIs('landing.service-details') ? 'active' : '' }}" href="{{ route('landing.services') }}">{{ __('Features') }}</a></li>
+          <li class="nav-item"><a class="nav-link nav2 {{ request()->routeIs('landing.contact') || request()->routeIs('landing.contact.store') ? 'active' : '' }}" href="{{ route('landing.contact') }}">{{ __('Contact') }}</a></li>
           <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
             <button type="button" class="theme-toggle" id="themeToggle" aria-label="{{ __('Toggle dark mode') }}">
               <i class="bi bi-sun-fill"></i>

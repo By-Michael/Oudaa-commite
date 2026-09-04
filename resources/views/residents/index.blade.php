@@ -44,6 +44,11 @@
                                     {{ $resident->status === 'active' ? __('Deactivate') : __('Activate') }}
                                 </button>
                             </form>
+                            <form method="POST" action="{{ route('residents.destroy', $resident) }}" style="display:inline"
+                                  data-confirm="{{ __('Delete') }} {{ addslashes($resident->name) }}? {{ __('This cannot be undone.') }}">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="{{ __('Delete') }}">🗑</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

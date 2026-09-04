@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\InviteMemberMail;
 use App\Models\Committee;
 use App\Models\TenantSetting;
+use App\Services\PhpMailerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class MemberController extends Controller
@@ -77,6 +76,15 @@ class MemberController extends Controller
 
         $communityName = TenantSetting::current()?->community_name ?? 'your community';
 
-        Mail::to($committee->email)->send(new InviteMemberMail($setPasswordUrl, $committee->name, $communityName));
+        app(PhpMailerService::class)->send(
+            to: $committee->email,
+            subject: 'You\'ve been added to '.$communityName.' on Oudaa',
+            view: 'emails.invite-member',
+            data: [
+                'setPasswordUrl' => $setPasswordUrl,
+                'committeeName' => $committee->name,
+                'communityName' => $communityName,
+            ],
+        );
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ResetPasswordMail;
 use App\Models\Committee;
+use App\Services\PhpMailerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 /**
@@ -52,7 +51,12 @@ class ForgotPasswordController extends Controller
                 'email' => $committee->email,
             ]);
 
-            Mail::to($committee->email)->send(new ResetPasswordMail($resetUrl, $committee->name));
+            app(PhpMailerService::class)->send(
+                to: $committee->email,
+                subject: 'Reset your Oudaa password',
+                view: 'emails.reset-password',
+                data: ['resetUrl' => $resetUrl, 'committeeName' => $committee->name],
+            );
         }
 
         return back()->with('status', __('If that email is registered, a password reset link is on its way to it.'));

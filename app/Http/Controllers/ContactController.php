@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ContactMessageReceived;
+use App\Jobs\SendPhpMailerEmail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -20,8 +19,14 @@ class ContactController extends Controller
             'website' => ['prohibited'],
         ]);
 
-        Mail::to(env('MAIL_SUPPORT_ADDRESS', 'm7020322@gmail.com'))
-            ->queue(new ContactMessageReceived($data));
+        SendPhpMailerEmail::dispatch(
+            to: env('MAIL_SUPPORT_ADDRESS', 'm7020322@gmail.com'),
+            subject: 'New contact form message'.($data['community_name'] ? ' — '.$data['community_name'] : ''),
+            view: 'emails.contact-message',
+            data: ['data' => $data],
+            replyToEmail: $data['email'],
+            replyToName: $data['full_name'],
+        );
 
         return redirect()
             ->route('landing.contact')

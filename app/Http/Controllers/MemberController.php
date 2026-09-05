@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InviteMemberMail;
 use App\Models\Committee;
 use App\Models\TenantSetting;
-use App\Services\PhpMailerService;
+use App\Services\SafeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -52,12 +53,16 @@ class MemberController extends Controller
             'password' => Hash::make(Str::random(40)),
         ]);
 
-        $this->sendSetPasswordEmail($request, $committee);
+        $sent = $this->sendSetPasswordEmail($request, $committee);
+
+        if (! $sent) {
+            return redirect()->route('members.index')->with('warning', __('Committee member added, but the invite email failed to send. Please share the set-password link with them another way for now.'));
+        }
 
         return redirect()->route('members.index')->with('status', __('Committee member added. We\'ve emailed them a link to set their password.'));
     }
 
-    private function sendSetPasswordEmail(Request $request, Committee $committee): void
+    private function sendSetPasswordEmail(Request $request, Committee $committee): bool
     {
         $plainToken = Str::random(64);
 
@@ -76,15 +81,10 @@ class MemberController extends Controller
 
         $communityName = TenantSetting::current()?->community_name ?? 'your community';
 
-        app(PhpMailerService::class)->send(
-            to: $committee->email,
-            subject: 'You\'ve been added to '.$communityName.' on Oudaa',
-            view: 'emails.invite-member',
-            data: [
-                'setPasswordUrl' => $setPasswordUrl,
-                'committeeName' => $committee->name,
-                'communityName' => $communityName,
-            ],
+        return SafeMail::send(
+            new InviteMemberMail($setPasswordUrl, $committee->name, $communityName),
+            $committee->email,
+            ['context' => 'member_invite', 'committee_id' => $committee->id]
         );
     }
 }

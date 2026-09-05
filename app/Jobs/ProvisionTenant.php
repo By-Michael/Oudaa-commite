@@ -2,9 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Mail\TenantProvisioned;
 use App\Models\Central\Tenant;
 use App\Models\TenantSetting;
-use App\Services\PhpMailerService;
+use App\Services\SafeMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,7 +13,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -66,17 +66,11 @@ class ProvisionTenant implements ShouldQueue
                 'setup_token_expires_at' => now()->addHours((int) config('tenancy.setup_link_ttl_hours')),
             ]);
 
-            $setupUrl = URL::temporarySignedRoute(
-                'tenants.set-password.show',
-                $tenant->setup_token_expires_at,
-                ['tenant' => $tenant->slug, 'token' => $rawToken]
-            );
-
-            app(PhpMailerService::class)->send(
-                to: $tenant->owner_email,
-                subject: "Your {$tenant->name} platform is ready",
-                view: 'emails.tenant-provisioned',
-                data: ['tenant' => $tenant, 'setupUrl' => $setupUrl],
+            SafeMail::queue(
+                new TenantProvisioned($tenant, $rawToken),
+                $tenant->owner_email,
+                ['context' => 'tenant_provisioned', 'tenant_id' => $tenant->id],
+                rethrow: true
             );
         } catch (Throwable $e) {
             Log::error('Tenant provisioning failed', [

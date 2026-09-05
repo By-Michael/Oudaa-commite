@@ -7,8 +7,11 @@ use App\Support\CurrentCommunity;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\Mailer\Bridge\Sendinblue\Transport\SendinblueTransportFactory;
+use Symfony\Component\Mailer\Transport\Dsn;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +44,26 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->recordSlowQueries();
+        $this->registerBrevoMailer();
+    }
+
+    /**
+     * Brevo (formerly Sendinblue) isn't one of Laravel's built-in mailer
+     * drivers, so — unlike ses/postmark/resend in config/mail.php, which
+     * Laravel already knows how to build — it has to be registered by
+     * hand via Mail::extend(), using the transport factory that ships in
+     * the symfony/sendinblue-mailer package (composer require it before
+     * this will resolve). The 'default' host segment below is a Symfony
+     * Mailer convention for API-based transports with no custom host —
+     * it's not a placeholder to fill in.
+     */
+    private function registerBrevoMailer(): void
+    {
+        Mail::extend('brevo', function (array $config = []) {
+            return (new SendinblueTransportFactory())->create(
+                new Dsn('sendinblue+api', 'default', $config['key'] ?? null)
+            );
+        });
     }
 
     /**

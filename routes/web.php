@@ -181,7 +181,6 @@ Route::prefix('{tenant}')->middleware('tenant-web')->group(function () {
         Route::get('/residents/{resident}/edit', [ResidentController::class, 'edit'])->name('residents.edit');
         Route::put('/residents/{resident}', [ResidentController::class, 'update'])->name('residents.update');
         Route::patch('/residents/{resident}/toggle', [ResidentController::class, 'deactivate'])->name('residents.toggle');
-        Route::delete('/residents/{resident}', [ResidentController::class, 'destroy'])->name('residents.destroy');
 
         Route::get('/fees', [FeeController::class, 'index'])->name('fees.index');
         Route::get('/fees/create', [FeeController::class, 'create'])->name('fees.create');

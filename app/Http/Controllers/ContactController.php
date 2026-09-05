@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendPhpMailerEmail;
+use App\Mail\ContactMessageReceived;
+use App\Services\SafeMail;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -19,14 +20,17 @@ class ContactController extends Controller
             'website' => ['prohibited'],
         ]);
 
-        SendPhpMailerEmail::dispatch(
-            to: env('MAIL_SUPPORT_ADDRESS', 'm7020322@gmail.com'),
-            subject: 'New contact form message'.($data['community_name'] ? ' — '.$data['community_name'] : ''),
-            view: 'emails.contact-message',
-            data: ['data' => $data],
-            replyToEmail: $data['email'],
-            replyToName: $data['full_name'],
+        $sent = SafeMail::queue(
+            new ContactMessageReceived($data),
+            env('MAIL_SUPPORT_ADDRESS', 'm7020322@gmail.com'),
+            ['context' => 'contact_form', 'submitter_email' => $data['email']]
         );
+
+        if (! $sent) {
+            return redirect()
+                ->route('landing.contact')
+                ->with('error', "Sorry — we couldn't send your message right now. Please try again in a bit, or email us directly.");
+        }
 
         return redirect()
             ->route('landing.contact')

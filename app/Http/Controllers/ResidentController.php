@@ -318,9 +318,7 @@ class ResidentController extends Controller
     }
 
     /**
-     * Deactivate is the usual way to remove a resident from active use,
-     * since it keeps payment history intact. Hard delete (below) is only
-     * offered for residents with no payment history at all.
+     * No delete for residents — deactivate instead so payment history stays intact.
      */
     public function deactivate(Request $request)
     {
@@ -328,26 +326,6 @@ class ResidentController extends Controller
         $resident->update(['status' => $resident->status === 'active' ? 'inactive' : 'active']);
 
         return back()->with('status', __('Resident status updated.'));
-    }
-
-    /**
-     * Hard delete. Blocked when the resident has any payment history,
-     * since deleting would cascade-delete those payment records —
-     * such residents should be deactivated instead.
-     */
-    public function destroy(Request $request)
-    {
-        $resident = Resident::findOrFail($request->route('resident'));
-
-        if ($resident->payments()->exists()) {
-            return back()->withErrors([
-                'delete' => __('This resident has payment history and cannot be deleted. Deactivate them instead.'),
-            ]);
-        }
-
-        $resident->delete();
-
-        return redirect()->route('residents.index')->with('status', __('Resident deleted.'));
     }
 
     private function validated(Request $request, ?Resident $resident = null): array

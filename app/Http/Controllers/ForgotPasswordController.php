@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPasswordMail;
 use App\Models\Committee;
-use App\Services\PhpMailerService;
+use App\Services\SafeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -51,11 +52,14 @@ class ForgotPasswordController extends Controller
                 'email' => $committee->email,
             ]);
 
-            app(PhpMailerService::class)->send(
-                to: $committee->email,
-                subject: 'Reset your Oudaa password',
-                view: 'emails.reset-password',
-                data: ['resetUrl' => $resetUrl, 'committeeName' => $committee->name],
+            // Result intentionally not surfaced to the user — the response
+            // below stays identical whether the send succeeded or failed,
+            // so this form still can't be used to enumerate accounts.
+            // SafeMail::attempt() logs any failure for us to see instead.
+            SafeMail::send(
+                new ResetPasswordMail($resetUrl, $committee->name),
+                $committee->email,
+                ['context' => 'password_reset', 'committee_id' => $committee->id]
             );
         }
 

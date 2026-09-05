@@ -101,15 +101,6 @@ class CreatePlatformController extends Controller
             'accept_terms.accepted' => 'Please accept the Privacy Policy and Terms of Service to continue.',
         ]);
 
-        // One community per email: an email that already owns a tenant
-        // (whether it's still being provisioned or already active)
-        // can't spin up a second one.
-        if ($this->emailAlreadyOwnsTenant($data['email'])) {
-            return back()->withErrors([
-                'email' => __('This email has already created a community. Please log in to your existing community instead, or use a different email.'),
-            ])->withInput();
-        }
-
         $slug = Session::get('onboarding.slug');
 
         // Re-check availability at submit time too — someone else could
@@ -168,19 +159,6 @@ class CreatePlatformController extends Controller
             'available' => $available,
             'suggestion' => $available ? null : $this->suggestSlug($slug, true),
         ]);
-    }
-
-    /**
-     * Case-insensitive check: "Owner@x.com" and "owner@x.com" count as
-     * the same email so they can't be used to bypass the one-community
-     * limit. Any existing tenant row counts, regardless of its status
-     * (pending_setup / active / failed) — a failed provisioning attempt
-     * should be retried or resolved with that same community, not used
-     * to create a duplicate one.
-     */
-    protected function emailAlreadyOwnsTenant(string $email): bool
-    {
-        return Tenant::whereRaw('LOWER(owner_email) = ?', [strtolower($email)])->exists();
     }
 
     protected function slugAvailable(string $slug): bool

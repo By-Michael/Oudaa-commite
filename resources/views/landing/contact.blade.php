@@ -46,6 +46,9 @@
           @if (session('status'))
             <div class="alert alert-success py-2">{{ session('status') }}</div>
           @endif
+          @if (session('error'))
+            <div class="alert alert-danger py-2">{{ session('error') }}</div>
+          @endif
           @if ($errors->any())
             <div class="alert alert-danger py-2">
               <ul class="mb-0 ps-3">

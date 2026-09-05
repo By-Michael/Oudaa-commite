@@ -49,6 +49,19 @@ return [
             'transport' => 'resend',
         ],
 
+        // Brevo (formerly Sendinblue), via its HTTP API — not SMTP, so it
+        // isn't affected by Render's free-tier block on outbound SMTP
+        // ports (25/465/587). Not a mailer Laravel knows out of the box
+        // (unlike ses/postmark/resend above), so 'brevo' is registered as
+        // a custom transport in AppServiceProvider::boot() via
+        // Mail::extend() — see there for how 'key' below gets used.
+        // Requires: composer require symfony/sendinblue-mailer, plus a
+        // verified sender in Brevo matching MAIL_FROM_ADDRESS.
+        'brevo' => [
+            'transport' => 'brevo',
+            'key' => env('BREVO_KEY'),
+        ],
+
         'sendmail' => [
             'transport' => 'sendmail',
             'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs -i'),

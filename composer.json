@@ -8,11 +8,13 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
         "getbrevo/brevo-php": "^5.0",
+        "guzzlehttp/guzzle": "^7.15",
         "laravel/framework": "^11.44",
         "laravel/tinker": "^2.9",
         "phpoffice/phpspreadsheet": "^2.3",
         "resend/resend-php": "^1.12",
         "symfony/brevo-mailer": "^8.1",
+        "symfony/http-client": "^8.1",
         "symfony/sendinblue-mailer": "*"
     },
     "require-dev": {
